@@ -1,23 +1,23 @@
-import { HardHat, Building2, Hammer } from "lucide-react";
+import { LineChart, Award, HeartHandshake } from "lucide-react";
 import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
 const features = [
   {
-    icon: HardHat,
-    title: "Dynamic Team of Engineers",
-    body: "Partner with a dynamic team of over 1,500 skilled professionals, each contributing their own expertise and innovative ideas to every project.",
+    icon: LineChart,
+    title: "Bringing The Numbers To Life",
+    body: "Every annual account tells a story of your business. We explain your business journey and help you plan the next steps to achieve your goals.",
   },
   {
-    icon: Building2,
-    title: "Top Quality Buildings",
-    body: "Gain access to a vibrant workforce of dedicated specialists, all of whom bring diverse skills and insights to the table.",
+    icon: Award,
+    title: "Expertise",
+    body: "Decades of experience, knowledge and expertise across the UK — a well-established, trusted chartered accountancy firm you can rely on.",
   },
   {
-    icon: Hammer,
-    title: "Best Tools On the Market",
-    body: "Collaborate with a passionate team of committed experts, each offering unique abilities and perspectives that enhance our projects.",
+    icon: HeartHandshake,
+    title: "Personable Service",
+    body: "Friendly, dedicated advisors who take the time to know your business — nurturing client relationships is at the heart of how we work.",
   },
 ];
 
@@ -28,12 +28,15 @@ export function WhyChoose() {
         <ScrollAnimate>
           <div className="relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-14 shadow-soft sm:px-12">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-display text-3xl font-semibold tracking-tight text-surface sm:text-4xl">
-                Why choose <span className="text-brand">C&amp;A</span>?
+              <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">
+                What Makes Us Different?
+              </p>
+              <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-surface sm:text-4xl">
+                Expertise you can trust, <span className="text-brand">technology</span> you'll love.
               </h2>
               <p className="mt-4 text-sm leading-relaxed text-surface/70">
-                We aim to deliver exceptional solutions tailored to our clients' diverse needs, with
-                craftsmanship that lasts decades.
+                We take pride in building strong relationships with every client — understanding
+                your business and goals so we can offer tailored, proactive advice.
               </p>
             </div>
 
@@ -58,9 +61,9 @@ export function WhyChoose() {
               delay={0.2}
               className="mt-12 flex flex-col items-center gap-4 sm:flex-row"
             >
-              <MotionButton>Start A Project</MotionButton>
+              <MotionButton>Speak to our team today</MotionButton>
               <p className="text-sm text-surface/60">
-                The #1 leading company in the market, providing top-notch services.
+                Call us now on <span className="text-surface">020 3916 5680</span> — Mon–Fri, 9AM–5PM.
               </p>
             </ScrollAnimate>
           </div>

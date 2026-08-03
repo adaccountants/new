@@ -1,14 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Hero } from "@/components/site/Hero";
+import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
-import { Portfolio } from "@/components/site/Portfolio";
+import { Testimonials } from "@/components/site/Testimonials";
 import { SiteFooter } from "@/components/site/SiteFooter";
 
-const title = "C&A Construction — Building a Brighter Future";
+const title = "Alpha Digi AI — Chartered Accountants in London";
 const description =
-  "C&A is a construction company delivering commercial builds, custom homes, interior remodeling, roofing and outdoor design across 4 countries.";
+  "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,13 +27,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div id="top" className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <main>
         <Hero />
+        <About />
         <Services />
         <WhyChoose />
-        <Portfolio />
+        <Testimonials />
       </main>
       <SiteFooter />
     </div>
