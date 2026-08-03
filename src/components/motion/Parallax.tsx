@@ -21,7 +21,7 @@ export function Parallax({ children, offset = 60, className }: ParallaxProps) {
 
   return (
     <div ref={ref} className={cn("relative", className)}>
-      <motion.div style={reduced ? undefined : { y }}>{children}</motion.div>
+      <motion.div style={{ y: reduced ? 0 : y }}>{children}</motion.div>
     </div>
   );
 }
