@@ -54,7 +54,7 @@ export function Hero() {
           </ScrollAnimate>
         </div>
 
-        <div className="pointer-events-none absolute right-0 bottom-0 w-[52%] sm:w-[52%] lg:pointer-events-auto lg:relative lg:inset-auto lg:w-auto">
+        <div className="pointer-events-none absolute right-[-4%] bottom-0 w-[62%] sm:right-0 sm:w-[52%] lg:pointer-events-auto lg:relative lg:inset-auto lg:w-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -70,7 +70,7 @@ export function Hero() {
               alt="Smiling chartered accountant in a navy suit pointing upwards"
               width={1024}
               height={1536}
-              className="relative mx-auto h-auto w-full object-contain lg:h-[620px] lg:w-auto"
+              className="relative mx-auto h-[430px] w-auto max-w-none object-contain sm:h-[520px] sm:w-full sm:max-w-full lg:h-[620px] lg:w-auto"
             />
           </Parallax>
         </div>
