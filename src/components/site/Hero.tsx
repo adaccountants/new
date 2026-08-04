@@ -1,81 +1,79 @@
 import { motion } from "framer-motion";
-import heroImage from "@/assets/acc-hero.jpg";
+import { ArrowRight, Phone } from "lucide-react";
+import accountantAsset from "@/assets/accountant.png.asset.json";
 import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
 export function Hero() {
   return (
-    <section className="mx-auto w-full max-w-7xl px-6 pt-12 pb-8 lg:px-12">
-      <div className="grid items-end gap-8 lg:grid-cols-[1fr_1.35fr]">
-        <ScrollAnimate y={24} className="max-w-xs">
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Based in <span className="font-semibold text-foreground">London</span>, we are an ICAEW
-            chartered accountancy practice built for modern business owners.
-          </p>
-        </ScrollAnimate>
+    <section className="relative overflow-hidden">
+      {/* soft cream wash */}
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-brand/8 via-background to-background" />
 
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 pt-10 pb-4 lg:grid-cols-[1.05fr_0.95fr] lg:px-12 lg:pt-16">
         <div>
+          <ScrollAnimate y={20} duration={0.5}>
+            <span className="inline-flex rounded-full bg-brand/15 px-5 py-2 text-xs font-semibold tracking-[0.2em] text-brand-strong uppercase">
+              Chartered Accountants · London
+            </span>
+          </ScrollAnimate>
+
           <motion.h1
             initial={{ opacity: 0, y: 40, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, ease: EASE_OUT }}
-            className="font-display text-[2.75rem] leading-[0.95] font-semibold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+            transition={{ duration: 0.8, delay: 0.1, ease: EASE_OUT }}
+            className="mt-6 font-display text-[2.6rem] leading-[1.02] font-bold tracking-tight text-foreground sm:text-6xl lg:text-[4.2rem]"
           >
-            <span className="text-brand">Chartered</span> Accountants for
+            <span className="text-brand">Chartered Accountants</span>
             <br />
-            Individuals and <span className="text-brand">Business Owners</span>
+            for Individuals and
+            <br />
+            Business Owners.
           </motion.h1>
 
-          <ScrollAnimate
-            delay={0.15}
-            y={24}
-            className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center"
-          >
-            <div className="flex items-center gap-3">
-              <MotionButton>See Our Services</MotionButton>
-              <MotionButton variant="ghost">Contact Us</MotionButton>
-            </div>
-            <p className="max-w-sm text-sm text-muted-foreground">
+          <ScrollAnimate delay={0.2} y={24} className="mt-7 max-w-lg">
+            <p className="text-base leading-relaxed text-muted-foreground">
               Welcome to Alpha Digi AI Accountants — combining chartered expertise with AI-driven
               insight so you can make smarter financial decisions every day.
             </p>
           </ScrollAnimate>
-        </div>
-      </div>
 
-      <ScrollAnimate delay={0.1} className="mt-10">
-        <div className="relative overflow-hidden rounded-[2.5rem] shadow-soft">
-          <Parallax offset={40}>
-            <img
-              src={heroImage}
-              alt="Canary Wharf financial district skyline at golden hour"
-              width={1600}
-              height={1000}
-              className="h-[320px] w-full scale-110 object-cover sm:h-[460px] lg:h-[560px]"
+          <ScrollAnimate delay={0.3} y={24} className="mt-9 flex flex-wrap items-center gap-5">
+            <MotionButton size="lg" className="gap-3">
+              See Our Services
+              <ArrowRight className="h-4 w-4" />
+            </MotionButton>
+            <MotionButton variant="ghost" size="lg" className="gap-3 px-0 text-foreground">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card">
+                <Phone className="h-4 w-4 text-brand-strong" />
+              </span>
+              Contact Us
+            </MotionButton>
+          </ScrollAnimate>
+        </div>
+
+        <div className="relative">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: EASE_OUT }}
+            className="pointer-events-none absolute inset-x-6 top-[12%] bottom-0 rounded-full bg-brand/20 blur-[2px]"
+          />
+          <Parallax offset={26}>
+            <motion.img
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
+              src={accountantAsset.url}
+              alt="Smiling chartered accountant in a navy suit pointing upwards"
+              width={1024}
+              height={1536}
+              className="relative mx-auto h-[380px] w-auto object-contain sm:h-[520px] lg:h-[620px]"
             />
           </Parallax>
-
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
-
-          <div className="pointer-events-none absolute bottom-5 left-5 flex items-center gap-3 rounded-full border border-white/20 bg-ink/70 px-4 py-2 backdrop-blur-md">
-            <div className="flex -space-x-2">
-              {[0, 1, 2, 3].map((i) => (
-                <span
-                  key={i}
-                  className="h-6 w-6 rounded-full border border-ink bg-brand/80"
-                  style={{ opacity: 1 - i * 0.15 }}
-                />
-              ))}
-            </div>
-            <span className="text-xs font-medium text-surface">12 Years of expertise</span>
-          </div>
-
-          <div className="pointer-events-none absolute right-5 bottom-5 rounded-full border border-white/20 bg-ink/70 px-4 py-2 text-xs font-medium text-surface backdrop-blur-md">
-            ICAEW Chartered Members
-          </div>
         </div>
-      </ScrollAnimate>
+      </div>
     </section>
   );
 }
