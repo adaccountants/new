@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import accountantAsset from "@/assets/accountant.png.asset.json";
+import accountantMobileAsset from "@/assets/accountant-mobile.png.asset.json";
 import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
@@ -66,11 +67,21 @@ export function Hero() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
+              src={accountantMobileAsset.url}
+              alt="Smiling chartered accountant in a navy suit pointing upwards"
+              width={1024}
+              height={1536}
+              className="relative mx-auto block h-[380px] w-full max-w-full object-contain object-bottom sm:h-[520px] lg:hidden"
+            />
+            <motion.img
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
               src={accountantAsset.url}
               alt="Smiling chartered accountant in a navy suit pointing upwards"
               width={1024}
               height={1536}
-              className="relative mx-auto h-[380px] w-full max-w-full object-contain sm:h-[520px] sm:w-full sm:max-w-full lg:h-[620px] lg:w-auto"
+              className="relative mx-auto hidden h-[620px] w-auto object-contain lg:block"
             />
           </Parallax>
         </div>
