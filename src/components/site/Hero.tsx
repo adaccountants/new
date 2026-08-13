@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import accountantAsset from "@/assets/accountant.png.asset.json";
-import accountantMobileAsset from "@/assets/accountant-mobile.png.asset.json";
+import accountant from "@/assets/accountant.png";
+import accountantMobile from "@/assets/accountant-mobile.png";
 import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
@@ -67,7 +67,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
-              src={accountantMobileAsset.url}
+              src={accountantMobile}
               alt="Smiling chartered accountant in a navy suit pointing upwards"
               width={1024}
               height={1536}
@@ -77,7 +77,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
-              src={accountantAsset.url}
+              src={accountant}
               alt="Smiling chartered accountant in a navy suit pointing upwards"
               width={1024}
               height={1536}
