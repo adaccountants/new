@@ -68,6 +68,7 @@
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --shadow-brand: 0 12px 30px -12px color-mix(in oklab, var(--brand) 65%, transparent);
   --shadow-soft: 0 24px 60px -30px oklch(0.2 0.02 80 / 0.45);
+  --shadow-glow: 0 18px 45px -12px color-mix(in oklab, var(--brand) 45%, transparent);
 }
 
 

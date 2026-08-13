@@ -1,17 +1,21 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { MotionButton } from "@/components/motion/MotionButton";
+import { Menu, X } from "lucide-react";
 import { EASE_OUT } from "@/components/motion/ScrollAnimate";
 
 const links = [
-  { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
-] as const;
+  { label: "Home", to: "/" as const },
+  { label: "Services", to: "/services" as const },
+  { label: "About Us", to: "/about" as const },
+  { label: "Careers", to: "/careers" as const },
+  { label: "Contact", to: "/contact" as const },
+];
 
 export function SiteHeader() {
+  const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -24 }}
@@ -34,27 +38,64 @@ export function SiteHeader() {
       </div>
 
       <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-12">
-        <Link to="/" className="font-display text-lg font-bold tracking-tight">
+        <Link to="/" className="font-display text-lg font-bold tracking-tight" onClick={() => setOpen(false)}>
           Alpha<span className="text-brand">Digi</span>AI
         </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
-          {links.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+          {links.map((link) => {
+            const active = pathname === link.to;
+            return (
+              <li key={link.label}>
+                <Link
+                  to={link.to}
+                  className={`text-sm transition-colors hover:text-foreground ${
+                    active ? "text-foreground" : "text-muted-foreground"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
-        <MotionButton size="sm" aria-label="Contact us">
-          Contact
-        </MotionButton>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/contact"
+            className="hidden h-9 items-center justify-center rounded-full bg-brand px-4 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong sm:inline-flex"
+          >
+            Contact
+          </Link>
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border md:hidden"
+            aria-expanded={open}
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
       </nav>
+
+      {open ? (
+        <div className="border-t border-border/60 bg-background md:hidden">
+          <ul className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-6 py-3">
+            {links.map((link) => (
+              <li key={link.label}>
+                <Link
+                  to={link.to}
+                  onClick={() => setOpen(false)}
+                  className="block py-2 text-sm text-muted-foreground hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </motion.header>
   );
 }

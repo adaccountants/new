@@ -1,8 +1,8 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import accountant from "@/assets/accountant.png";
 import accountantMobile from "@/assets/accountant-mobile.png";
-import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
@@ -42,16 +42,22 @@ export function Hero() {
             y={24}
             className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
           >
-            <MotionButton size="lg" className="gap-3">
+            <Link
+              to="/services"
+              className="inline-flex h-13 items-center justify-center gap-3 rounded-full bg-brand px-8 text-base font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
+            >
               See Our Services
               <ArrowRight className="h-4 w-4" />
-            </MotionButton>
-            <MotionButton variant="ghost" size="lg" className="gap-3 px-0 text-foreground">
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex h-13 items-center justify-center gap-3 px-0 text-base font-medium tracking-tight text-foreground"
+            >
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card">
                 <Phone className="h-4 w-4 text-brand-strong" />
               </span>
               Contact Us
-            </MotionButton>
+            </Link>
           </ScrollAnimate>
         </div>
 

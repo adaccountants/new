@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router";
 import bridge from "@/assets/acc-bridge.jpg";
-import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
@@ -44,8 +44,18 @@ export function About() {
             grow.
           </p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <MotionButton>More about us</MotionButton>
-            <MotionButton variant="ghost">Make an appointment</MotionButton>
+            <Link
+              to="/about"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
+            >
+              More about us
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex h-11 items-center justify-center rounded-full px-6 text-sm font-medium tracking-tight text-muted-foreground hover:text-foreground"
+            >
+              Make an appointment
+            </Link>
           </div>
         </ScrollAnimate>
       </div>

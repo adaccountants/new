@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { StaggerCards, type StaggerCardItem } from "@/components/motion/StaggerCards";
 import accountancy from "@/assets/acc-accountancy.jpg";
@@ -52,6 +53,12 @@ export function Services() {
           bookkeeping and specialist work such as R&amp;D tax — we cover every stage of your
           financial year.
         </p>
+        <Link
+          to="/services"
+          className="mt-6 inline-flex items-center justify-center rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-brand-foreground shadow-brand hover:bg-brand-strong"
+        >
+          View all services
+        </Link>
       </ScrollAnimate>
 
       <div className="mt-12">
