@@ -13,6 +13,20 @@ export default defineConfig({
   server: {
     host: true,
     port: 8080,
+    warmup: {
+      clientFiles: [
+        "./src/routes/index.tsx",
+        "./src/routes/about.tsx",
+        "./src/routes/services.tsx",
+        "./src/routes/careers.tsx",
+        "./src/routes/contact.tsx",
+        "./src/components/site/SiteShell.tsx",
+        "./src/components/site/Hero.tsx",
+      ],
+    },
+  },
+  optimizeDeps: {
+    include: ["framer-motion", "@tanstack/react-router", "@tanstack/react-query"],
   },
   resolve: {
     alias: {

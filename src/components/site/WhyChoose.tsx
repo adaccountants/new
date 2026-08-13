@@ -44,8 +44,8 @@ export function WhyChoose() {
               {features.map((feature, index) => (
                 <ScrollAnimate
                   key={feature.title}
-                  delay={index * 0.15}
-                  y={32}
+                  delay={index * 0.05}
+                  y={16}
                   className={index === 1 ? "md:mt-8" : index === 2 ? "md:mt-16" : undefined}
                 >
                   <feature.icon className="h-8 w-8 text-brand" strokeWidth={1.5} />
@@ -68,7 +68,8 @@ export function WhyChoose() {
                 Speak to our team today
               </Link>
               <p className="text-sm text-surface/60">
-                Call us now on <span className="text-surface">020 3916 5680</span> — Mon–Fri, 9AM–5PM.
+                Call us now on <span className="text-surface">020 3916 5680</span> — Mon–Fri,
+                9AM–5PM.
               </p>
             </ScrollAnimate>
           </div>

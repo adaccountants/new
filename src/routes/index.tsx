@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteShell } from "@/components/site/SiteShell";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
+import accountant from "@/assets/accountant.webp";
+import accountantMobile from "@/assets/accountant-mobile.webp";
 
 const title = "Alpha Digi AI — Chartered Accountants in London";
 const description =
@@ -20,20 +21,22 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [
+      { rel: "preload", href: accountantMobile, as: "image", type: "image/webp" },
+      { rel: "preload", href: accountant, as: "image", type: "image/webp" },
+    ],
   }),
   component: Index,
 });
 
 function Index() {
   return (
-    <SiteShell>
-      <div id="top">
-        <Hero />
-        <About />
-        <Services />
-        <WhyChoose />
-        <Testimonials />
-      </div>
-    </SiteShell>
+    <div id="top">
+      <Hero />
+      <About />
+      <Services />
+      <WhyChoose />
+      <Testimonials />
+    </div>
   );
 }
