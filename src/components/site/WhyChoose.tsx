@@ -1,5 +1,5 @@
+import { Link } from "@tanstack/react-router";
 import { LineChart, Award, HeartHandshake } from "lucide-react";
-import { MotionButton } from "@/components/motion/MotionButton";
 import { Parallax } from "@/components/motion/Parallax";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
@@ -61,7 +61,12 @@ export function WhyChoose() {
               delay={0.2}
               className="mt-12 flex flex-col items-center gap-4 sm:flex-row"
             >
-              <MotionButton>Speak to our team today</MotionButton>
+              <Link
+                to="/contact"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
+              >
+                Speak to our team today
+              </Link>
               <p className="text-sm text-surface/60">
                 Call us now on <span className="text-surface">020 3916 5680</span> — Mon–Fri, 9AM–5PM.
               </p>

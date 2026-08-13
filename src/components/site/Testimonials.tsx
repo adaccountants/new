@@ -1,6 +1,6 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
-import { MotionButton } from "@/components/motion/MotionButton";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
 type Testimonial = {
@@ -85,7 +85,12 @@ export function Testimonials() {
           We are ICAEW members — giving us access to world-leading resources, technical guidance and
           advisory services.
         </p>
-        <MotionButton>Get a free consultation</MotionButton>
+        <Link
+          to="/contact"
+          className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
+        >
+          Get a free consultation
+        </Link>
       </ScrollAnimate>
     </section>
   );

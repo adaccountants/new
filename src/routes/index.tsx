@@ -1,11 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteShell } from "@/components/site/SiteShell";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
-import { SiteFooter } from "@/components/site/SiteFooter";
 
 const title = "Alpha Digi AI — Chartered Accountants in London";
 const description =
@@ -27,16 +26,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div id="top" className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
-      <main>
+    <SiteShell>
+      <div id="top">
         <Hero />
         <About />
         <Services />
         <WhyChoose />
         <Testimonials />
-      </main>
-      <SiteFooter />
-    </div>
+      </div>
+    </SiteShell>
   );
 }
