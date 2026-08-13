@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import accountant from "@/assets/accountant.png";
-import accountantMobile from "@/assets/accountant-mobile.png";
+import accountant from "@/assets/accountant.webp";
+import accountantMobile from "@/assets/accountant-mobile.webp";
 import { Parallax } from "@/components/motion/Parallax";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
@@ -69,26 +69,23 @@ export function Hero() {
             className="pointer-events-none absolute inset-x-0 top-[18%] bottom-[4%] rounded-full bg-brand/20 blur-[2px] sm:inset-x-6 lg:top-[12%] lg:bottom-0"
           />
           <Parallax offset={26}>
-            <motion.img
+            <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
-              src={accountantMobile}
-              alt="Smiling chartered accountant in a navy suit pointing upwards"
-              width={1024}
-              height={1536}
-              className="relative mx-auto block h-[380px] w-full max-w-full object-contain object-bottom sm:h-[520px] lg:hidden"
-            />
-            <motion.img
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
-              src={accountant}
-              alt="Smiling chartered accountant in a navy suit pointing upwards"
-              width={1024}
-              height={1536}
-              className="relative mx-auto hidden h-[620px] w-auto object-contain lg:block"
-            />
+            >
+              <picture>
+                <source media="(min-width: 1024px)" srcSet={accountant} />
+                <img
+                  src={accountantMobile}
+                  alt="Smiling chartered accountant in a navy suit pointing upwards"
+                  width={512}
+                  height={768}
+                  fetchPriority="high"
+                  className="relative mx-auto block h-[380px] w-full max-w-full object-contain object-bottom sm:h-[520px] lg:h-[620px] lg:w-auto"
+                />
+              </picture>
+            </motion.div>
           </Parallax>
         </div>
       </div>
