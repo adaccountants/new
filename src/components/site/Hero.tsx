@@ -1,10 +1,34 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import { Parallax } from "@/components/motion/Parallax";
+import icaewLogo from "@/assets/icaew_logo.jpeg";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
+
+const ICAEW_HOME = "https://www.icaew.com";
+
+function IcaewHeroLogo({ className }: { className?: string }) {
+  return (
+    <a
+      href={ICAEW_HOME}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="ICAEW Chartered Accountants (opens icaew.com)"
+      className={className}
+    >
+      <img
+        src={icaewLogo}
+        alt="ICAEW Chartered Accountants"
+        width={736}
+        height={298}
+        decoding="async"
+        draggable={false}
+        className="shrink-0 max-w-full"
+      />
+    </a>
+  );
+}
 
 export function Hero() {
   useCms();
@@ -14,17 +38,14 @@ export function Hero() {
   const intro = getContentValue("home.hero.intro");
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
-  const imageDesktop = getContentValue("home.hero.imageDesktop");
-  const imageMobile = getContentValue("home.hero.imageMobile");
-  const imageAlt = getContentValue("home.hero.imageAlt");
 
   return (
     <section className="relative overflow-hidden">
       {/* soft cream wash */}
       <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-brand/8 via-background to-background" />
 
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 pt-10 pb-4 lg:grid-cols-[1.05fr_0.95fr] lg:px-12 lg:pt-16">
-        <div className="relative z-10 max-w-[62%] sm:max-w-[58%] lg:max-w-none">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-8 px-6 pt-10 pb-16 lg:px-12 lg:pt-16 lg:pb-20">
+        <div className="relative z-10 max-w-xl lg:max-w-2xl">
           <ScrollAnimate y={20} duration={0.5}>
             <span className="inline-flex rounded-full bg-brand/15 px-4 py-2 text-[0.65rem] font-semibold tracking-[0.2em] text-brand-strong uppercase sm:px-5 sm:text-xs">
               {eyebrow}
@@ -67,36 +88,11 @@ export function Hero() {
               {ctaSecondary}
             </Link>
           </ScrollAnimate>
+
+          <IcaewHeroLogo className="mt-8 inline-flex lg:hidden" />
         </div>
 
-        <div className="pointer-events-none absolute right-0 bottom-0 w-[58%] sm:right-0 sm:w-[52%] lg:pointer-events-auto lg:relative lg:inset-auto lg:w-auto">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: EASE_OUT }}
-            className="pointer-events-none absolute inset-x-0 top-[18%] bottom-[4%] rounded-full bg-brand/20 blur-[2px] sm:inset-x-6 lg:top-[12%] lg:bottom-0"
-          />
-          <Parallax offset={26}>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.15, ease: EASE_OUT }}
-            >
-              <picture>
-                <source media="(min-width: 1024px)" srcSet={imageDesktop} type="image/webp" />
-                <img
-                  src={imageMobile}
-                  alt={imageAlt}
-                  width={512}
-                  height={768}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="relative mx-auto block h-[380px] w-full max-w-full object-contain object-bottom sm:h-[520px] lg:h-[620px] lg:w-auto"
-                />
-              </picture>
-            </motion.div>
-          </Parallax>
-        </div>
+        <IcaewHeroLogo className="hidden lg:inline-flex" />
       </div>
     </section>
   );

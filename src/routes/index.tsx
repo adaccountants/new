@@ -4,8 +4,7 @@ import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
-import accountant from "@/assets/accountant.webp";
-import accountantMobile from "@/assets/accountant-mobile.webp";
+import icaewLogo from "@/assets/icaew_logo.jpeg";
 
 const title = "Alpha Digi AI — Chartered Accountants in London";
 const description =
@@ -22,8 +21,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "preload", href: accountantMobile, as: "image", type: "image/webp" },
-      { rel: "preload", href: accountant, as: "image", type: "image/webp" },
+      { rel: "preload", href: icaewLogo, as: "image" },
     ],
   }),
   component: Index,
