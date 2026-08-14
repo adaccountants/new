@@ -19,6 +19,7 @@ export default defineConfig({
         "./src/routes/about.tsx",
         "./src/routes/services.tsx",
         "./src/routes/careers.tsx",
+        "./src/routes/blog.tsx",
         "./src/routes/contact.tsx",
         "./src/components/site/SiteShell.tsx",
         "./src/components/site/Hero.tsx",

@@ -34,6 +34,7 @@ Routes live in `src/routes/`. Each `.tsx` file is a URL:
 | `about.tsx` | `/about` |
 | `services.tsx` | `/services` |
 | `careers.tsx` | `/careers` |
+| `blog.tsx` | `/blog` |
 | `contact.tsx` | `/contact` |
 
 Do not add Next.js-style `app/` or `pages/` trees. The only root layout is `__root.tsx`.

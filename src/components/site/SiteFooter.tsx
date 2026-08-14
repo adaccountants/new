@@ -5,6 +5,7 @@ const footerLinks = [
   { label: "Services", to: "/services" as const },
   { label: "About Us", to: "/about" as const },
   { label: "Careers", to: "/careers" as const },
+  { label: "Blog", to: "/blog" as const },
   { label: "Contact", to: "/contact" as const },
 ];
 
