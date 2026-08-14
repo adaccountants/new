@@ -1,4 +1,4 @@
-import { motion, type HTMLMotionProps } from "framer-motion";
+import { motion, useReducedMotion, type HTMLMotionProps } from "framer-motion";
 import type { ReactNode } from "react";
 
 export const EASE_OUT = [0.22, 1, 0.36, 1] as const;
@@ -25,19 +25,21 @@ export interface ScrollAnimateProps extends Omit<HTMLMotionProps<"div">, "childr
  */
 export function ScrollAnimate({
   children,
-  amount = 0.2,
+  amount = 0.15,
   delay = 0,
-  duration = 0.6,
-  y = 40,
-  scale = 0.96,
+  duration = 0.35,
+  y = 16,
+  scale = 1,
   once = true,
   ...rest
 }: ScrollAnimateProps) {
+  const reduced = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y, scale }}
+      initial={reduced ? false : { opacity: 0, y, scale }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once, amount }}
+      viewport={{ once, amount, margin: "80px 0px" }}
       transition={{ duration, delay, ease: EASE_OUT }}
       {...rest}
     >

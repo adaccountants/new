@@ -16,6 +16,7 @@ export function About() {
                 width={1200}
                 height={900}
                 loading="lazy"
+                decoding="async"
                 className="h-[320px] w-full scale-110 object-cover sm:h-[420px]"
               />
             </Parallax>
@@ -34,10 +35,10 @@ export function About() {
             A new firm led by a Big 4 experienced <span className="text-brand">ICAEW member</span>.
           </h2>
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-            Looking for a reliable, forward-thinking accountant? With 12 years of experience handling
-            listed, non-listed and charity clients, we proudly support new businesses, charity trusts
-            and individuals through ongoing change. Whether you're launching a new venture or managing
-            an established company, our team guides you every step of the way.
+            Looking for a reliable, forward-thinking accountant? With 12 years of experience
+            handling listed, non-listed and charity clients, we proudly support new businesses,
+            charity trusts and individuals through ongoing change. Whether you're launching a new
+            venture or managing an established company, our team guides you every step of the way.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             It's not just about numbers — it's about knowing your business inside out and helping it
