@@ -11,7 +11,7 @@ const root = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
   server: {
-    host: "0.0.0.0",
+    host: true,
     port: 8080,
     strictPort: true,
     allowedHosts: true,
