@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 
 const footerLinks = [
   { label: "Home", to: "/" as const },
@@ -12,7 +13,7 @@ const footerLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 bg-ink">
-      <div className="mx-auto w-full max-w-7xl px-6 py-14 lg:px-12">
+      <ScrollAnimate className="mx-auto w-full max-w-7xl px-6 py-14 lg:px-12">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-display text-2xl font-semibold text-surface">
@@ -42,7 +43,7 @@ export function SiteFooter() {
         <p className="mt-12 text-xs text-surface/40">
           © {new Date().getFullYear()} Alpha Digi AI Accountants. ICAEW Chartered Accountants.
         </p>
-      </div>
+      </ScrollAnimate>
     </footer>
   );
 }

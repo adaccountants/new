@@ -39,8 +39,8 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 1, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE_OUT } },
+  hidden: { opacity: 0, x: 50 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: EASE_OUT } },
 };
 
 export function Testimonials() {
@@ -55,7 +55,7 @@ export function Testimonials() {
 
       <motion.div
         variants={container}
-        initial="visible"
+        initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         className="mx-auto mt-12 grid w-full max-w-7xl gap-6 px-6 md:grid-cols-3 lg:px-12"

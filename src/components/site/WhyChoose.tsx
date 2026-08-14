@@ -44,8 +44,8 @@ export function WhyChoose() {
               {features.map((feature, index) => (
                 <ScrollAnimate
                   key={feature.title}
-                  delay={index * 0.05}
-                  y={16}
+                  delay={index * 0.15}
+                  y={32}
                   className={index === 1 ? "md:mt-8" : index === 2 ? "md:mt-16" : undefined}
                 >
                   <feature.icon className="h-8 w-8 text-brand" strokeWidth={1.5} />

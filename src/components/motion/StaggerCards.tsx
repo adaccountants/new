@@ -23,8 +23,8 @@ const containerVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 1, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE_OUT } },
+  hidden: { opacity: 0, x: 50 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: EASE_OUT } },
 };
 
 /** Horizontally scrollable row of cards that enter in sequence. */
@@ -40,7 +40,7 @@ export function StaggerCards({
         ...containerVariants,
         show: { transition: { staggerChildren: stagger } },
       }}
-      initial="show"
+      initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
       className={cn(

@@ -25,11 +25,11 @@ export interface ScrollAnimateProps extends Omit<HTMLMotionProps<"div">, "childr
  */
 export function ScrollAnimate({
   children,
-  amount = 0.15,
+  amount = 0.2,
   delay = 0,
-  duration = 0.35,
-  y = 16,
-  scale = 1,
+  duration = 0.6,
+  y = 40,
+  scale = 0.96,
   once = true,
   ...rest
 }: ScrollAnimateProps) {
@@ -39,7 +39,7 @@ export function ScrollAnimate({
     <motion.div
       initial={reduced ? false : { opacity: 0, y, scale }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once, amount, margin: "80px 0px" }}
+      viewport={{ once, amount }}
       transition={{ duration, delay, ease: EASE_OUT }}
       {...rest}
     >
