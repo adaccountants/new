@@ -9,6 +9,7 @@ const footerNav = [
   { key: "home.nav.about", to: "/about" as const },
   { key: "home.nav.services", to: "/services" as const },
   { key: "home.nav.blog", to: "/blog" as const },
+  { key: "home.nav.knowledge", to: "/knowledge" as const },
   { key: "home.nav.careers", to: "/careers" as const },
   { key: "home.nav.contact", to: "/contact" as const },
 ];

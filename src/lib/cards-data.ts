@@ -8,12 +8,15 @@
  * Table: `cards`
  * Columns:
  *   id          uuid primary key
- *   section     text  -- 'services' | 'testimonials' | 'blog' | 'team' | 'careers'
+ *   section     text  -- 'services' | 'testimonials' | 'blog' | 'team' | 'careers' | 'knowledge'
  *   slug        text  -- required for services & blog; unique per (section, slug)
  *   title       text
  *   subtitle    text
  *   body        text
  *   image_url   text  -- maps to imageUrl
+ *   file_url    text  -- maps to fileUrl (knowledge downloads only)
+ *   file_name   text  -- maps to fileName (original filename for knowledge downloads)
+ *   category    text  -- knowledge only: Guides | Checklists & Templates | Deadline Calendars | Industry Insights
  *   sort_order  int   -- maps to sortOrder
  *   published   boolean
  *
@@ -52,7 +55,20 @@ import blogRnd from "@/assets/blog-rnd.jpg";
 
 import { emitCmsChange } from "@/lib/cms-sync";
 
-export type CardSection = "services" | "testimonials" | "blog" | "team" | "careers";
+export type CardSection = "services" | "testimonials" | "blog" | "team" | "careers" | "knowledge";
+
+export type KnowledgeCategory =
+  | "Guides"
+  | "Checklists & Templates"
+  | "Deadline Calendars"
+  | "Industry Insights";
+
+export const KNOWLEDGE_CATEGORIES: KnowledgeCategory[] = [
+  "Guides",
+  "Checklists & Templates",
+  "Deadline Calendars",
+  "Industry Insights",
+];
 
 export type Card = {
   id: string;
@@ -62,6 +78,9 @@ export type Card = {
   subtitle?: string;
   body?: string;
   imageUrl: string;
+  fileUrl?: string;
+  fileName?: string;
+  category?: string;
   sortOrder: number;
   published: boolean;
 };
@@ -72,6 +91,7 @@ export const CARD_SECTIONS: CardSection[] = [
   "blog",
   "team",
   "careers",
+  "knowledge",
 ];
 
 export const HOME_SERVICE_SLUG_PREFIX = "home-";
@@ -352,6 +372,118 @@ let cards: Card[] = [
     sortOrder: 2,
     published: true,
   },
+  {
+    id: "know-sa-calendar",
+    section: "knowledge",
+    slug: "self-assessment-deadline-calendar-2026-27",
+    title: "Self-Assessment Deadline Calendar 2026/27",
+    subtitle: "Deadline Calendars",
+    body: "Key Self Assessment dates for the 2026/27 tax year, including paper and online filing, payments on account, and our recommended prep window.",
+    imageUrl: blogLandlord,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "self-assessment-deadline-calendar-2026-27.pdf",
+    category: "Deadline Calendars",
+    sortOrder: 1,
+    published: true,
+  },
+  {
+    id: "know-ct-calendar",
+    section: "knowledge",
+    slug: "corporation-tax-filing-calendar-2026-27",
+    title: "Corporation Tax Filing Calendar 2026/27",
+    subtitle: "Deadline Calendars",
+    body: "A year-round calendar of Companies House accounts, Corporation Tax returns, and payment dates for limited companies.",
+    imageUrl: blogLimitedCompany,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "corporation-tax-filing-calendar-2026-27.pdf",
+    category: "Deadline Calendars",
+    sortOrder: 2,
+    published: true,
+  },
+  {
+    id: "know-new-business",
+    section: "knowledge",
+    slug: "new-business-setup-checklist",
+    title: "New Business Setup Checklist",
+    subtitle: "Checklists & Templates",
+    body: "A practical checklist for launching a UK business: structure, HMRC registrations, record-keeping, and the first 90 days of trading.",
+    imageUrl: startup,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "new-business-setup-checklist.pdf",
+    category: "Checklists & Templates",
+    sortOrder: 3,
+    published: true,
+  },
+  {
+    id: "know-year-end",
+    section: "knowledge",
+    slug: "year-end-bookkeeping-checklist",
+    title: "Year-End Bookkeeping Checklist",
+    subtitle: "Checklists & Templates",
+    body: "What to gather before we close your books — bank recs, invoices, stock, directors’ loans, and year-end adjustments.",
+    imageUrl: accountancy,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "year-end-bookkeeping-checklist.pdf",
+    category: "Checklists & Templates",
+    sortOrder: 4,
+    published: true,
+  },
+  {
+    id: "know-mileage",
+    section: "knowledge",
+    slug: "mileage-log-template",
+    title: "Mileage Log Template",
+    subtitle: "Checklists & Templates",
+    body: "A simple mileage log for claiming approved mileage allowance — date, journey, business purpose, and miles.",
+    imageUrl: other,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "mileage-log-template.pdf",
+    category: "Checklists & Templates",
+    sortOrder: 5,
+    published: true,
+  },
+  {
+    id: "know-vat-thresholds",
+    section: "knowledge",
+    slug: "understanding-vat-registration-thresholds",
+    title: "Understanding VAT Registration Thresholds",
+    subtitle: "Guides",
+    body: "When VAT registration becomes compulsory, how the rolling 12-month test works, and what voluntary registration can mean for your cash flow.",
+    imageUrl: tax,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "understanding-vat-registration-thresholds.pdf",
+    category: "Guides",
+    sortOrder: 6,
+    published: true,
+  },
+  {
+    id: "know-mtd",
+    section: "knowledge",
+    slug: "making-tax-digital-what-it-means-for-you",
+    title: "Making Tax Digital: What It Means For You",
+    subtitle: "Guides",
+    body: "A plain-English briefing on Making Tax Digital for VAT and Income Tax, digital records, and how we help you stay compliant.",
+    imageUrl: blogAi,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "making-tax-digital-what-it-means-for-you.pdf",
+    category: "Guides",
+    sortOrder: 7,
+    published: true,
+  },
+  {
+    id: "know-payroll-teams",
+    section: "knowledge",
+    slug: "payroll-for-growing-teams",
+    title: "Payroll for Growing Teams",
+    subtitle: "Industry Insights",
+    body: "What changes as you hire: PAYE, auto-enrolment, benefits, and the records HMRC expects from a growing employer.",
+    imageUrl: blogMeeting,
+    fileUrl: "/mock-files/placeholder.pdf",
+    fileName: "payroll-for-growing-teams.pdf",
+    category: "Industry Insights",
+    sortOrder: 8,
+    published: true,
+  },
 ];
 
 export function parseCareerBody(body = ""): { paragraphs: string[]; ideals: string[] } {
@@ -399,9 +531,15 @@ export function updateCard(id: string, patch: Partial<Card>): Card {
   const slug = "slug" in patch ? patch.slug : current.slug;
   const subtitle = "subtitle" in patch ? patch.subtitle : current.subtitle;
   const body = "body" in patch ? patch.body : current.body;
+  const fileUrl = "fileUrl" in patch ? patch.fileUrl : current.fileUrl;
+  const fileName = "fileName" in patch ? patch.fileName : current.fileName;
+  const category = "category" in patch ? patch.category : current.category;
   if (slug) updated.slug = slug;
   if (subtitle) updated.subtitle = subtitle;
   if (body) updated.body = body;
+  if (fileUrl) updated.fileUrl = fileUrl;
+  if (fileName) updated.fileName = fileName;
+  if (category) updated.category = category;
   cards = cards.map((card) => (card.id === id ? updated : card));
   emitCmsChange();
   return updated;

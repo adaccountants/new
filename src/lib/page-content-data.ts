@@ -7,7 +7,7 @@
  * Table: `page_content`
  * Columns:
  *   key    text primary key  -- dot notation, e.g. 'home.hero.heading'
- *   page   text              -- 'home' | 'about' | 'services' | 'careers' | 'contact' | 'blog'
+ *   page   text              -- 'home' | 'about' | 'services' | 'careers' | 'contact' | 'blog' | 'knowledge'
  *   label  text              -- human-readable admin label
  *   value  text
  *   type   text              -- 'text' | 'richtext'
@@ -23,7 +23,7 @@ import bridge from "@/assets/acc-bridge.jpg";
 
 import { emitCmsChange } from "@/lib/cms-sync";
 
-export type ContentPage = "home" | "about" | "services" | "careers" | "contact" | "blog";
+export type ContentPage = "home" | "about" | "services" | "careers" | "contact" | "blog" | "knowledge";
 
 export type ContentBlock = {
   key: string;
@@ -40,6 +40,7 @@ export const CONTENT_PAGES: { id: ContentPage; label: string }[] = [
   { id: "careers", label: "Careers" },
   { id: "contact", label: "Contact" },
   { id: "blog", label: "Blog" },
+  { id: "knowledge", label: "Knowledge" },
 ];
 
 function block(
@@ -61,6 +62,7 @@ let blocks: ContentBlock[] = [
   block("home.nav.about", "home", "Nav: About Us", "About Us"),
   block("home.nav.services", "home", "Nav: Services", "Services"),
   block("home.nav.blog", "home", "Nav: Blog", "Blog"),
+  block("home.nav.knowledge", "home", "Nav: Knowledge", "Knowledge"),
   block("home.nav.careers", "home", "Nav: Careers", "Careers"),
   block("home.nav.contact", "home", "Nav: Contact", "Contact"),
   block("home.header.contactCta", "home", "Header contact button", "Contact"),
@@ -514,6 +516,20 @@ let blocks: ContentBlock[] = [
     "Contact form thanks message",
     "Thanks — we've received your details and will be in touch shortly.",
   ),
+
+  // —— Knowledge page ——
+  block("knowledge.eyebrow", "knowledge", "Knowledge page eyebrow", "Knowledge"),
+  block("knowledge.headingPrefix", "knowledge", "Knowledge heading prefix", "Guides, checklists and "),
+  block("knowledge.headingBrand", "knowledge", "Knowledge heading (highlighted)", "resources"),
+  block("knowledge.headingSuffix", "knowledge", "Knowledge heading suffix", "."),
+  block(
+    "knowledge.intro",
+    "knowledge",
+    "Knowledge intro paragraph",
+    "Firm-authored guides, checklists, templates and deadline calendars to help you stay organised through the tax year.",
+    "richtext",
+  ),
+  block("knowledge.card.cta", "knowledge", "Knowledge download button", "Download PDF"),
 ];
 
 export function getContentByPage(page: string): ContentBlock[] {

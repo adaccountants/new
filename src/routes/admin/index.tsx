@@ -13,6 +13,7 @@ const sectionCopy: Record<string, string> = {
   services: "Services",
   testimonials: "Testimonials",
   blog: "Blog",
+  knowledge: "Knowledge",
   team: "Team",
   careers: "Careers",
 };

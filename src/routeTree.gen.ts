@@ -15,6 +15,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminSectionRouteRouteImport } from './routes/admin/$section/route'
@@ -53,6 +54,11 @@ const CareersRoute = CareersRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeRoute = KnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/admin/$section': typeof AdminSectionRouteRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/knowledge': typeof KnowledgeRoute
   '/services': typeof ServicesRoute
   '/admin/$section': typeof AdminSectionRouteRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/knowledge'
     | '/services'
     | '/admin/$section'
     | '/admin/login'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/knowledge'
     | '/services'
     | '/admin/login'
     | '/admin/settings'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/knowledge'
     | '/services'
     | '/admin/$section'
     | '/admin/login'
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
+  KnowledgeRoute: typeof KnowledgeRoute
   ServicesRoute: typeof ServicesRoute
 }
 
@@ -255,6 +268,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge': {
+      id: '/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof KnowledgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -365,6 +385,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
+  KnowledgeRoute: KnowledgeRoute,
   ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
