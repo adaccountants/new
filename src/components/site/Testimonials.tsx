@@ -2,36 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
-
-type Testimonial = {
-  id: string;
-  quote: string;
-  name: string;
-  role?: string;
-};
-
-const testimonials: Testimonial[] = [
-  {
-    id: "t1",
-    quote:
-      "The team are brilliant. So welcoming and helpful, and they really took the time to understand what I needed. Everything was explained clearly.",
-    name: "Louise N.",
-  },
-  {
-    id: "t2",
-    quote:
-      "Their knowledge around arts and construction based industries has been an asset — along with brilliant tax and VAT advice.",
-    name: "Antonia S.",
-    role: "Artist, Curator and Facilitator",
-  },
-  {
-    id: "t3",
-    quote:
-      "A safe pair of hands for all my statutory needs. Professional with a personal touch that makes them a pleasure to deal with.",
-    name: "Phillip R.",
-    role: "Databoss Ltd",
-  },
-];
+import { getCards } from "@/lib/cards-data";
+import { useCms } from "@/lib/cms-sync";
+import { getContentValue } from "@/lib/page-content-data";
 
 const container = {
   hidden: {},
@@ -44,12 +17,23 @@ const item = {
 };
 
 export function Testimonials() {
+  useCms();
+  const eyebrow = getContentValue("home.testimonials.eyebrow");
+  const headingPrefix = getContentValue("home.testimonials.headingPrefix");
+  const headingBrand = getContentValue("home.testimonials.headingBrand");
+  const headingSuffix = getContentValue("home.testimonials.headingSuffix");
+  const icaewNote = getContentValue("home.testimonials.icaewNote");
+  const cta = getContentValue("home.testimonials.cta");
+  const testimonials = getCards("testimonials").filter((card) => card.published);
+
   return (
     <section id="testimonials" className="py-20">
       <ScrollAnimate className="mx-auto max-w-2xl px-6 text-center">
-        <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">Testimonials</p>
+        <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{eyebrow}</p>
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          What our <span className="text-brand">clients say</span>.
+          {headingPrefix}
+          <span className="text-brand">{headingBrand}</span>
+          {headingSuffix}
         </h2>
       </ScrollAnimate>
 
@@ -70,11 +54,11 @@ export function Testimonials() {
           >
             <Quote className="h-7 w-7 text-brand" strokeWidth={1.5} />
             <blockquote className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              “{t.quote}”
+              “{t.body}”
             </blockquote>
             <figcaption className="mt-6">
-              <p className="font-display text-sm font-semibold">{t.name}</p>
-              {t.role ? <p className="text-xs text-muted-foreground">{t.role}</p> : null}
+              <p className="font-display text-sm font-semibold">{t.title}</p>
+              {t.subtitle ? <p className="text-xs text-muted-foreground">{t.subtitle}</p> : null}
             </figcaption>
           </motion.figure>
         ))}
@@ -84,15 +68,12 @@ export function Testimonials() {
         delay={0.1}
         className="mt-10 flex flex-col items-center gap-3 px-6 text-center"
       >
-        <p className="text-sm text-muted-foreground">
-          We are ICAEW members — giving us access to world-leading resources, technical guidance and
-          advisory services.
-        </p>
+        <p className="text-sm text-muted-foreground">{icaewNote}</p>
         <Link
           to="/contact"
           className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
         >
-          Get a free consultation
+          {cta}
         </Link>
       </ScrollAnimate>
     </section>

@@ -2,42 +2,51 @@ import { Link } from "@tanstack/react-router";
 import { LineChart, Award, HeartHandshake } from "lucide-react";
 import { Parallax } from "@/components/motion/Parallax";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
-
-const features = [
-  {
-    icon: LineChart,
-    title: "Bringing The Numbers To Life",
-    body: "Every annual account tells a story of your business. We explain your business journey and help you plan the next steps to achieve your goals.",
-  },
-  {
-    icon: Award,
-    title: "Expertise",
-    body: "Decades of experience, knowledge and expertise across the UK — a well-established, trusted chartered accountancy firm you can rely on.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Personable Service",
-    body: "Friendly, dedicated advisors who take the time to know your business — nurturing client relationships is at the heart of how we work.",
-  },
-];
+import { useCms } from "@/lib/cms-sync";
+import { getContentValue } from "@/lib/page-content-data";
+import { getSettings } from "@/lib/site-settings-data";
 
 export function WhyChoose() {
+  useCms();
+  const settings = getSettings();
+  const eyebrow = getContentValue("home.why.eyebrow");
+  const headingPrefix = getContentValue("home.why.headingPrefix");
+  const headingBrand = getContentValue("home.why.headingBrand");
+  const headingSuffix = getContentValue("home.why.headingSuffix");
+  const intro = getContentValue("home.why.intro");
+  const cta = getContentValue("home.why.cta");
+  const callPrefix = getContentValue("home.why.callPrefix");
+  const features = [
+    {
+      icon: LineChart,
+      title: getContentValue("home.why.feature1.title"),
+      body: getContentValue("home.why.feature1.body"),
+    },
+    {
+      icon: Award,
+      title: getContentValue("home.why.feature2.title"),
+      body: getContentValue("home.why.feature2.body"),
+    },
+    {
+      icon: HeartHandshake,
+      title: getContentValue("home.why.feature3.title"),
+      body: getContentValue("home.why.feature3.body"),
+    },
+  ];
+
   return (
     <section className="mx-auto w-full max-w-7xl px-6 py-16 lg:px-12">
       <Parallax offset={28}>
         <ScrollAnimate>
           <div className="relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-14 shadow-soft sm:px-12">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">
-                What Makes Us Different?
-              </p>
+              <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{eyebrow}</p>
               <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-surface sm:text-4xl">
-                Expertise you can trust, <span className="text-brand">technology</span> you'll love.
+                {headingPrefix}
+                <span className="text-brand">{headingBrand}</span>
+                {headingSuffix}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-surface/70">
-                We take pride in building strong relationships with every client — understanding
-                your business and goals so we can offer tailored, proactive advice.
-              </p>
+              <p className="mt-4 text-sm leading-relaxed text-surface/70">{intro}</p>
             </div>
 
             <div className="mt-12 grid gap-10 md:grid-cols-3">
@@ -65,11 +74,10 @@ export function WhyChoose() {
                 to="/contact"
                 className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
               >
-                Speak to our team today
+                {cta}
               </Link>
               <p className="text-sm text-surface/60">
-                Call us now on <span className="text-surface">020 3916 5680</span> — Mon–Fri,
-                9AM–5PM.
+                {callPrefix} <span className="text-surface">{settings.phone}</span> — {settings.hours}.
               </p>
             </ScrollAnimate>
           </div>

@@ -11,10 +11,19 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminSectionRouteRouteImport } from './routes/admin/$section/route'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminSectionIndexRouteImport } from './routes/admin/$section/index'
+import { Route as AdminSectionIdRouteImport } from './routes/admin/$section/$id'
+import { Route as AdminSectionNewRouteImport } from './routes/admin/$section/new'
+import { Route as AdminPagesIndexRouteImport } from './routes/admin/pages/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -46,14 +60,63 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSectionRouteRoute = AdminSectionRouteRouteImport.update({
+  id: '/$section',
+  path: '/$section',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSectionIndexRoute = AdminSectionIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminSectionRouteRoute,
+} as any)
+const AdminSectionIdRoute = AdminSectionIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminSectionRouteRoute,
+} as any)
+const AdminSectionNewRoute = AdminSectionNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminSectionRouteRoute,
+} as any)
+const AdminPagesIndexRoute = AdminPagesIndexRouteImport.update({
+  id: '/pages/',
+  path: '/pages/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
+  '/admin/$section': typeof AdminSectionRouteRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/$section/$id': typeof AdminSectionIdRoute
+  '/admin/$section/new': typeof AdminSectionNewRoute
+  '/admin/$section/': typeof AdminSectionIndexRoute
+  '/admin/pages/': typeof AdminPagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,33 +125,87 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/$section/$id': typeof AdminSectionIdRoute
+  '/admin/$section/new': typeof AdminSectionNewRoute
+  '/admin/$section': typeof AdminSectionIndexRoute
+  '/admin/pages': typeof AdminPagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
+  '/admin/$section': typeof AdminSectionRouteRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/$section/$id': typeof AdminSectionIdRoute
+  '/admin/$section/new': typeof AdminSectionNewRoute
+  '/admin/$section/': typeof AdminSectionIndexRoute
+  '/admin/pages/': typeof AdminPagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/blog' | '/careers' | '/contact' | '/services'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/blog'
+    | '/careers'
+    | '/contact'
+    | '/services'
+    | '/admin/$section'
+    | '/admin/login'
+    | '/admin/settings'
+    | '/admin/'
+    | '/admin/$section/$id'
+    | '/admin/$section/new'
+    | '/admin/$section/'
+    | '/admin/pages/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/blog' | '/careers' | '/contact' | '/services'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/about'
     | '/blog'
     | '/careers'
     | '/contact'
     | '/services'
+    | '/admin/login'
+    | '/admin/settings'
+    | '/admin'
+    | '/admin/$section/$id'
+    | '/admin/$section/new'
+    | '/admin/$section'
+    | '/admin/pages'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/blog'
+    | '/careers'
+    | '/contact'
+    | '/services'
+    | '/admin/$section'
+    | '/admin/login'
+    | '/admin/settings'
+    | '/admin/'
+    | '/admin/$section/$id'
+    | '/admin/$section/new'
+    | '/admin/$section/'
+    | '/admin/pages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
@@ -110,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -140,11 +264,103 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/$section': {
+      id: '/admin/$section'
+      path: '/$section'
+      fullPath: '/admin/$section'
+      preLoaderRoute: typeof AdminSectionRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/$section/': {
+      id: '/admin/$section/'
+      path: '/'
+      fullPath: '/admin/$section/'
+      preLoaderRoute: typeof AdminSectionIndexRouteImport
+      parentRoute: typeof AdminSectionRouteRoute
+    }
+    '/admin/$section/$id': {
+      id: '/admin/$section/$id'
+      path: '/$id'
+      fullPath: '/admin/$section/$id'
+      preLoaderRoute: typeof AdminSectionIdRouteImport
+      parentRoute: typeof AdminSectionRouteRoute
+    }
+    '/admin/$section/new': {
+      id: '/admin/$section/new'
+      path: '/new'
+      fullPath: '/admin/$section/new'
+      preLoaderRoute: typeof AdminSectionNewRouteImport
+      parentRoute: typeof AdminSectionRouteRoute
+    }
+    '/admin/pages/': {
+      id: '/admin/pages/'
+      path: '/pages'
+      fullPath: '/admin/pages/'
+      preLoaderRoute: typeof AdminPagesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
 
+interface AdminSectionRouteRouteChildren {
+  AdminSectionIdRoute: typeof AdminSectionIdRoute
+  AdminSectionNewRoute: typeof AdminSectionNewRoute
+  AdminSectionIndexRoute: typeof AdminSectionIndexRoute
+}
+
+const AdminSectionRouteRouteChildren: AdminSectionRouteRouteChildren = {
+  AdminSectionIdRoute: AdminSectionIdRoute,
+  AdminSectionNewRoute: AdminSectionNewRoute,
+  AdminSectionIndexRoute: AdminSectionIndexRoute,
+}
+
+const AdminSectionRouteRouteWithChildren =
+  AdminSectionRouteRoute._addFileChildren(AdminSectionRouteRouteChildren)
+
+interface AdminRouteRouteChildren {
+  AdminSectionRouteRoute: typeof AdminSectionRouteRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminPagesIndexRoute: typeof AdminPagesIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminSectionRouteRoute: AdminSectionRouteRouteWithChildren,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminPagesIndexRoute: AdminPagesIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
