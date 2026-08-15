@@ -68,7 +68,6 @@ export function Testimonials() {
         delay={0.1}
         className="mt-10 flex flex-col items-center gap-3 px-6 text-center"
       >
-        <p className="text-sm text-muted-foreground">{icaewNote}</p>
         <Link
           to="/contact"
           className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong"
