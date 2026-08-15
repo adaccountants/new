@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
+import adaiLogo from "@/assets/adai-logo.png";
 import {
   Clock3,
   Facebook,
@@ -127,12 +128,16 @@ export function SiteHeader() {
         <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-12">
           <Link
             to="/"
-            className="font-display text-lg font-bold tracking-tight"
+            className="flex shrink-0 items-center focus:outline-none"
             onClick={() => setOpen(false)}
+            aria-label="ADAi Chartered Accountants Home"
           >
-            {brandPrefix}
-            <span className="text-brand">{brandAccent}</span>
-            {brandSuffix}
+            <img
+              src={adaiLogo}
+              alt="ADAi Chartered Accountants"
+              height={28}
+              className="h-7 w-auto object-contain select-none"
+            />
           </Link>
 
           <ul className="hidden items-center gap-8 md:flex">
