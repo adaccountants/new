@@ -18,12 +18,17 @@ export function Hero() {
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
 
-  // Force play as early as possible — bypasses autoplay-delay on some browsers
+  // Force play as early as possible and re-trigger on visibility restore
   useEffect(() => {
     const video = videoRef.current;
     if (!video || reduced) return;
     video.muted = true;
-    void video.play().catch(() => {/* silently ignore policy errors */});
+    const tryPlay = () => {
+      if (!document.hidden) void video.play().catch(() => {});
+    };
+    tryPlay();
+    document.addEventListener("visibilitychange", tryPlay);
+    return () => document.removeEventListener("visibilitychange", tryPlay);
   }, [reduced]);
 
   return (
@@ -38,8 +43,7 @@ export function Hero() {
           loop={!reduced}
           playsInline
           preload="auto"
-          disablePictureInPicture
-          style={{ pointerEvents: "none" }}
+          onClick={() => { void videoRef.current?.play(); }}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
