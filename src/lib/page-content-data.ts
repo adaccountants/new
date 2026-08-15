@@ -397,6 +397,20 @@ let blocks: ContentBlock[] = [
     "richtext",
   ),
   block("services.card.cta", "services", "Service card button", "Learn More"),
+  block("services.partners.eyebrow", "services", "Partners eyebrow", "Integrations"),
+  block(
+    "services.partners.heading",
+    "services",
+    "Partners heading",
+    "Accounting Technology Partners",
+  ),
+  block(
+    "services.partners.intro",
+    "services",
+    "Partners intro",
+    "We work with trusted cloud accounting and compliance platforms to deliver secure, efficient, and digital-first accounting services for businesses, charities, and individuals.",
+    "richtext",
+  ),
 
   // —— Blog page ——
   block("blog.eyebrow", "blog", "Blog page eyebrow", "Blog"),
