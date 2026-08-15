@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
@@ -17,8 +17,6 @@ export function Hero() {
   const intro = getContentValue("home.hero.intro");
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
-
-  const [playing, setPlaying] = useState(false);
 
   // Autoplay + iOS fallback: play on first touch/click anywhere on the page
   useEffect(() => {
@@ -50,21 +48,18 @@ export function Hero() {
   return (
     <>
       {/* ── Full-screen looping video ── */}
-      <section className="relative w-full bg-black md:h-screen md:overflow-hidden">
+      <section className="w-full md:h-screen md:overflow-hidden">
         <video
           ref={videoRef}
-          className={`w-full h-auto block md:h-full md:w-full md:object-cover transition-opacity duration-500 ${playing ? "opacity-100" : "opacity-0"}`}
+          className="w-full h-auto block md:h-full md:w-full md:object-cover"
           autoPlay
           muted
           loop={!reduced}
           playsInline
           preload="auto"
-          onPlaying={() => setPlaying(true)}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
-        {/* Transparent overlay — prevents any native play button interaction */}
-        <div className="absolute inset-0" aria-hidden="true" />
       </section>
 
       {/* ── Original hero text section ── */}
