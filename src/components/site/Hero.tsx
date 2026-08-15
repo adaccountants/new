@@ -18,23 +18,41 @@ export function Hero() {
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
 
-  // Force play as early as possible and re-trigger on visibility restore
+  // Autoplay + iOS fallback: play on first touch/click anywhere on the page
   useEffect(() => {
     const video = videoRef.current;
     if (!video || reduced) return;
+
     video.muted = true;
+
     const tryPlay = () => {
       if (!document.hidden) void video.play().catch(() => {});
     };
+
+    // Immediate attempt
     tryPlay();
+
+    // iOS requires a user gesture — fire on first touch/click anywhere
+    const onFirstGesture = () => {
+      void video.play().catch(() => {});
+    };
+    document.addEventListener("touchstart", onFirstGesture, { once: true, passive: true });
+    document.addEventListener("click", onFirstGesture, { once: true });
+
+    // Re-play when tab becomes visible again
     document.addEventListener("visibilitychange", tryPlay);
-    return () => document.removeEventListener("visibilitychange", tryPlay);
+
+    return () => {
+      document.removeEventListener("touchstart", onFirstGesture);
+      document.removeEventListener("click", onFirstGesture);
+      document.removeEventListener("visibilitychange", tryPlay);
+    };
   }, [reduced]);
 
   return (
     <>
       {/* ── Full-screen looping video ── */}
-      <section className="w-full md:h-screen md:overflow-hidden">
+      <section className="relative w-full md:h-screen md:overflow-hidden">
         <video
           ref={videoRef}
           className="w-full h-auto block md:h-full md:w-full md:object-cover"
@@ -43,10 +61,11 @@ export function Hero() {
           loop={!reduced}
           playsInline
           preload="auto"
-          onClick={() => { void videoRef.current?.play(); }}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
+        {/* Transparent overlay — blocks the native iOS play button from showing */}
+        <div className="absolute inset-0" aria-hidden="true" />
       </section>
 
       {/* ── Original hero text section ── */}
