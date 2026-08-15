@@ -79,18 +79,9 @@ function ServicesPage() {
             >
               {getContentValue("services.ctaSecondary")}
             </a>
-            <a
-              href="#partners"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
-            >
-              {getContentValue("services.partners.heading")}
-              <ArrowRight className="size-4" />
-            </a>
           </div>
         </div>
       </section>
-
-      <TechnologyPartners />
 
       <section className="mx-auto max-w-6xl px-5 pb-16 pt-4">
         <div className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-10">
@@ -188,6 +179,8 @@ function ServicesPage() {
           ))}
         </div>
       </section>
+
+      <TechnologyPartners />
 
       <ContactCta />
     </main>
