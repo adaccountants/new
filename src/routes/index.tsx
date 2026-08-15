@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
-import { TechnologyPartners } from "@/components/site/TechnologyPartners";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
 import icaewLogo from "@/assets/finalicaewlogo.jpeg";
@@ -34,7 +33,6 @@ function Index() {
       <Hero />
       <About />
       <Services />
-      <TechnologyPartners />
       <WhyChoose />
       <Testimonials />
     </div>
