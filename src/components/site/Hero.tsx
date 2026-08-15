@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
@@ -18,6 +18,8 @@ export function Hero() {
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
 
+  const [playing, setPlaying] = useState(false);
+
   // Autoplay + iOS fallback: play on first touch/click anywhere on the page
   useEffect(() => {
     const video = videoRef.current;
@@ -29,17 +31,13 @@ export function Hero() {
       if (!document.hidden) void video.play().catch(() => {});
     };
 
-    // Immediate attempt
     tryPlay();
 
-    // iOS requires a user gesture — fire on first touch/click anywhere
     const onFirstGesture = () => {
       void video.play().catch(() => {});
     };
     document.addEventListener("touchstart", onFirstGesture, { once: true, passive: true });
     document.addEventListener("click", onFirstGesture, { once: true });
-
-    // Re-play when tab becomes visible again
     document.addEventListener("visibilitychange", tryPlay);
 
     return () => {
@@ -52,19 +50,20 @@ export function Hero() {
   return (
     <>
       {/* ── Full-screen looping video ── */}
-      <section className="relative w-full md:h-screen md:overflow-hidden">
+      <section className="relative w-full bg-black md:h-screen md:overflow-hidden">
         <video
           ref={videoRef}
-          className="w-full h-auto block md:h-full md:w-full md:object-cover"
+          className={`w-full h-auto block md:h-full md:w-full md:object-cover transition-opacity duration-500 ${playing ? "opacity-100" : "opacity-0"}`}
           autoPlay
           muted
           loop={!reduced}
           playsInline
           preload="auto"
+          onPlaying={() => setPlaying(true)}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
-        {/* Transparent overlay — blocks the native iOS play button from showing */}
+        {/* Transparent overlay — prevents any native play button interaction */}
         <div className="absolute inset-0" aria-hidden="true" />
       </section>
 
