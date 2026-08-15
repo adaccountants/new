@@ -11,9 +11,9 @@ export function ContactCta() {
   const contactButton = getContentValue("home.cta.contactButton");
 
   return (
-    <section className="mx-auto max-w-6xl px-5 pb-16">
-      <div className="flex flex-col items-center gap-5 rounded-3xl border border-border bg-secondary/60 px-6 py-12 text-center shadow-soft">
-        <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+    <section className="mx-auto max-w-6xl px-5 py-12 text-center">
+      <div className="flex flex-col items-center gap-5 text-center">
+        <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
           {heading}
         </h2>
         <div className="flex flex-wrap items-center justify-center gap-3">
