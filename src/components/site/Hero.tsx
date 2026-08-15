@@ -1,34 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import icaewLogo from "@/assets/icaew_logo.jpeg";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
-
-const ICAEW_HOME = "https://www.icaew.com";
-
-function IcaewHeroLogo({ className }: { className?: string }) {
-  return (
-    <a
-      href={ICAEW_HOME}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="ICAEW Chartered Accountants (opens icaew.com)"
-      className={className}
-    >
-      <img
-        src={icaewLogo}
-        alt="ICAEW Chartered Accountants"
-        width={736}
-        height={298}
-        decoding="async"
-        draggable={false}
-        className="shrink-0 max-w-full"
-      />
-    </a>
-  );
-}
 
 export function Hero() {
   useCms();
@@ -88,11 +63,7 @@ export function Hero() {
               {ctaSecondary}
             </Link>
           </ScrollAnimate>
-
-          <IcaewHeroLogo className="mt-8 inline-flex lg:hidden" />
         </div>
-
-        <IcaewHeroLogo className="hidden lg:inline-flex" />
       </div>
     </section>
   );

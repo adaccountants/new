@@ -4,7 +4,7 @@ import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
-import icaewLogo from "@/assets/icaew_logo.jpeg";
+import icaewLogo from "@/assets/finalicaewlogo.jpeg";
 
 const title = "Alpha Digi AI — Chartered Accountants in London";
 const description =
