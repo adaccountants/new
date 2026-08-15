@@ -15,6 +15,7 @@ import {
   BookOpen,
   Settings,
   Briefcase,
+  Handshake,
   Layers,
   Users,
 } from "lucide-react";
@@ -43,6 +44,7 @@ const nav: Array<
   },
   { label: "Blog", to: "/admin/$section", params: { section: "blog" }, icon: Newspaper },
   { label: "Knowledge", to: "/admin/$section", params: { section: "knowledge" }, icon: BookOpen },
+  { label: "Partnerships", to: "/admin/$section", params: { section: "partnership" }, icon: Handshake },
   { label: "Team", to: "/admin/$section", params: { section: "team" }, icon: Users },
   { label: "Careers", to: "/admin/$section", params: { section: "careers" }, icon: Briefcase },
   { label: "Pages", to: "/admin/pages", icon: FileText },

@@ -19,7 +19,7 @@ export default defineConfig({
       clientFiles: [
         "./src/routes/index.tsx",
         "./src/routes/about.tsx",
-        "./src/routes/services.tsx",
+        "./src/routes/services/index.tsx",
         "./src/routes/careers.tsx",
         "./src/routes/blog.tsx",
         "./src/routes/contact.tsx",

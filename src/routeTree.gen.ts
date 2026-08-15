@@ -16,11 +16,13 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
-import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ServicesRouteRouteImport } from './routes/services/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminSectionRouteRouteImport } from './routes/admin/$section/route'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as ServicesIndexRouteImport } from './routes/services/index'
+import { Route as ServicesSlugRouteImport } from './routes/services/$slug'
 import { Route as AdminSectionIndexRouteImport } from './routes/admin/$section/index'
 import { Route as AdminSectionIdRouteImport } from './routes/admin/$section/$id'
 import { Route as AdminSectionNewRouteImport } from './routes/admin/$section/new'
@@ -61,7 +63,7 @@ const KnowledgeRoute = KnowledgeRouteImport.update({
   path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ServicesRoute = ServicesRouteImport.update({
+const ServicesRouteRoute = ServicesRouteRouteImport.update({
   id: '/services',
   path: '/services',
   getParentRoute: () => rootRouteImport,
@@ -85,6 +87,16 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServicesRouteRoute,
+} as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ServicesRouteRoute,
 } as any)
 const AdminSectionIndexRoute = AdminSectionIndexRouteImport.update({
   id: '/',
@@ -110,16 +122,18 @@ const AdminPagesIndexRoute = AdminPagesIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/services': typeof ServicesRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/knowledge': typeof KnowledgeRoute
-  '/services': typeof ServicesRoute
   '/admin/$section': typeof AdminSectionRouteRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/admin/$section/$id': typeof AdminSectionIdRoute
   '/admin/$section/new': typeof AdminSectionNewRoute
   '/admin/$section/': typeof AdminSectionIndexRoute
@@ -132,10 +146,11 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/knowledge': typeof KnowledgeRoute
-  '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/services': typeof ServicesIndexRoute
   '/admin/$section/$id': typeof AdminSectionIdRoute
   '/admin/$section/new': typeof AdminSectionNewRoute
   '/admin/$section': typeof AdminSectionIndexRoute
@@ -145,16 +160,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/services': typeof ServicesRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/knowledge': typeof KnowledgeRoute
-  '/services': typeof ServicesRoute
   '/admin/$section': typeof AdminSectionRouteRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/admin/$section/$id': typeof AdminSectionIdRoute
   '/admin/$section/new': typeof AdminSectionNewRoute
   '/admin/$section/': typeof AdminSectionIndexRoute
@@ -165,16 +182,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/services'
     | '/about'
     | '/blog'
     | '/careers'
     | '/contact'
     | '/knowledge'
-    | '/services'
     | '/admin/$section'
     | '/admin/login'
     | '/admin/settings'
+    | '/services/$slug'
     | '/admin/'
+    | '/services/'
     | '/admin/$section/$id'
     | '/admin/$section/new'
     | '/admin/$section/'
@@ -187,10 +206,11 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/knowledge'
-    | '/services'
     | '/admin/login'
     | '/admin/settings'
+    | '/services/$slug'
     | '/admin'
+    | '/services'
     | '/admin/$section/$id'
     | '/admin/$section/new'
     | '/admin/$section'
@@ -199,16 +219,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/services'
     | '/about'
     | '/blog'
     | '/careers'
     | '/contact'
     | '/knowledge'
-    | '/services'
     | '/admin/$section'
     | '/admin/login'
     | '/admin/settings'
+    | '/services/$slug'
     | '/admin/'
+    | '/services/'
     | '/admin/$section/$id'
     | '/admin/$section/new'
     | '/admin/$section/'
@@ -218,12 +240,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  ServicesRouteRoute: typeof ServicesRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   KnowledgeRoute: typeof KnowledgeRoute
-  ServicesRoute: typeof ServicesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -281,7 +303,7 @@ declare module '@tanstack/react-router' {
       id: '/services'
       path: '/services'
       fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
+      preLoaderRoute: typeof ServicesRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -311,6 +333,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof ServicesRouteRoute
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof ServicesRouteRoute
     }
     '/admin/$section/': {
       id: '/admin/$section/'
@@ -378,15 +414,29 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface ServicesRouteRouteChildren {
+  ServicesSlugRoute: typeof ServicesSlugRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
+}
+
+const ServicesRouteRouteChildren: ServicesRouteRouteChildren = {
+  ServicesSlugRoute: ServicesSlugRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
+}
+
+const ServicesRouteRouteWithChildren = ServicesRouteRoute._addFileChildren(
+  ServicesRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  ServicesRouteRoute: ServicesRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   KnowledgeRoute: KnowledgeRoute,
-  ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

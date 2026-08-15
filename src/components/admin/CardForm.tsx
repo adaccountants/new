@@ -115,7 +115,7 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-2xl space-y-5">
       <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
+        <Label htmlFor="title">{section === "partnership" ? "Partner name" : "Title"}</Label>
         <Input id="title" {...form.register("title")} />
         {form.formState.errors.title ? (
           <p className="text-sm text-destructive">{form.formState.errors.title.message}</p>
@@ -128,7 +128,7 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="body">Body</Label>
+        <Label htmlFor="body">{section === "partnership" ? "Description" : "Body"}</Label>
         <Textarea id="body" rows={8} {...form.register("body")} />
         {section === "careers" ? (
           <p className="text-xs text-muted-foreground">
@@ -153,7 +153,7 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="image">Image</Label>
+        <Label htmlFor="image">{section === "partnership" ? "Logo" : "Image"}</Label>
         {/* TEMP: real Supabase Storage upload replaces this — store the public URL in imageUrl. */}
         <Input
           id="image"
@@ -174,8 +174,15 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
           <img
             src={imageUrl}
             alt=""
-            className="mt-2 h-40 w-full max-w-md rounded-md border object-cover"
+            className={`mt-2 h-40 w-full max-w-md rounded-md border ${
+              section === "partnership" ? "bg-white object-contain p-4" : "object-cover"
+            }`}
           />
+        ) : null}
+        {section === "partnership" ? (
+          <p className="text-xs text-muted-foreground">
+            Upload the partner logo. It is shown contained (not cropped) on the public cards.
+          </p>
         ) : null}
       </div>
 

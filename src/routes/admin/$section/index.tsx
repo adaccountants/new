@@ -26,6 +26,7 @@ const titles: Record<CardSection, string> = {
   testimonials: "Testimonials",
   blog: "Blog",
   knowledge: "Knowledge",
+  partnership: "Partnerships",
   team: "Team",
   careers: "Careers",
 };
@@ -77,7 +78,11 @@ function AdminSectionListPage() {
                 <img
                   src={card.imageUrl}
                   alt=""
-                  className="size-16 shrink-0 rounded-md object-cover"
+                  className={`size-16 shrink-0 rounded-md ${
+                    section === "partnership"
+                      ? "bg-slate-50 object-contain p-1"
+                      : "object-cover"
+                  }`}
                 />
               ) : (
                 <div className="grid size-16 shrink-0 place-items-center rounded-md bg-slate-100 text-xs text-muted-foreground">

@@ -3,35 +3,9 @@ import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
+import { getCards } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
-
-const partners = [
-  {
-    name: "Xero",
-    logo: "/partners/xero.svg",
-    description:
-      "Cloud accounting software that simplifies bookkeeping, invoicing, bank reconciliation, reporting, and financial management.",
-  },
-  {
-    name: "SmartSearch",
-    logo: "/partners/smartsearch.svg",
-    description:
-      "Digital identity verification, AML compliance, and Know Your Customer (KYC) solutions for secure client onboarding.",
-  },
-  {
-    name: "AccountsIQ",
-    logo: "/partners/accountsiq.svg",
-    description:
-      "Advanced cloud financial management software providing automation, reporting, consolidation, and business insights.",
-  },
-  {
-    name: "Sage",
-    logo: "/partners/sage.svg",
-    description:
-      "Business accounting, payroll, and financial management software designed for growing businesses.",
-  },
-] as const;
 
 const containerVariants: Variants = {
   hidden: {},
@@ -53,6 +27,7 @@ const cardVariants: Variants = {
 
 export function TechnologyPartners() {
   useCms();
+  const partners = getCards("partnership").filter((card) => card.published);
   const eyebrow = getContentValue("services.partners.eyebrow") || "Integrations";
   const heading = getContentValue("services.partners.heading") || "Accounting Technology Partners";
   const intro =
@@ -82,28 +57,30 @@ export function TechnologyPartners() {
         >
           {partners.map((partner) => (
             <motion.article
-              key={partner.name}
+              key={partner.id}
               variants={cardVariants}
               whileHover={{ y: -8, scale: 1.02 }}
               transition={{ duration: 0.3, ease: EASE_OUT }}
               className="group flex h-full flex-col rounded-[2rem] border border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:border-brand/50 hover:shadow-brand/15 sm:p-8"
             >
               <div className="mb-6 flex h-16 w-full items-center justify-center overflow-hidden">
-                <motion.img
-                  src={partner.logo}
-                  alt={`${partner.name} logo`}
-                  width={176}
-                  height={40}
-                  whileHover={{ scale: 1.08 }}
-                  transition={{ duration: 0.3, ease: EASE_OUT }}
-                  className="h-10 w-auto max-w-[11rem] object-contain object-center transition-transform"
-                />
+                {partner.imageUrl ? (
+                  <motion.img
+                    src={partner.imageUrl}
+                    alt={`${partner.title} logo`}
+                    width={176}
+                    height={40}
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ duration: 0.3, ease: EASE_OUT }}
+                    className="h-10 w-auto max-w-[11rem] object-contain object-center transition-transform"
+                  />
+                ) : null}
               </div>
               <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-brand">
-                {partner.name}
+                {partner.title}
               </h3>
               <p className="mt-2 mb-6 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                {partner.description}
+                {partner.body}
               </p>
               <Link
                 to="/contact"

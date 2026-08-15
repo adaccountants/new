@@ -8,7 +8,7 @@
  * Table: `cards`
  * Columns:
  *   id          uuid primary key
- *   section     text  -- 'services' | 'testimonials' | 'blog' | 'team' | 'careers' | 'knowledge'
+ *   section     text  -- 'services' | 'testimonials' | 'blog' | 'team' | 'careers' | 'knowledge' | 'partnership'
  *   slug        text  -- required for services & blog; unique per (section, slug)
  *   title       text
  *   subtitle    text
@@ -55,7 +55,14 @@ import blogRnd from "@/assets/blog-rnd.jpg";
 
 import { emitCmsChange } from "@/lib/cms-sync";
 
-export type CardSection = "services" | "testimonials" | "blog" | "team" | "careers" | "knowledge";
+export type CardSection =
+  | "services"
+  | "testimonials"
+  | "blog"
+  | "team"
+  | "careers"
+  | "knowledge"
+  | "partnership";
 
 export type KnowledgeCategory =
   | "Guides"
@@ -89,9 +96,10 @@ export const CARD_SECTIONS: CardSection[] = [
   "services",
   "testimonials",
   "blog",
+  "knowledge",
+  "partnership",
   "team",
   "careers",
-  "knowledge",
 ];
 
 export const HOME_SERVICE_SLUG_PREFIX = "home-";
@@ -253,6 +261,42 @@ let cards: Card[] = [
     body: "Secure, cloud-based accounting outsourcing that reduces costs while maintaining quality and compliance.",
     imageUrl: s10,
     sortOrder: 19,
+    published: true,
+  },
+  {
+    id: "ptr-xero",
+    section: "partnership",
+    title: "Xero",
+    body: "Cloud accounting software that simplifies bookkeeping, invoicing, bank reconciliation, reporting, and financial management.",
+    imageUrl: "/partners/xero.svg",
+    sortOrder: 1,
+    published: true,
+  },
+  {
+    id: "ptr-smartsearch",
+    section: "partnership",
+    title: "SmartSearch",
+    body: "Digital identity verification, AML compliance, and Know Your Customer (KYC) solutions for secure client onboarding.",
+    imageUrl: "/partners/smartsearch.svg",
+    sortOrder: 2,
+    published: true,
+  },
+  {
+    id: "ptr-accountsiq",
+    section: "partnership",
+    title: "AccountsIQ",
+    body: "Advanced cloud financial management software providing automation, reporting, consolidation, and business insights.",
+    imageUrl: "/partners/accountsiq.svg",
+    sortOrder: 3,
+    published: true,
+  },
+  {
+    id: "ptr-sage",
+    section: "partnership",
+    title: "Sage",
+    body: "Business accounting, payroll, and financial management software designed for growing businesses.",
+    imageUrl: "/partners/sage.svg",
+    sortOrder: 4,
     published: true,
   },
   {

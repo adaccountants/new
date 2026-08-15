@@ -12,7 +12,7 @@ function coreServiceCards() {
   return getCards("services").filter((card) => card.published && !isHomeServiceCard(card));
 }
 
-export const Route = createFileRoute("/services")({
+export const Route = createFileRoute("/services/")({
   head: () => {
     const preload = coreServiceCards()
       .slice(0, 3)
@@ -167,13 +167,24 @@ function ServicesPage() {
               <div className="flex flex-col gap-3 p-6">
                 <h3 className="text-lg leading-snug font-bold text-foreground">{s.title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-                <Link
-                  to="/contact"
-                  className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors group-hover:bg-brand group-hover:text-brand-foreground"
-                >
-                  {getContentValue("services.card.cta")}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                {s.slug ? (
+                  <Link
+                    to="/services/$slug"
+                    params={{ slug: s.slug }}
+                    className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors group-hover:bg-brand group-hover:text-brand-foreground"
+                  >
+                    {getContentValue("services.card.cta")}
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                ) : (
+                  <Link
+                    to="/contact"
+                    className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors group-hover:bg-brand group-hover:text-brand-foreground"
+                  >
+                    {getContentValue("services.card.cta")}
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                )}
               </div>
             </article>
           ))}
