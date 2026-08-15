@@ -82,6 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
       },
       { name: "author", content: "Alpha Digi AI Accountants" },
+      { property: "og:site_name", content: "Alpha Digi AI Accountants" },
       { property: "og:title", content: "Alpha Digi AI — Chartered Accountants in London" },
       {
         property: "og:description",
@@ -89,7 +90,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/favicon.png" },
+      { property: "og:image:alt", content: "ADAi Chartered Accountants logo" },
+      { property: "og:image:width", content: "1536" },
+      { property: "og:image:height", content: "512" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Alpha Digi AI — Chartered Accountants in London" },
+      {
+        name: "twitter:description",
+        content:
+          "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
+      },
+      { name: "twitter:image", content: "/favicon.png" },
     ],
     links: [
       {
@@ -97,7 +109,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico" },
-      { rel: "icon", href: "/favicon.jpeg", type: "image/jpeg" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "shortcut icon", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
