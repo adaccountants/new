@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
+import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
 
@@ -31,6 +33,24 @@ const partners = [
   },
 ] as const;
 
+const containerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: EASE_OUT },
+  },
+};
+
 export function TechnologyPartners() {
   useCms();
   const eyebrow = getContentValue("services.partners.eyebrow") || "Integrations";
@@ -43,7 +63,7 @@ export function TechnologyPartners() {
   return (
     <section id="partners" className="scroll-mt-28 bg-muted py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-5">
-        <div className="mx-auto max-w-3xl text-center">
+        <ScrollAnimate className="mx-auto max-w-3xl text-center">
           <span className="inline-block rounded-full bg-brand/15 px-4 py-1.5 text-xs font-bold tracking-[0.2em] text-brand uppercase">
             {eyebrow}
           </span>
@@ -51,37 +71,50 @@ export function TechnologyPartners() {
             {heading}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">{intro}</p>
-        </div>
+        </ScrollAnimate>
 
-        <div className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {partners.map((partner) => (
-            <article
+            <motion.article
               key={partner.name}
-              className="group flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
+              variants={cardVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ duration: 0.3, ease: EASE_OUT }}
+              className="group flex h-full flex-col rounded-[2rem] border border-border/80 bg-card p-6 shadow-soft transition-all duration-300 hover:border-brand/50 hover:shadow-brand/15 sm:p-8"
             >
-              <div className="mb-6 flex h-16 w-full items-center justify-center">
-                <img
+              <div className="mb-6 flex h-16 w-full items-center justify-center overflow-hidden">
+                <motion.img
                   src={partner.logo}
                   alt={`${partner.name} logo`}
                   width={176}
                   height={40}
-                  className="h-10 w-auto max-w-[11rem] object-contain object-center"
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ duration: 0.3, ease: EASE_OUT }}
+                  className="h-10 w-auto max-w-[11rem] object-contain object-center transition-transform"
                 />
               </div>
-              <h3 className="text-lg font-bold text-foreground">{partner.name}</h3>
+              <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-brand">
+                {partner.name}
+              </h3>
               <p className="mt-2 mb-6 text-xs leading-relaxed text-muted-foreground sm:text-sm">
                 {partner.description}
               </p>
               <Link
                 to="/contact"
-                className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors group-hover:bg-brand group-hover:text-brand-foreground"
+                className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-all duration-300 group-hover:bg-brand group-hover:text-brand-foreground group-hover:shadow-brand"
               >
                 {cta}
-                <ArrowRight className="size-4" />
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
