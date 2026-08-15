@@ -5,7 +5,6 @@ import {
   Clock3,
   Facebook,
   Instagram,
-  Linkedin,
   Mail,
   Menu,
   Phone,
@@ -30,7 +29,7 @@ const navKeys = [
 function socialIcon(platform: string): ReactNode {
   const name = platform.trim().toLowerCase();
   const iconClass = "h-3.5 w-3.5";
-  if (name.includes("linkedin")) return <Linkedin className={iconClass} aria-hidden />;
+  if (name.includes("linkedin")) return null;
   if (name.includes("facebook")) return <Facebook className={iconClass} aria-hidden />;
   if (name.includes("instagram")) return <Instagram className={iconClass} aria-hidden />;
   if (name.includes("youtube")) return <Youtube className={iconClass} aria-hidden />;
@@ -40,10 +39,7 @@ function socialIcon(platform: string): ReactNode {
 
 function TopInfoBar() {
   const settings = getSettings();
-  const socials = settings.socials.filter((social) => social.url);
-  const linkedIn = socials.find((social) => social.platform.toLowerCase().includes("linkedin"));
-  const otherSocials = socials.filter((social) => !social.platform.toLowerCase().includes("linkedin"));
-  const orderedSocials = [...(linkedIn ? [linkedIn] : []), ...otherSocials];
+  const orderedSocials = settings.socials.filter((social) => social.url && !social.platform.toLowerCase().includes("linkedin"));
 
   return (
     <div className="bg-neutral-950 text-white">
@@ -75,7 +71,7 @@ function TopInfoBar() {
           </li>
         </ul>
 
-        {orderedSocials.length > 0 ? (
+        {orderedSocials.length > 0 && (
           <ul className="hidden shrink-0 items-center gap-1 sm:flex">
             {orderedSocials.map((social) => {
               const icon = socialIcon(social.platform);
@@ -95,16 +91,6 @@ function TopInfoBar() {
               );
             })}
           </ul>
-        ) : (
-          <a
-            href="https://www.linkedin.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            className="hidden h-7 w-7 shrink-0 items-center justify-center rounded-full text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex"
-          >
-            <Linkedin className="h-3.5 w-3.5" aria-hidden />
-          </a>
         )}
       </div>
     </div>
