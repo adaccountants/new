@@ -58,7 +58,7 @@ export function Hero() {
         }}
       />
 
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-10 px-6 pt-4 pb-14 lg:flex-row lg:items-center lg:gap-12 lg:px-12 lg:pt-5 lg:pb-16">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-10 px-6 pt-0 pb-14 lg:flex-row lg:items-center lg:gap-12 lg:px-12 lg:pt-5 lg:pb-16">
 
         {/* ── LEFT: Text content ── */}
         <div className="relative z-10 order-last w-full lg:order-first lg:w-[47%] xl:w-[46%]">
@@ -121,10 +121,7 @@ export function Hero() {
         </div>
 
         {/* ── RIGHT: Video container ── */}
-        <motion.div
-          initial={{ opacity: 0, x: 40, scale: 0.97 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.25, ease: EASE_OUT }}
+        <div
           className="relative order-first -mx-6 w-[calc(100%+3rem)] lg:mx-0 lg:order-last lg:w-[50%] xl:w-[51%]"
           style={{ flexShrink: 0 }}
         >
@@ -158,7 +155,7 @@ export function Hero() {
                 "radial-gradient(ellipse at 60% 50%, color-mix(in oklab, var(--brand) 30%, transparent) 0%, transparent 70%)",
             }}
           />
-        </motion.div>
+        </div>
       </div>
     </section>
   );
