@@ -41,7 +41,13 @@ let settings: SiteSettings = {
   email: "info@adaaccountants.uk",
   address: "London, United Kingdom",
   hours: "Mon – Fri, 9AM – 5PM",
-  socials: [],
+  socials: [
+    { platform: "Instagram", url: "https://instagram.com" },
+    { platform: "X", url: "https://x.com/ADAiaccountants" },
+    { platform: "LinkedIn", url: "https://www.linkedin.com/company/alpha-digiai-accountants-ltd/about/?viewAsMember=true" },
+    { platform: "YouTube", url: "https://youtube.com" },
+    { platform: "Facebook", url: "https://facebook.com" },
+  ],
   footerText: "Alpha Digi AI Accountants. ICAEW Chartered Accountants.",
 };
 

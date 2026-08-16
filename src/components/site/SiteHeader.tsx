@@ -70,27 +70,6 @@ function TopInfoBar() {
           </li>
         </ul>
 
-        {orderedSocials.length > 0 && (
-          <ul className="hidden shrink-0 items-center gap-1 sm:flex">
-            {orderedSocials.map((social) => {
-              const icon = socialIcon(social.platform);
-              if (!icon) return null;
-              return (
-                <li key={`${social.platform}-${social.url}`}>
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={social.platform}
-                    className="inline-flex h-7 w-7 items-center justify-center rounded-full text-white/75 transition-colors hover:bg-white/10 hover:text-white"
-                  >
-                    {icon}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
 import { getSettings, interpolateSettings } from "@/lib/site-settings-data";
+import { getSocialIcon } from "@/lib/social-icons";
 
 const footerNav = [
   { key: "home.nav.home", to: "/" as const },
@@ -78,22 +79,27 @@ export function SiteFooter() {
                     </Link>
                   </li>
                 ))}
-                {settings.socials
-                  .filter((social) => social.url)
-                  .map((social) => (
-                    <li key={`${social.platform}-${social.url}`}>
-                      <a
-                        href={social.url}
-                        className="transition-colors hover:text-brand"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {social.platform || social.url}
-                      </a>
-                    </li>
-                  ))}
               </ul>
             </nav>
+
+            {settings.socials.filter((s) => s.url && s.url.trim().length > 0).length > 0 && (
+              <div className="mt-4 flex flex-wrap items-center gap-4">
+                {settings.socials
+                  .filter((s) => s.url && s.url.trim().length > 0)
+                  .map((social) => (
+                    <a
+                      key={`${social.platform}-${social.url}`}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit our ${social.platform} page`}
+                      className="text-surface/75 transition-colors hover:text-brand"
+                    >
+                      {getSocialIcon(social.platform, "h-5 w-5")}
+                    </a>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Right CTA Button */}

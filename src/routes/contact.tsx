@@ -5,6 +5,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 import { getMailHref, getPhoneHref, getSettings } from "@/lib/site-settings-data";
+import { getSocialIcon } from "@/lib/social-icons";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -81,6 +82,31 @@ function ContactPage() {
               </div>
             </div>
           ))}
+
+          {settings.socials.filter((s) => s.url && s.url.trim().length > 0).length > 0 && (
+            <div className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-5 shadow-soft">
+              <p className="text-xs font-bold tracking-[0.15em] text-muted-foreground uppercase">
+                Social Media
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                {settings.socials
+                  .filter((s) => s.url && s.url.trim().length > 0)
+                  .map((social) => (
+                    <a
+                      key={`${social.platform}-${social.url}`}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit our ${social.platform} page`}
+                      className="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand text-brand-foreground transition-colors hover:bg-brand-strong"
+                      title={`Follow us on ${social.platform}`}
+                    >
+                      {getSocialIcon(social.platform, "size-5")}
+                    </a>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <form
