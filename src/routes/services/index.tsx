@@ -5,21 +5,23 @@ import { ArrowRight, Check, ChevronUp, Phone } from "lucide-react";
 import { ContactCta } from "@/components/site/ContactCta";
 import { TechnologyPartners } from "@/components/site/TechnologyPartners";
 import { getCards, isHomeServiceCard } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
-
-function coreServiceCards() {
-  return getCards("services").filter((card) => card.published && !isHomeServiceCard(card));
-}
+import { useContentValue } from "@/lib/cms-context";
+import { pageSeoHead } from "@/lib/cms-load";
 
 export const Route = createFileRoute("/services/")({
-  head: () => {
-    const preload = coreServiceCards()
+  loader: async () => {
+    const services = (await getCards("services")).filter(
+      (card) => card.published && !isHomeServiceCard(card),
+    );
+    return { services };
+  },
+  head: ({ loaderData, matches }) => {
+    const preload = loaderData.services
       .slice(0, 3)
       .filter((card) => card.imageUrl)
       .map((card) => ({ rel: "preload" as const, href: card.imageUrl, as: "image" as const }));
     return {
-      meta: seoHeadTags("services"),
+      meta: pageSeoHead("services", matches),
       links: preload,
     };
   },
@@ -27,12 +29,12 @@ export const Route = createFileRoute("/services/")({
 });
 
 function ServicesPage() {
-  useCms();
+  const { services } = Route.useLoaderData();
+  const getContentValue = useContentValue();
   const [open, setOpen] = useState(true);
   const highlights = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) =>
     getContentValue(`services.highlight.${n}`),
   );
-  const services = coreServiceCards();
 
   return (
     <main className="bg-background">

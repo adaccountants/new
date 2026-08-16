@@ -1,21 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { StaggerCards } from "@/components/motion/StaggerCards";
-import { getCards, isHomeServiceCard } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
 
 export function Services() {
-  useCms();
+  const getContentValue = useContentValue();
+  const { homeServices } = useCmsSnapshot();
   const eyebrow = getContentValue("home.services.eyebrow");
   const headingPrefix = getContentValue("home.services.headingPrefix");
   const headingBrand = getContentValue("home.services.headingBrand");
   const headingSuffix = getContentValue("home.services.headingSuffix");
   const intro = getContentValue("home.services.intro");
   const cta = getContentValue("home.services.cta");
-  const services = getCards("services")
-    .filter((card) => card.published && isHomeServiceCard(card))
-    .map((card) => {
+  const services = homeServices.map((card) => {
       const item: { id: string; label: string; image: string; caption?: string } = {
         id: card.id,
         label: card.title,

@@ -11,9 +11,8 @@ import {
   X,
   Youtube,
 } from "lucide-react";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
-import { getMailHref, getPhoneHref, getSettings } from "@/lib/site-settings-data";
+import { useContentValue, useSettings } from "@/lib/cms-context";
+import { getMailHref, getPhoneHref } from "@/lib/site-settings-data";
 
 const navKeys = [
   { key: "home.nav.home", to: "/" as const },
@@ -37,7 +36,7 @@ function socialIcon(platform: string): ReactNode {
 }
 
 function TopInfoBar() {
-  const settings = getSettings();
+  const settings = useSettings();
   const orderedSocials = settings.socials.filter((social) => social.url && !social.platform.toLowerCase().includes("linkedin"));
 
   return (
@@ -76,7 +75,7 @@ function TopInfoBar() {
 }
 
 export function SiteHeader() {
-  useCms();
+  const getContentValue = useContentValue();
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const contactCta = getContentValue("home.header.contactCta");

@@ -3,21 +3,21 @@ import { ArrowRight } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
-
-function publishedPosts() {
-  return getCards("blog").filter((card) => card.published);
-}
+import { useContentValue } from "@/lib/cms-context";
+import { pageSeoHead } from "@/lib/cms-load";
 
 export const Route = createFileRoute("/blog")({
-  head: () => {
-    const preload = publishedPosts()
+  loader: async () => {
+    const posts = (await getCards("blog")).filter((card) => card.published);
+    return { posts };
+  },
+  head: ({ loaderData, matches }) => {
+    const preload = loaderData.posts
       .slice(0, 3)
       .filter((card) => card.imageUrl)
       .map((card) => ({ rel: "preload" as const, href: card.imageUrl, as: "image" as const }));
     return {
-      meta: seoHeadTags("blog"),
+      meta: pageSeoHead("blog", matches),
       links: preload,
     };
   },
@@ -25,8 +25,8 @@ export const Route = createFileRoute("/blog")({
 });
 
 function BlogPage() {
-  useCms();
-  const posts = publishedPosts();
+  const { posts } = Route.useLoaderData();
+  const getContentValue = useContentValue();
 
   return (
     <main className="bg-background">

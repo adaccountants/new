@@ -3,9 +3,7 @@ import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
-import { getCards } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
 
 const containerVariants: Variants = {
   hidden: {},
@@ -26,8 +24,8 @@ const cardVariants: Variants = {
 };
 
 export function TechnologyPartners() {
-  useCms();
-  const partners = getCards("partnership").filter((card) => card.published);
+  const getContentValue = useContentValue();
+  const { partners } = useCmsSnapshot();
   const eyebrow = getContentValue("services.partners.eyebrow");
   const heading = getContentValue("services.partners.heading");
   const intro = getContentValue("services.partners.intro");

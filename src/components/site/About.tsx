@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Parallax } from "@/components/motion/Parallax";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { useContentValue } from "@/lib/cms-context";
 
 export function About() {
-  useCms();
+  const getContentValue = useContentValue();
   const imageUrl = getContentValue("home.about.imageUrl");
   const imageAlt = getContentValue("home.about.imageAlt");
   const yearsValue = getContentValue("home.about.yearsValue");

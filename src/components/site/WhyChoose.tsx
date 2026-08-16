@@ -2,13 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { LineChart, Award, HeartHandshake } from "lucide-react";
 import { Parallax } from "@/components/motion/Parallax";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
-import { getSettings } from "@/lib/site-settings-data";
+import { useContentValue, useSettings } from "@/lib/cms-context";
 
 export function WhyChoose() {
-  useCms();
-  const settings = getSettings();
+  const getContentValue = useContentValue();
+  const settings = useSettings();
   const eyebrow = getContentValue("home.why.eyebrow");
   const headingPrefix = getContentValue("home.why.headingPrefix");
   const headingBrand = getContentValue("home.why.headingBrand");

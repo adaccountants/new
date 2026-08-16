@@ -1,12 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Phone } from "lucide-react";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
-import { getPhoneHref, getSettings } from "@/lib/site-settings-data";
+import { useContentValue, useSettings } from "@/lib/cms-context";
+import { getPhoneHref } from "@/lib/site-settings-data";
 
 export function ContactCta() {
-  useCms();
-  const settings = getSettings();
+  const getContentValue = useContentValue();
+  const settings = useSettings();
   const heading = getContentValue("home.cta.heading");
   const contactButton = getContentValue("home.cta.contactButton");
 

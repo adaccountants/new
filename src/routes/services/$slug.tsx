@@ -3,40 +3,42 @@ import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCardBySlug, isHomeServiceCard } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
-import { getServiceJsonLd, getSettings } from "@/lib/site-settings-data";
+import { useContentValue } from "@/lib/cms-context";
+import { rootCms } from "@/lib/cms-load";
+import { getServiceJsonLd } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/services/$slug")({
-  head: ({ params }) => {
-    const card = getCardBySlug("services", params.slug);
-    const settings = getSettings();
-    const firmName = settings.firmName;
-    const title = card ? `${card.title} | ${firmName}` : firmName;
-    const description = card?.body || card?.subtitle || "";
-    const meta: Array<Record<string, unknown>> = [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ];
-    if (card) {
-      meta.push({ "script:ld+json": getServiceJsonLd(card, settings) });
+  loader: async ({ params }) => {
+    const card = await getCardBySlug("services", params.slug);
+    if (!card || !card.published || isHomeServiceCard(card)) {
+      throw notFound();
     }
-    return { meta };
+    return { card };
+  },
+  head: ({ loaderData, matches }) => {
+    const { settings } = rootCms(matches);
+    const card = loaderData.card;
+    const firmName = settings.firmName;
+    const title = `${card.title} | ${firmName}`;
+    const description = card.body || card.subtitle || "";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { "script:ld+json": getServiceJsonLd(card, settings) },
+      ],
+    };
   },
   component: ServiceDetailPage,
 });
 
 function ServiceDetailPage() {
-  useCms();
-  const { slug } = Route.useParams();
-  const card = getCardBySlug("services", slug);
-  if (!card || !card.published || isHomeServiceCard(card)) {
-    throw notFound();
-  }
+  const { card } = Route.useLoaderData();
+  const getContentValue = useContentValue();
 
   return (
     <main className="bg-background">

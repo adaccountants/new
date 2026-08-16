@@ -3,21 +3,21 @@ import { Download } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards, KNOWLEDGE_CATEGORIES } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
-
-function publishedKnowledge() {
-  return getCards("knowledge").filter((card) => card.published);
-}
+import { useContentValue } from "@/lib/cms-context";
+import { pageSeoHead } from "@/lib/cms-load";
 
 export const Route = createFileRoute("/knowledge")({
-  head: () => {
-    const preload = publishedKnowledge()
+  loader: async () => {
+    const cards = (await getCards("knowledge")).filter((card) => card.published);
+    return { cards };
+  },
+  head: ({ loaderData, matches }) => {
+    const preload = loaderData.cards
       .slice(0, 3)
       .filter((card) => card.imageUrl)
       .map((card) => ({ rel: "preload" as const, href: card.imageUrl, as: "image" as const }));
     return {
-      meta: seoHeadTags("knowledge"),
+      meta: pageSeoHead("knowledge", matches),
       links: preload,
     };
   },
@@ -25,8 +25,8 @@ export const Route = createFileRoute("/knowledge")({
 });
 
 function KnowledgePage() {
-  useCms();
-  const cards = publishedKnowledge();
+  const { cards } = Route.useLoaderData();
+  const getContentValue = useContentValue();
   const grouped = KNOWLEDGE_CATEGORIES.map((category) => ({
     category,
     items: cards.filter((card) => card.category === category),

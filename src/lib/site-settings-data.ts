@@ -1,29 +1,5 @@
-/**
- * TEMP in-memory store — replace each function body with a Supabase query against a single-row
- * `site_settings` table. Keep these exact function signatures.
- *
- * Supabase mapping
- * ----------------
- * Table: `site_settings` (one row)
- * Columns:
- *   id           uuid / int  -- singleton row
- *   firm_name    text        -- maps to firmName
- *   phone        text
- *   email        text
- *   address      text
- *   hours        text
- *   socials      jsonb       -- [{ platform, url }]
- *   footer_text  text        -- maps to footerText
- *
- * RLS:
- *   Public-read: SELECT on the singleton row (header, footer, contact details).
- *   Admin-only:  UPDATE (and INSERT if the row is missing). Authenticated admin role.
- *
- * Seed notes: header/footer used info@adaaccountants.uk; the contact page previously showed
- * hello@alphadigi.co.uk. One email is stored here so the whole site stays in sync.
- */
-
-import { emitCmsChange } from "@/lib/cms-sync";
+import { getCmsDb } from "@/lib/cms-db";
+import { supabase } from "@/lib/supabase-client";
 
 /** Current Vercel production URL. Update to the real custom domain once one is connected. */
 export const SITE_URL = "https://scroll-joy-animate.vercel.app";
@@ -38,47 +14,88 @@ export type SiteSettings = {
   footerText: string;
 };
 
-let settings: SiteSettings = {
-  firmName: "Alpha Digi AI Accountants",
-  phone: "020 3916 5680",
-  email: "info@adaaccountants.uk",
-  address: "London, United Kingdom",
-  hours: "Mon – Fri, 9AM – 5PM",
-  socials: [
-    { platform: "Instagram", url: "https://instagram.com" },
-    { platform: "X", url: "https://x.com/ADAiaccountants" },
-    { platform: "LinkedIn", url: "https://www.linkedin.com/company/alpha-digiai-accountants-ltd/about/?viewAsMember=true" },
-    { platform: "YouTube", url: "https://youtube.com" },
-    { platform: "Facebook", url: "https://facebook.com" },
-  ],
-  footerText: "Alpha Digi AI Accountants. ICAEW Chartered Accountants.",
+const EMPTY_SETTINGS: SiteSettings = {
+  firmName: "",
+  phone: "",
+  email: "",
+  address: "",
+  hours: "",
+  socials: [],
+  footerText: "",
 };
 
-export function getSettings(): SiteSettings {
+type SettingsRow = {
+  id: number;
+  firm_name: string;
+  phone: string;
+  email: string;
+  address: string;
+  hours: string;
+  socials: SiteSettings["socials"];
+  footer_text: string;
+};
+
+function throwIfError(error: { message: string } | null, action: string) {
+  if (error) throw new Error(`${action}: ${error.message}`);
+}
+
+function logIfError(error: { message: string } | null, action: string) {
+  if (error) console.error(`[supabase] ${action}:`, error.message);
+  return Boolean(error);
+}
+
+export function settingsFromRow(row: SettingsRow): SiteSettings {
   return {
-    ...settings,
-    socials: settings.socials.map((item) => ({ ...item })),
+    firmName: row.firm_name,
+    phone: row.phone,
+    email: row.email,
+    address: row.address,
+    hours: row.hours,
+    socials: Array.isArray(row.socials) ? row.socials.map((item) => ({ ...item })) : [],
+    footerText: row.footer_text,
   };
 }
 
-export function updateSettings(patch: Partial<SiteSettings>): void {
-  settings = {
-    ...settings,
+export function settingsToRow(current: SiteSettings) {
+  return {
+    id: 1,
+    firm_name: current.firmName,
+    phone: current.phone,
+    email: current.email,
+    address: current.address,
+    hours: current.hours,
+    socials: current.socials,
+    footer_text: current.footerText,
+  };
+}
+
+export async function getSettings(): Promise<SiteSettings> {
+  const db = await getCmsDb();
+  const { data, error } = await db.from("site_settings").select("*").eq("id", 1).maybeSingle();
+  if (logIfError(error, "getSettings") || !data) return { ...EMPTY_SETTINGS, socials: [] };
+  return settingsFromRow(data as SettingsRow);
+}
+
+export async function updateSettings(patch: Partial<SiteSettings>): Promise<void> {
+  const current = await getSettings();
+  const next: SiteSettings = {
+    ...current,
     ...patch,
-    socials: patch.socials ? patch.socials.map((item) => ({ ...item })) : settings.socials,
+    socials: patch.socials ? patch.socials.map((item) => ({ ...item })) : current.socials,
   };
-  emitCmsChange();
+  const { error } = await supabase.from("site_settings").upsert(settingsToRow(next));
+  throwIfError(error, "updateSettings");
 }
 
-export function getPhoneHref(phone = settings.phone): string {
+export function getPhoneHref(phone: string): string {
   return `tel:${phone.replace(/[^\d+]/g, "")}`;
 }
 
-export function getMailHref(email = settings.email): string {
+export function getMailHref(email: string): string {
   return `mailto:${email}`;
 }
 
-export function interpolateSettings(template: string, current = getSettings()): string {
+export function interpolateSettings(template: string, current: SiteSettings): string {
   return template
     .replaceAll("{phone}", current.phone)
     .replaceAll("{email}", current.email)
@@ -86,7 +103,7 @@ export function interpolateSettings(template: string, current = getSettings()): 
     .replaceAll("{firmName}", current.firmName);
 }
 
-export function getAccountingServiceJsonLd(current = getSettings()) {
+export function getAccountingServiceJsonLd(current: SiteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "AccountingService",
@@ -94,9 +111,6 @@ export function getAccountingServiceJsonLd(current = getSettings()) {
     url: SITE_URL,
     telephone: current.phone,
     email: current.email,
-    // TODO: split address into streetAddress / addressLocality / postalCode as
-    // separate SiteSettings fields later for stronger structured data. Using the
-    // single address string as-is for now to match the current data shape.
     address: {
       "@type": "PostalAddress",
       streetAddress: current.address,
@@ -109,7 +123,7 @@ export function getAccountingServiceJsonLd(current = getSettings()) {
 
 export function getServiceJsonLd(
   card: { title: string; body?: string; subtitle?: string },
-  current = getSettings(),
+  current: SiteSettings,
 ) {
   const jsonLd: {
     "@context": string;
