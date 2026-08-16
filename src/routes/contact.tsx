@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useState, type FormEvent } from "react";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
 import { useContentValue, useSettings } from "@/lib/cms-context";
 import { pageSeoHead } from "@/lib/cms-load";
+import { submitContact } from "@/lib/contact-submit";
 import { getMailHref, getPhoneHref } from "@/lib/site-settings-data";
 import { getSocialIcon } from "@/lib/social-icons";
 
@@ -17,7 +19,9 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const getContentValue = useContentValue();
   const settings = useSettings();
-  const [sent, setSent] = useState(false);
+  const sendContact = useServerFn(submitContact);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const details = [
     {
       icon: Phone,
@@ -73,7 +77,10 @@ function ContactPage() {
                   {c.label}
                 </p>
                 {"href" in c && c.href ? (
-                  <a href={c.href} className="text-base font-semibold text-foreground hover:text-brand">
+                  <a
+                    href={c.href}
+                    className="text-base font-semibold text-foreground hover:text-brand"
+                  >
                     {c.value}
                   </a>
                 ) : (
@@ -110,11 +117,41 @@ function ContactPage() {
         </div>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSent(true);
+          onSubmit={async (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            if (status === "sending" || status === "sent") return;
+            const form = event.currentTarget;
+            const fields = new FormData(form);
+            setStatus("sending");
+            setErrorMessage("");
+            try {
+              const result = await sendContact({
+                data: {
+                  name: String(fields.get("name") ?? ""),
+                  email: String(fields.get("email") ?? ""),
+                  phone: String(fields.get("phone") ?? ""),
+                  message: String(fields.get("message") ?? ""),
+                  website: String(fields.get("website") ?? ""),
+                },
+              });
+              if (result.ok) {
+                setStatus("sent");
+                form.reset();
+                return;
+              }
+              setErrorMessage(result.error);
+              setStatus("error");
+            } catch (error) {
+              setErrorMessage(
+                error instanceof Error && error.message
+                  ? error.message
+                  : getContentValue("contact.form.error") ||
+                      "We couldn't send your message. Please try again or email us directly.",
+              );
+              setStatus("error");
+            }
           }}
-          className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
+          className="relative rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
         >
           <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground">
             {getContentValue("contact.form.heading")}
@@ -125,7 +162,8 @@ function ContactPage() {
               <input
                 required
                 name="name"
-                className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand"
+                disabled={status === "sending" || status === "sent"}
+                className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand disabled:opacity-60"
               />
             </label>
             <label className="text-sm font-semibold text-foreground">
@@ -134,14 +172,16 @@ function ContactPage() {
                 required
                 type="email"
                 name="email"
-                className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand"
+                disabled={status === "sending" || status === "sent"}
+                className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand disabled:opacity-60"
               />
             </label>
             <label className="text-sm font-semibold text-foreground sm:col-span-2">
               {getContentValue("contact.form.phoneLabel")}
               <input
                 name="phone"
-                className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand"
+                disabled={status === "sending" || status === "sent"}
+                className="mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand disabled:opacity-60"
               />
             </label>
             <label className="text-sm font-semibold text-foreground sm:col-span-2">
@@ -150,18 +190,37 @@ function ContactPage() {
                 required
                 name="message"
                 rows={5}
-                className="mt-1.5 w-full resize-y rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand"
+                disabled={status === "sending" || status === "sent"}
+                className="mt-1.5 w-full resize-y rounded-xl border border-input bg-background px-4 py-2.5 text-sm font-normal outline-none focus:border-brand disabled:opacity-60"
               />
             </label>
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label>
+                Website
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+              </label>
+            </div>
           </div>
           <button
             type="submit"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-strong"
+            disabled={status === "sending" || status === "sent"}
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-strong disabled:opacity-60"
           >
-            {getContentValue("contact.form.submit")}
+            {status === "sending"
+              ? getContentValue("contact.form.sending") || "Sending…"
+              : getContentValue("contact.form.submit")}
           </button>
-          {sent ? (
-            <p className="mt-4 text-sm font-semibold text-brand">{getContentValue("contact.form.thanks")}</p>
+          {status === "sent" ? (
+            <p className="mt-4 text-sm font-semibold text-brand" role="status">
+              {getContentValue("contact.form.thanks")}
+            </p>
+          ) : null}
+          {status === "error" ? (
+            <p className="mt-4 text-sm font-semibold text-destructive" role="alert">
+              {errorMessage ||
+                getContentValue("contact.form.error") ||
+                "We couldn't send your message. Please try again or email us directly."}
+            </p>
           ) : null}
         </form>
       </section>

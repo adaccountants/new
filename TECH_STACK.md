@@ -1,6 +1,6 @@
 # Tech stack
 
-This file describes the complete technology stack used by this project (Alpha Digi AI Accountants marketing site). There is no separate backend database or third-party API in the current codebase.
+This file describes the complete technology stack used by this project (Alpha Digi AI Accountants marketing site). CMS data lives in Supabase. The contact form sends mail through Resend.
 
 ## Runtime and language
 
@@ -45,7 +45,7 @@ Do not add Next.js-style `app/` or `pages/` trees. The only root layout is `__ro
 - `src/server.ts` — Fetch handler wrapping `@tanstack/react-start/server-entry`, plus HTML fallback for catastrophic SSR errors.
 - **Nitro** (`nitro` 3 beta) is the production server bundler (platform auto-detected, or pin with `NITRO_PRESET`).
 
-There are currently **no `createServerFn` calls** and **no database client**. Pages are rendered from static React components.
+Public pages load CMS data in route loaders. The contact form posts through `createServerFn` in `src/lib/contact-submit.ts` (Resend + `contact_submissions`). CSRF protection for server functions is enabled in `src/start.ts`.
 
 ## Build and tooling
 
@@ -105,7 +105,8 @@ These are on the shadcn/Radix template even if not every widget is used on the p
 | Package | Role |
 | --- | --- |
 | **react-hook-form** | Form state |
-| **zod** | Schema validation |
+| **zod** | Schema validation (including the contact form server function) |
+| **resend** | Transactional email for `/contact` submissions |
 | **@hookform/resolvers** | Zod adapter for react-hook-form |
 | **cmdk** | Command palette |
 | **vaul** | Drawer |
@@ -129,9 +130,9 @@ SSR error helpers live in `src/lib/error-capture.ts` and `src/lib/error-page.ts`
 ## What this stack is not
 
 - Not Next.js, Remix, or Vite SPA-only
-- No Prisma, Supabase, or other database in the repo
-- No auth provider wired up
-- Contact details (phone, email) are static copy, not a form backend
+- Not Prisma; CMS and submissions use **Supabase**
+- Admin auth is Supabase Auth plus `public.admins`
+- Contact form submissions go through Resend (see README)
 
 ## Typical request path
 
