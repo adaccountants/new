@@ -1,10 +1,15 @@
+/**
+ * TEMP placeholder auth — NOT secure, replace with real Supabase Auth + RLS
+ * before this goes live for a client.
+ */
+
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInAdmin } from "@/lib/admin-auth";
+import { ADMIN_PASSWORD, setAdminAuthed } from "@/lib/admin-config";
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
@@ -12,10 +17,8 @@ export const Route = createFileRoute("/admin/login")({
 
 function AdminLoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [pending, setPending] = useState(false);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
@@ -23,32 +26,19 @@ function AdminLoginPage() {
         className="w-full max-w-sm space-y-4 rounded-xl border bg-white p-6 shadow-sm"
         onSubmit={(event) => {
           event.preventDefault();
-          setPending(true);
-          setError("");
-          void signInAdmin(email.trim(), password)
-            .then(() => navigate({ to: "/admin" }))
-            .catch((err: unknown) => {
-              setError(err instanceof Error ? err.message : "Sign-in failed");
-            })
-            .finally(() => setPending(false));
+          if (password !== ADMIN_PASSWORD) {
+            setError("Incorrect password");
+            return;
+          }
+          setAdminAuthed(true);
+          void navigate({ to: "/admin" });
         }}
       >
         <div>
           <h1 className="text-lg font-semibold">Admin login</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Sign in with your admin account.</p>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            autoComplete="username"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              setError("");
-            }}
-          />
+          <p className="mt-1 text-sm text-muted-foreground">
+            Placeholder password gate for this mock CMS.
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
@@ -64,8 +54,8 @@ function AdminLoginPage() {
           />
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
         </div>
-        <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? "Signing in…" : "Log in"}
+        <Button type="submit" className="w-full">
+          Log in
         </Button>
       </form>
     </div>

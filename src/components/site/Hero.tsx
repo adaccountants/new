@@ -3,10 +3,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
-import { useContentValue } from "@/lib/cms-context";
+import { useCms } from "@/lib/cms-sync";
+import { getContentValue } from "@/lib/page-content-data";
 
 export function Hero() {
-  const getContentValue = useContentValue();
+  useCms();
   const reduced = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
 

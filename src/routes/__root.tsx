@@ -11,10 +11,8 @@ import type { ReactNode } from "react";
 
 import { SiteShell } from "@/components/site/SiteShell";
 import { Toaster } from "@/components/ui/sonner";
-import { CmsProvider } from "@/lib/cms-context";
-import { loadCmsSnapshot } from "@/lib/cms-load";
-import { contentValue, seoMetaFromContent } from "@/lib/page-content-data";
-import { getAccountingServiceJsonLd } from "@/lib/site-settings-data";
+import { getContentValue, getSeoMeta } from "@/lib/page-content-data";
+import { getAccountingServiceJsonLd, getSettings } from "@/lib/site-settings-data";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -75,13 +73,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  loader: async () => loadCmsSnapshot(),
-  head: ({ loaderData }) => {
-    const settings = loaderData.settings;
-    const content = loaderData.content;
-    const seo = seoMetaFromContent("home", content, settings);
-    const shareImage = contentValue(content, "home.seo.image");
-    const shareImageAlt = contentValue(content, "home.seo.imageAlt");
+  head: () => {
+    const seo = getSeoMeta("home");
+    const settings = getSettings();
+    const shareImage = getContentValue("home.seo.image");
+    const shareImageAlt = getContentValue("home.seo.imageAlt");
     return {
       meta: [
         { charSet: "utf-8" },
@@ -136,17 +132,14 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const cms = Route.useLoaderData();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CmsProvider data={cms}>
-        <SiteShell>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </SiteShell>
-        <Toaster />
-      </CmsProvider>
+      <SiteShell>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </SiteShell>
+      <Toaster />
     </QueryClientProvider>
   );
 }

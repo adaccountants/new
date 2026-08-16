@@ -17,16 +17,6 @@ npm run dev
 
 The app runs at [http://localhost:8080](http://localhost:8080).
 
-## Supabase
-
-CMS data, admin auth, and file uploads use Supabase.
-
-1. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Add the same keys in Vercel.
-2. In the Supabase SQL Editor, run `supabase/schema.sql`.
-3. Optionally run `supabase/seed-page-content.sql` and `supabase/seed-cards.sql` to load the current site copy.
-4. Authentication → Users → Add user (email + password). Then insert that user into `public.admins` (see the comment at the bottom of `schema.sql`).
-5. Restart `npm run dev`.
-
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Vite development server |

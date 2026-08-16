@@ -4,13 +4,13 @@ import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
-import { pageSeoHead, rootCms } from "@/lib/cms-load";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 export const Route = createFileRoute("/")({
-  head: ({ matches }) => {
-    const icaewImage = rootCms(matches).content["home.footer.icaewImageUrl"];
+  head: () => {
+    const icaewImage = getContentValue("home.footer.icaewImageUrl");
     return {
-      meta: pageSeoHead("home", matches),
+      meta: seoHeadTags("home"),
       links: icaewImage ? [{ rel: "preload" as const, href: icaewImage, as: "image" as const }] : [],
     };
   },

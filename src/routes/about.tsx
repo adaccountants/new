@@ -2,24 +2,25 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Quote } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
-import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
-import { pageSeoHead } from "@/lib/cms-load";
+import { getCards } from "@/lib/cards-data";
+import { useCms } from "@/lib/cms-sync";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 export const Route = createFileRoute("/about")({
-  head: ({ matches }) => ({
-    meta: pageSeoHead("about", matches),
+  head: () => ({
+    meta: seoHeadTags("about"),
   }),
   component: AboutPage,
 });
 
 function AboutPage() {
-  const getContentValue = useContentValue();
-  const { testimonials } = useCmsSnapshot();
+  useCms();
   const badges = [1, 2, 3, 4, 5, 6].map((n) => getContentValue(`about.badge.${n}`));
   const differences = [1, 2, 3].map((n) => ({
     title: getContentValue(`about.different.${n}.title`),
     desc: getContentValue(`about.different.${n}.body`),
   }));
+  const testimonials = getCards("testimonials").filter((card) => card.published);
 
   return (
     <main className="bg-background">
