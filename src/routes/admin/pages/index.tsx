@@ -1,27 +1,28 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCms } from "@/lib/cms-sync";
 import {
   CONTENT_PAGES,
   type ContentPage,
-  getContentByPage,
+  getAllContentBlocks,
   updateContent,
 } from "@/lib/page-content-data";
 
 export const Route = createFileRoute("/admin/pages/")({
+  loader: async () => ({ blocks: await getAllContentBlocks() }),
   component: AdminPagesPage,
 });
 
 function AdminPagesPage() {
-  useCms();
+  const router = useRouter();
+  const { blocks: allBlocks } = Route.useLoaderData();
   const [page, setPage] = useState<ContentPage>("home");
-  const blocks = getContentByPage(page);
+  const blocks = allBlocks.filter((item) => item.page === page);
   const originals = useMemo(
     () => Object.fromEntries(blocks.map((block) => [block.key, block.value])),
     [blocks],
@@ -34,21 +35,24 @@ function AdminPagesPage() {
   function selectPage(next: ContentPage) {
     if (dirty && !window.confirm("Discard unsaved changes?")) return;
     setPage(next);
-    const nextBlocks = getContentByPage(next);
+    const nextBlocks = allBlocks.filter((item) => item.page === next);
     setDraft(Object.fromEntries(nextBlocks.map((block) => [block.key, block.value])));
     setSavedFlash(false);
   }
 
   function save() {
-    for (const block of blocks) {
-      const value = draft[block.key] ?? block.value;
-      if (value !== block.value) {
-        updateContent(block.key, value);
+    void (async () => {
+      for (const block of blocks) {
+        const value = draft[block.key] ?? block.value;
+        if (value !== block.value) {
+          await updateContent(block.key, value);
+        }
       }
-    }
-    toast.success("Saved");
-    setSavedFlash(true);
-    window.setTimeout(() => setSavedFlash(false), 2000);
+      await router.invalidate();
+      toast.success("Saved");
+      setSavedFlash(true);
+      window.setTimeout(() => setSavedFlash(false), 2000);
+    })();
   }
 
   return (

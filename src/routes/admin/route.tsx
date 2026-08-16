@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { isAdminAuthed, setAdminAuthed } from "@/lib/admin-config";
+import { getAdminUser, signOutAdmin } from "@/lib/admin-auth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/admin")({
@@ -59,9 +59,15 @@ function AdminLayout() {
   const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
-    const ok = isAdminAuthed();
-    setAuthed(ok);
-    setReady(true);
+    let cancelled = false;
+    void getAdminUser().then((user) => {
+      if (cancelled) return;
+      setAuthed(Boolean(user));
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   if (isLogin) {
@@ -117,8 +123,7 @@ function AdminLayout() {
             variant="ghost"
             className="w-full justify-start"
             onClick={() => {
-              setAdminAuthed(false);
-              void navigate({ to: "/admin/login" });
+              void signOutAdmin().then(() => navigate({ to: "/admin/login" }));
             }}
           >
             <LogOut className="size-4" />

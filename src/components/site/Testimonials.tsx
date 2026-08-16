@@ -2,9 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
-import { getCards } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
 
 const container = {
   hidden: {},
@@ -17,13 +15,13 @@ const item = {
 };
 
 export function Testimonials() {
-  useCms();
+  const getContentValue = useContentValue();
+  const { testimonials } = useCmsSnapshot();
   const eyebrow = getContentValue("home.testimonials.eyebrow");
   const headingPrefix = getContentValue("home.testimonials.headingPrefix");
   const headingBrand = getContentValue("home.testimonials.headingBrand");
   const headingSuffix = getContentValue("home.testimonials.headingSuffix");
   const cta = getContentValue("home.testimonials.cta");
-  const testimonials = getCards("testimonials").filter((card) => card.published);
 
   return (
     <section id="testimonials" className="py-20">

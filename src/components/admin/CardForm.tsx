@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { addCard, type Card, type CardSection, KNOWLEDGE_CATEGORIES, updateCard } from "@/lib/cards-data";
+import { uploadPublicFile } from "@/lib/storage-upload";
 
 const slugRequired = new Set<CardSection>(["services", "blog"]);
 
@@ -61,6 +63,9 @@ type CardFormProps = {
 
 export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
   const navigate = useNavigate();
+  const router = useRouter();
+  const [uploadError, setUploadError] = useState("");
+  const [uploading, setUploading] = useState(false);
   const form = useForm<CardFormValues>({
     resolver: zodResolver(cardSchema(section)),
     defaultValues: {
@@ -102,14 +107,21 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
       if (fileNameValue) payload.fileName = fileNameValue;
     }
 
-    if (card) {
-      updateCard(card.id, payload);
-      toast.success("Card updated");
-    } else {
-      addCard(payload);
-      toast.success("Card added");
-    }
-    void navigate({ to: "/admin/$section", params: { section } });
+    void (async () => {
+      try {
+        if (card) {
+          await updateCard(card.id, payload);
+          toast.success("Card updated");
+        } else {
+          await addCard(payload);
+          toast.success("Card added");
+        }
+        await router.invalidate();
+        void navigate({ to: "/admin/$section", params: { section } });
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Could not save card");
+      }
+    })();
   }
 
   return (
@@ -154,7 +166,6 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="image">{section === "partnership" ? "Logo" : "Image"}</Label>
-        {/* TEMP: real Supabase Storage upload replaces this — store the public URL in imageUrl. */}
         <Input
           id="image"
           type="file"
@@ -162,7 +173,14 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (!file) return;
-            form.setValue("imageUrl", URL.createObjectURL(file), { shouldDirty: true });
+            setUploadError("");
+            setUploading(true);
+            void uploadPublicFile("card-images", file)
+              .then((url) => form.setValue("imageUrl", url, { shouldDirty: true }))
+              .catch((err: unknown) => {
+                setUploadError(err instanceof Error ? err.message : "Image upload failed");
+              })
+              .finally(() => setUploading(false));
           }}
         />
         <Input
@@ -212,8 +230,6 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="file">Downloadable file</Label>
-            {/* TEMP — file upload uses local object URL, replace with real Supabase Storage upload
-                (separate bucket from images, e.g. 'knowledge-files') when backend is wired. */}
             {fileName ? (
               <p className="text-sm text-muted-foreground">Current file: {fileName}</p>
             ) : fileUrl ? (
@@ -226,8 +242,17 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
               onChange={(event) => {
                 const file = event.target.files?.[0];
                 if (!file) return;
-                form.setValue("fileUrl", URL.createObjectURL(file), { shouldDirty: true });
-                form.setValue("fileName", file.name, { shouldDirty: true });
+                setUploadError("");
+                setUploading(true);
+                void uploadPublicFile("knowledge-files", file)
+                  .then((url) => {
+                    form.setValue("fileUrl", url, { shouldDirty: true });
+                    form.setValue("fileName", file.name, { shouldDirty: true });
+                  })
+                  .catch((err: unknown) => {
+                    setUploadError(err instanceof Error ? err.message : "File upload failed");
+                  })
+                  .finally(() => setUploading(false));
               }}
             />
           </div>
@@ -243,8 +268,11 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
         <Label htmlFor="published">{published ? "Published" : "Draft"}</Label>
       </div>
 
+      {uploadError ? <p className="text-sm text-destructive">{uploadError}</p> : null}
+      {uploading ? <p className="text-sm text-muted-foreground">Uploading…</p> : null}
+
       <div className="flex gap-2">
-        <Button type="submit">{card ? "Save changes" : "Add card"}</Button>
+        <Button type="submit" disabled={uploading}>{card ? "Save changes" : "Add card"}</Button>
         <Button
           type="button"
           variant="outline"

@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from "lucide-react";
 
 import {
@@ -15,9 +15,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { deleteCard, getCards, isCardSection, reorderCards, type CardSection } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
 
 export const Route = createFileRoute("/admin/$section/")({
+  loader: async ({ params }) => {
+    if (!isCardSection(params.section)) return { cards: [] };
+    return { cards: await getCards(params.section) };
+  },
   component: AdminSectionListPage,
 });
 
@@ -32,11 +35,11 @@ const titles: Record<CardSection, string> = {
 };
 
 function AdminSectionListPage() {
-  useCms();
+  const router = useRouter();
   const { section: sectionParam } = Route.useParams();
+  const { cards } = Route.useLoaderData();
   if (!isCardSection(sectionParam)) return null;
   const section = sectionParam;
-  const cards = getCards(section);
 
   function move(id: string, direction: -1 | 1) {
     const ids = cards.map((card) => card.id);
@@ -47,7 +50,7 @@ function AdminSectionListPage() {
     if (index < 0 || next < 0 || next >= ids.length || !currentId || !swapId) return;
     ids[index] = swapId;
     ids[next] = currentId;
-    reorderCards(section, ids);
+    void reorderCards(section, ids).then(() => router.invalidate());
   }
 
   return (
@@ -134,13 +137,18 @@ function AdminSectionListPage() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete this card?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        “{card.title}” will be removed from this session’s mock data. This cannot be
-                        undone until you refresh the page.
+                        “{card.title}” will be permanently deleted.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => deleteCard(card.id)}>Delete</AlertDialogAction>
+                      <AlertDialogAction
+                        onClick={() => {
+                          void deleteCard(card.id).then(() => router.invalidate());
+                        }}
+                      >
+                        Delete
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>

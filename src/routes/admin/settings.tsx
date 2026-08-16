@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -7,16 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCms } from "@/lib/cms-sync";
 import { getSettings, updateSettings } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/admin/settings")({
+  loader: async () => ({ current: await getSettings() }),
   component: AdminSettingsPage,
 });
 
 function AdminSettingsPage() {
-  useCms();
-  const current = getSettings();
+  const router = useRouter();
+  const { current } = Route.useLoaderData();
   const [firmName, setFirmName] = useState(current.firmName);
   const [phone, setPhone] = useState(current.phone);
   const [email, setEmail] = useState(current.email);
@@ -36,10 +36,12 @@ function AdminSettingsPage() {
     JSON.stringify(socials) !== JSON.stringify(current.socials);
 
   function save() {
-    updateSettings({ firmName, phone, email, address, hours, footerText, socials });
-    toast.success("Settings saved");
-    setSavedFlash(true);
-    window.setTimeout(() => setSavedFlash(false), 2000);
+    void updateSettings({ firmName, phone, email, address, hours, footerText, socials }).then(() => {
+      void router.invalidate();
+      toast.success("Settings saved");
+      setSavedFlash(true);
+      window.setTimeout(() => setSavedFlash(false), 2000);
+    });
   }
 
   return (

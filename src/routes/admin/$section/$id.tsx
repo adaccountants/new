@@ -4,19 +4,24 @@ import { CardForm } from "@/components/admin/CardForm";
 import { getCardById, getCards, isCardSection } from "@/lib/cards-data";
 
 export const Route = createFileRoute("/admin/$section/$id")({
+  loader: async ({ params }) => {
+    if (!isCardSection(params.section)) throw notFound();
+    const card = await getCardById(params.id);
+    if (!card || card.section !== params.section) throw notFound();
+    const existing = await getCards(params.section);
+    return {
+      card,
+      nextSortOrder: existing.length ? Math.max(...existing.map((item) => item.sortOrder)) + 1 : 1,
+    };
+  },
   component: AdminEditCardPage,
 });
 
 function AdminEditCardPage() {
-  const { section: sectionParam, id } = Route.useParams();
+  const { section: sectionParam } = Route.useParams();
+  const { card, nextSortOrder } = Route.useLoaderData();
   if (!isCardSection(sectionParam)) throw notFound();
   const section = sectionParam;
-  const card = getCardById(id);
-  if (!card || card.section !== section) {
-    throw notFound();
-  }
-  const existing = getCards(section);
-  const nextSortOrder = existing.length ? Math.max(...existing.map((item) => item.sortOrder)) + 1 : 1;
 
   return (
     <div>

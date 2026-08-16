@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
-import { getSettings, interpolateSettings } from "@/lib/site-settings-data";
+import { useContentValue, useSettings } from "@/lib/cms-context";
+import { interpolateSettings } from "@/lib/site-settings-data";
 import { getSocialIcon } from "@/lib/social-icons";
 
 const footerNav = [
@@ -16,8 +15,8 @@ const footerNav = [
 ];
 
 export function SiteFooter() {
-  useCms();
-  const settings = getSettings();
+  const getContentValue = useContentValue();
+  const settings = useSettings();
   const headingPrefix = getContentValue("home.footer.headingPrefix");
   const headingBrand = getContentValue("home.footer.headingBrand");
   const headingSuffix = getContentValue("home.footer.headingSuffix");

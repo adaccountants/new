@@ -3,24 +3,28 @@ import { Check } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards, parseCareerBody } from "@/lib/cards-data";
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
+import { useContentValue } from "@/lib/cms-context";
+import { pageSeoHead } from "@/lib/cms-load";
 
 export const Route = createFileRoute("/careers")({
-  head: () => ({
-    meta: seoHeadTags("careers"),
+  loader: async () => {
+    const roles = (await getCards("careers")).filter((card) => card.published);
+    return { roles };
+  },
+  head: ({ matches }) => ({
+    meta: pageSeoHead("careers", matches),
   }),
   component: CareersPage,
 });
 
 function CareersPage() {
-  useCms();
+  const { roles } = Route.useLoaderData();
+  const getContentValue = useContentValue();
   const culture = [1, 2, 3, 4].map((n) => ({
     title: getContentValue(`careers.culture.${n}.title`),
     desc: getContentValue(`careers.culture.${n}.body`),
   }));
   const values = [1, 2, 3, 4].map((n) => getContentValue(`careers.values.${n}`));
-  const roles = getCards("careers").filter((card) => card.published);
 
   return (
     <main className="bg-background">

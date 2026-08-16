@@ -2,22 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
-import { useCms } from "@/lib/cms-sync";
-import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
-import { getMailHref, getPhoneHref, getSettings } from "@/lib/site-settings-data";
+import { useContentValue, useSettings } from "@/lib/cms-context";
+import { pageSeoHead } from "@/lib/cms-load";
+import { getMailHref, getPhoneHref } from "@/lib/site-settings-data";
 import { getSocialIcon } from "@/lib/social-icons";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: seoHeadTags("contact"),
+  head: ({ matches }) => ({
+    meta: pageSeoHead("contact", matches),
   }),
   component: ContactPage,
 });
 
 function ContactPage() {
-  useCms();
+  const getContentValue = useContentValue();
+  const settings = useSettings();
   const [sent, setSent] = useState(false);
-  const settings = getSettings();
   const details = [
     {
       icon: Phone,
