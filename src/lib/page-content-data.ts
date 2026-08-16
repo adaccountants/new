@@ -68,13 +68,13 @@ let blocks: ContentBlock[] = [
   block("home.header.contactCta", "home", "Header contact button", "Contact"),
 
   // —— Home: Hero ——
-  block("home.hero.eyebrow", "home", "Hero eyebrow", "Chartered Accountants · London"),
+  block("home.hero.eyebrow", "home", "Hero eyebrow", "Alpha Digi AI Accountants LTD, CHARTERED ACCOUNTANTS, London"),
   block("home.hero.headingBrand", "home", "Hero heading (highlighted)", "Chartered Accountants"),
   block(
     "home.hero.headingRest",
     "home",
     "Hero heading (rest)",
-    "for Individuals and Business Owners.",
+    "for Companies, Charities and Sole Businesses.",
   ),
   block(
     "home.hero.intro",

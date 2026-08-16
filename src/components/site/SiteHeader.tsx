@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import adaiLogo from "@/assets/adai-logo.png";
+import adaiLogo from "@/assets/adai-logo.jpeg";
 import {
   Clock3,
   Facebook,
@@ -121,8 +121,8 @@ export function SiteHeader() {
             <img
               src={adaiLogo}
               alt="ADAi Chartered Accountants"
-              height={28}
-              className="h-7 w-auto object-contain select-none"
+              height={56}
+              className="h-14 w-auto object-contain select-none"
             />
           </Link>
 

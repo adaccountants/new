@@ -302,7 +302,7 @@ let cards: Card[] = [
   {
     id: "t1",
     section: "testimonials",
-    title: "Louise N.",
+    title: "Anjali Kochar",
     body: "The team are brilliant. So welcoming and helpful, and they really took the time to understand what I needed. Everything was explained clearly.",
     imageUrl: "",
     sortOrder: 1,
@@ -311,8 +311,7 @@ let cards: Card[] = [
   {
     id: "t2",
     section: "testimonials",
-    title: "Antonia S.",
-    subtitle: "Artist, Curator and Facilitator",
+    title: "Hemant Tripathi",
     body: "Their knowledge around arts and construction based industries has been an asset — along with brilliant tax and VAT advice.",
     imageUrl: "",
     sortOrder: 2,
@@ -321,8 +320,8 @@ let cards: Card[] = [
   {
     id: "t3",
     section: "testimonials",
-    title: "Phillip R.",
-    subtitle: "Databoss Ltd",
+    title: "Nijam Ali",
+
     body: "A safe pair of hands for all my statutory needs. Professional with a personal touch that makes them a pleasure to deal with.",
     imageUrl: "",
     sortOrder: 3,
