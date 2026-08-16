@@ -1,11 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import icaewLogo from "@/assets/finalicaewlogo.jpeg";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
-import { getSettings } from "@/lib/site-settings-data";
-
-const ICAEW_HOME = "https://www.icaew.com";
+import { getSettings, interpolateSettings } from "@/lib/site-settings-data";
 
 const footerNav = [
   { key: "home.nav.home", to: "/" as const },
@@ -17,13 +14,6 @@ const footerNav = [
   { key: "home.nav.contact", to: "/contact" as const },
 ];
 
-function interpolateSettings(template: string, settings: ReturnType<typeof getSettings>) {
-  return template
-    .replaceAll("{phone}", settings.phone)
-    .replaceAll("{email}", settings.email)
-    .replaceAll("{hours}", settings.hours);
-}
-
 export function SiteFooter() {
   useCms();
   const settings = getSettings();
@@ -32,6 +22,10 @@ export function SiteFooter() {
   const headingSuffix = getContentValue("home.footer.headingSuffix");
   const intro = interpolateSettings(getContentValue("home.footer.intro"), settings);
   const cta = getContentValue("home.footer.cta");
+  const icaewHref = getContentValue("home.footer.icaewHref");
+  const icaewImageUrl = getContentValue("home.footer.icaewImageUrl");
+  const icaewImageAlt = getContentValue("home.footer.icaewImageAlt");
+  const icaewNote = getContentValue("home.footer.icaewNote");
   const links = footerNav.map((link) => ({ ...link, label: getContentValue(link.key) }));
 
   return (
@@ -40,15 +34,15 @@ export function SiteFooter() {
         {/* ICAEW Accreditation Logo (Untouched) */}
         <div className="mb-8">
           <a
-            href={ICAEW_HOME}
+            href={icaewHref}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="ICAEW Chartered Accountants (opens icaew.com)"
+            aria-label={icaewImageAlt}
             className="inline-block focus:outline-none"
           >
             <img
-              src={icaewLogo}
-              alt="ICAEW Chartered Accountant"
+              src={icaewImageUrl}
+              alt={icaewImageAlt}
               width={736}
               height={298}
               decoding="async"
@@ -57,7 +51,7 @@ export function SiteFooter() {
             />
           </a>
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-surface/70">
-            We are ICAEW members — giving us access to world-leading resources, technical guidance and advisory services.
+            {icaewNote}
           </p>
         </div>
 

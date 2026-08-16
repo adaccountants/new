@@ -28,12 +28,10 @@ const cardVariants: Variants = {
 export function TechnologyPartners() {
   useCms();
   const partners = getCards("partnership").filter((card) => card.published);
-  const eyebrow = getContentValue("services.partners.eyebrow") || "Integrations";
-  const heading = getContentValue("services.partners.heading") || "Accounting Technology Partners";
-  const intro =
-    getContentValue("services.partners.intro") ||
-    "We work with trusted cloud accounting and compliance platforms to deliver secure, efficient, and digital-first accounting services for businesses, charities, and individuals.";
-  const cta = getContentValue("services.card.cta") || "Learn More";
+  const eyebrow = getContentValue("services.partners.eyebrow");
+  const heading = getContentValue("services.partners.heading");
+  const intro = getContentValue("services.partners.intro");
+  const cta = getContentValue("services.card.cta");
 
   return (
     <section id="partners" className="scroll-mt-28 bg-muted py-16 sm:py-20">

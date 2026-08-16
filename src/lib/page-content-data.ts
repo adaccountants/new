@@ -20,6 +20,10 @@
 import accountant from "@/assets/accountant.webp";
 import accountantMobile from "@/assets/accountant-mobile.webp";
 import bridge from "@/assets/acc-bridge.jpg";
+import adaiLogo from "@/assets/adai-logo.jpeg";
+import icaewLogo from "@/assets/finalicaewlogo.jpeg";
+
+import { interpolateSettings } from "@/lib/site-settings-data";
 
 import { emitCmsChange } from "@/lib/cms-sync";
 
@@ -58,6 +62,8 @@ let blocks: ContentBlock[] = [
   block("home.header.brandPrefix", "home", "Header logo prefix", "Alpha"),
   block("home.header.brandAccent", "home", "Header logo accent", "Digi"),
   block("home.header.brandSuffix", "home", "Header logo suffix", "AI"),
+  block("home.header.logoUrl", "home", "Header logo image", adaiLogo),
+  block("home.header.logoAlt", "home", "Header logo alt text", "ADAi Chartered Accountants"),
   block("home.nav.home", "home", "Nav: Home", "Home"),
   block("home.nav.about", "home", "Nav: About Us", "About Us"),
   block("home.nav.services", "home", "Nav: Services", "Services"),
@@ -85,6 +91,7 @@ let blocks: ContentBlock[] = [
   ),
   block("home.hero.ctaPrimary", "home", "Hero primary button", "See Our Services"),
   block("home.hero.ctaSecondary", "home", "Hero secondary button", "Contact Us"),
+  block("home.hero.videoUrl", "home", "Hero video URL", "/hero-video.mp4"),
   block("home.hero.imageDesktop", "home", "Hero image (desktop)", accountant),
   block("home.hero.imageMobile", "home", "Hero image (mobile)", accountantMobile),
   block(
@@ -216,8 +223,57 @@ let blocks: ContentBlock[] = [
     "richtext",
   ),
   block("home.footer.cta", "home", "Footer CTA button", "Contact Us"),
+  block("home.footer.icaewImageUrl", "home", "Footer ICAEW logo image", icaewLogo),
+  block("home.footer.icaewImageAlt", "home", "Footer ICAEW logo alt text", "ICAEW Chartered Accountant"),
+  block("home.footer.icaewHref", "home", "Footer ICAEW logo link", "https://www.icaew.com"),
+  block(
+    "home.footer.icaewNote",
+    "home",
+    "Footer ICAEW membership note",
+    "We are ICAEW members — giving us access to world-leading resources, technical guidance and advisory services.",
+    "richtext",
+  ),
+  block(
+    "home.seo.title",
+    "home",
+    "Home SEO title",
+    "Alpha Digi AI — Chartered Accountants in London",
+  ),
+  block(
+    "home.seo.description",
+    "home",
+    "Home SEO description",
+    "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
+    "richtext",
+  ),
+  block("home.seo.ogTitle", "home", "Home Open Graph title", "Alpha Digi AI — Chartered Accountants in London"),
+  block(
+    "home.seo.ogDescription",
+    "home",
+    "Home Open Graph description",
+    "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
+    "richtext",
+  ),
+  block("home.seo.image", "home", "Default social share image", "/favicon.jpeg"),
+  block("home.seo.imageAlt", "home", "Default social share image alt", "ADAi Chartered Accountants logo"),
 
   // —— About page ——
+  block("about.seo.title", "about", "About SEO title", "About Us | Alpha Digi AI Accountants"),
+  block(
+    "about.seo.description",
+    "about",
+    "About SEO description",
+    "Chartered accountants for over 12 years — ICAEW registered, HMRC agent, AI-driven solutions and personable service for listed, non-listed and charity clients.",
+    "richtext",
+  ),
+  block("about.seo.ogTitle", "about", "About Open Graph title", "About Alpha Digi AI Accountants"),
+  block(
+    "about.seo.ogDescription",
+    "about",
+    "About Open Graph description",
+    "Modern accountancy, human at heart. Big 4 experienced ICAEW members supporting UK businesses, charities and trusts.",
+    "richtext",
+  ),
   block("about.eyebrow", "about", "About page eyebrow", "About Us"),
   block("about.headingPrefix", "about", "About page heading prefix", "Modern accountancy, "),
   block("about.headingBrand", "about", "About page heading (highlighted)", "human at heart."),
@@ -315,6 +371,22 @@ let blocks: ContentBlock[] = [
   ),
 
   // —— Services page ——
+  block("services.seo.title", "services", "Services SEO title", "Accounting & Compliance Services | Alpha Digi"),
+  block(
+    "services.seo.description",
+    "services",
+    "Services SEO description",
+    "Company formation, payroll, tax and VAT returns, audit, management accounts, charity and trust accounting, plus outsourced bookkeeping to India.",
+    "richtext",
+  ),
+  block("services.seo.ogTitle", "services", "Services Open Graph title", "Accounting & Compliance Services"),
+  block(
+    "services.seo.ogDescription",
+    "services",
+    "Services Open Graph description",
+    "Ten core cloud accounting services for businesses, charities, trusts and individuals.",
+    "richtext",
+  ),
   block("services.eyebrow", "services", "Services page eyebrow", "Our Services"),
   block("services.headingPrefix", "services", "Services page heading line 1", "Digital-First Cloud"),
   block(
@@ -413,6 +485,22 @@ let blocks: ContentBlock[] = [
   ),
 
   // —— Blog page ——
+  block("blog.seo.title", "blog", "Blog SEO title", "Blog | Alpha Digi AI Accountants"),
+  block(
+    "blog.seo.description",
+    "blog",
+    "Blog SEO description",
+    "Insights, guides and updates from Alpha Digi — practical advice from chartered accountants on tax, growth and digital accountancy.",
+    "richtext",
+  ),
+  block("blog.seo.ogTitle", "blog", "Blog Open Graph title", "Blog | Alpha Digi AI Accountants"),
+  block(
+    "blog.seo.ogDescription",
+    "blog",
+    "Blog Open Graph description",
+    "Insights, guides and updates from Alpha Digi — practical advice from chartered accountants on tax, growth and digital accountancy.",
+    "richtext",
+  ),
   block("blog.eyebrow", "blog", "Blog page eyebrow", "Blog"),
   block("blog.headingPrefix", "blog", "Blog heading prefix", "Insights, guides and "),
   block("blog.headingBrand", "blog", "Blog heading (highlighted)", "updates"),
@@ -427,6 +515,22 @@ let blocks: ContentBlock[] = [
   block("blog.card.cta", "blog", "Blog card button", "Read more"),
 
   // —— Careers page ——
+  block("careers.seo.title", "careers", "Careers SEO title", "Careers at Alpha Digi AI Accountants"),
+  block(
+    "careers.seo.description",
+    "careers",
+    "Careers SEO description",
+    "Join a chartered accountancy firm built on AI-assisted workflows. Roles for experienced ACA/ACCA/CTA professionals, graduates and apprentices across the UK.",
+    "richtext",
+  ),
+  block("careers.seo.ogTitle", "careers", "Careers Open Graph title", "Join Our Team | Alpha Digi Careers"),
+  block(
+    "careers.seo.ogDescription",
+    "careers",
+    "Careers Open Graph description",
+    "Work at the intersection of chartered accountancy and AI — flexible working, modern tools and funded ICAEW pathways.",
+    "richtext",
+  ),
   block("careers.eyebrow", "careers", "Careers page eyebrow", "Join Our Team"),
   block("careers.headingPrefix", "careers", "Careers heading prefix", "Careers at "),
   block("careers.headingBrand", "careers", "Careers heading (highlighted)", "Alpha Digi"),
@@ -504,6 +608,22 @@ let blocks: ContentBlock[] = [
   block("careers.role.cta", "careers", "Role apply button", "Apply"),
 
   // —— Contact page ——
+  block("contact.seo.title", "contact", "Contact SEO title", "Contact Alpha Digi AI Accountants"),
+  block(
+    "contact.seo.description",
+    "contact",
+    "Contact SEO description",
+    "Speak to our chartered accountants on {phone} or send us a message about accounting, payroll, tax, VAT and charity services.",
+    "richtext",
+  ),
+  block("contact.seo.ogTitle", "contact", "Contact Open Graph title", "Contact Alpha Digi AI Accountants"),
+  block(
+    "contact.seo.ogDescription",
+    "contact",
+    "Contact Open Graph description",
+    "Get in touch with our UK chartered accountancy team today.",
+    "richtext",
+  ),
   block("contact.eyebrow", "contact", "Contact page eyebrow", "Contact"),
   block("contact.headingPrefix", "contact", "Contact heading prefix", "Speak to our "),
   block("contact.headingBrand", "contact", "Contact heading (highlighted)", "team today."),
@@ -532,6 +652,22 @@ let blocks: ContentBlock[] = [
   ),
 
   // —— Knowledge page ——
+  block("knowledge.seo.title", "knowledge", "Knowledge SEO title", "Knowledge | Alpha Digi AI Accountants"),
+  block(
+    "knowledge.seo.description",
+    "knowledge",
+    "Knowledge SEO description",
+    "Download firm-authored tax guides, checklists, templates and deadline calendars from Alpha Digi AI Accountants.",
+    "richtext",
+  ),
+  block("knowledge.seo.ogTitle", "knowledge", "Knowledge Open Graph title", "Knowledge | Alpha Digi AI Accountants"),
+  block(
+    "knowledge.seo.ogDescription",
+    "knowledge",
+    "Knowledge Open Graph description",
+    "Download firm-authored tax guides, checklists, templates and deadline calendars from Alpha Digi AI Accountants.",
+    "richtext",
+  ),
   block("knowledge.eyebrow", "knowledge", "Knowledge page eyebrow", "Knowledge"),
   block("knowledge.headingPrefix", "knowledge", "Knowledge heading prefix", "Guides, checklists and "),
   block("knowledge.headingBrand", "knowledge", "Knowledge heading (highlighted)", "resources"),
@@ -556,6 +692,31 @@ export function getAllContentBlocks(): ContentBlock[] {
 
 export function getContentValue(key: string): string {
   return blocks.find((item) => item.key === key)?.value ?? "";
+}
+
+export function getSeoMeta(page: ContentPage): {
+  title: string;
+  description: string;
+  ogTitle: string;
+  ogDescription: string;
+} {
+  const title = getContentValue(`${page}.seo.title`);
+  const description = interpolateSettings(getContentValue(`${page}.seo.description`));
+  const ogTitle = getContentValue(`${page}.seo.ogTitle`) || title;
+  const ogDescription = interpolateSettings(getContentValue(`${page}.seo.ogDescription`)) || description;
+  return { title, description, ogTitle, ogDescription };
+}
+
+export function seoHeadTags(page: ContentPage) {
+  const { title, description, ogTitle, ogDescription } = getSeoMeta(page);
+  return [
+    { title },
+    { name: "description" as const, content: description },
+    { property: "og:title" as const, content: ogTitle },
+    { property: "og:description" as const, content: ogDescription },
+    { property: "og:type" as const, content: "website" },
+    { name: "twitter:card" as const, content: "summary_large_image" },
+  ];
 }
 
 export function updateContent(key: string, value: string): void {

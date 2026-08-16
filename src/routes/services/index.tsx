@@ -6,7 +6,7 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { TechnologyPartners } from "@/components/site/TechnologyPartners";
 import { getCards, isHomeServiceCard } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 function coreServiceCards() {
   return getCards("services").filter((card) => card.published && !isHomeServiceCard(card));
@@ -19,22 +19,7 @@ export const Route = createFileRoute("/services/")({
       .filter((card) => card.imageUrl)
       .map((card) => ({ rel: "preload" as const, href: card.imageUrl, as: "image" as const }));
     return {
-      meta: [
-        { title: "Accounting & Compliance Services | Alpha Digi" },
-        {
-          name: "description",
-          content:
-            "Company formation, payroll, tax and VAT returns, audit, management accounts, charity and trust accounting, plus outsourced bookkeeping to India.",
-        },
-        { property: "og:title", content: "Accounting & Compliance Services" },
-        {
-          property: "og:description",
-          content:
-            "Ten core cloud accounting services for businesses, charities, trusts and individuals.",
-        },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
+      meta: seoHeadTags("services"),
       links: preload,
     };
   },

@@ -5,11 +5,13 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { getCardBySlug, isHomeServiceCard } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
+import { getSettings } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
     const card = getCardBySlug("services", params.slug);
-    const title = card ? `${card.title} | Alpha Digi` : "Service | Alpha Digi";
+    const firmName = getSettings().firmName;
+    const title = card ? `${card.title} | ${firmName}` : firmName;
     const description = card?.body || card?.subtitle || "";
     return {
       meta: [

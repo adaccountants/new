@@ -3,26 +3,12 @@ import { useState } from "react";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
 import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 import { getMailHref, getPhoneHref, getSettings } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
-    meta: [
-      { title: "Contact Alpha Digi AI Accountants" },
-      {
-        name: "description",
-        content:
-          "Speak to our chartered accountants on 020 3916 5680 or send us a message about accounting, payroll, tax, VAT and charity services.",
-      },
-      { property: "og:title", content: "Contact Alpha Digi AI Accountants" },
-      {
-        property: "og:description",
-        content: "Get in touch with our UK chartered accountancy team today.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+    meta: seoHeadTags("contact"),
   }),
   component: ContactPage,
 });

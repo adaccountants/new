@@ -68,3 +68,11 @@ export function getPhoneHref(phone = settings.phone): string {
 export function getMailHref(email = settings.email): string {
   return `mailto:${email}`;
 }
+
+export function interpolateSettings(template: string, current = getSettings()): string {
+  return template
+    .replaceAll("{phone}", current.phone)
+    .replaceAll("{email}", current.email)
+    .replaceAll("{hours}", current.hours)
+    .replaceAll("{firmName}", current.firmName);
+}

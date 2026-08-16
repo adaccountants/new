@@ -17,6 +17,7 @@ export function Hero() {
   const intro = getContentValue("home.hero.intro");
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
+  const videoUrl = getContentValue("home.hero.videoUrl");
 
   // Autoplay + iOS fallback
   useEffect(() => {
@@ -143,7 +144,7 @@ export function Hero() {
               playsInline
               preload="auto"
             >
-              <source src="/hero-video.mp4" type="video/mp4" />
+              <source src={videoUrl} type="video/mp4" />
             </video>
           </div>
 

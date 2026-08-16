@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 function publishedPosts() {
   return getCards("blog").filter((card) => card.published);
@@ -17,22 +17,7 @@ export const Route = createFileRoute("/blog")({
       .filter((card) => card.imageUrl)
       .map((card) => ({ rel: "preload" as const, href: card.imageUrl, as: "image" as const }));
     return {
-      meta: [
-        { title: "Blog | Alpha Digi AI Accountants" },
-        {
-          name: "description",
-          content:
-            "Insights, guides and updates from Alpha Digi — practical advice from chartered accountants on tax, growth and digital accountancy.",
-        },
-        { property: "og:title", content: "Blog | Alpha Digi AI Accountants" },
-        {
-          property: "og:description",
-          content:
-            "Insights, guides and updates from Alpha Digi — practical advice from chartered accountants on tax, growth and digital accountancy.",
-        },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
+      meta: seoHeadTags("blog"),
       links: preload,
     };
   },

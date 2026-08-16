@@ -4,26 +4,11 @@ import { Check, Quote } from "lucide-react";
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
-    meta: [
-      { title: "About Us | Alpha Digi AI Accountants" },
-      {
-        name: "description",
-        content:
-          "Chartered accountants for over 12 years — ICAEW registered, HMRC agent, AI-driven solutions and personable service for listed, non-listed and charity clients.",
-      },
-      { property: "og:title", content: "About Alpha Digi AI Accountants" },
-      {
-        property: "og:description",
-        content:
-          "Modern accountancy, human at heart. Big 4 experienced ICAEW members supporting UK businesses, charities and trusts.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+    meta: seoHeadTags("about"),
   }),
   component: AboutPage,
 });

@@ -4,7 +4,7 @@ import { Download } from "lucide-react";
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards, KNOWLEDGE_CATEGORIES } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 function publishedKnowledge() {
   return getCards("knowledge").filter((card) => card.published);
@@ -17,22 +17,7 @@ export const Route = createFileRoute("/knowledge")({
       .filter((card) => card.imageUrl)
       .map((card) => ({ rel: "preload" as const, href: card.imageUrl, as: "image" as const }));
     return {
-      meta: [
-        { title: "Knowledge | Alpha Digi AI Accountants" },
-        {
-          name: "description",
-          content:
-            "Download firm-authored tax guides, checklists, templates and deadline calendars from Alpha Digi AI Accountants.",
-        },
-        { property: "og:title", content: "Knowledge | Alpha Digi AI Accountants" },
-        {
-          property: "og:description",
-          content:
-            "Download firm-authored tax guides, checklists, templates and deadline calendars from Alpha Digi AI Accountants.",
-        },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
+      meta: seoHeadTags("knowledge"),
       links: preload,
     };
   },

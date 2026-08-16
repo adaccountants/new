@@ -1,6 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import adaiLogo from "@/assets/adai-logo.jpeg";
 import {
   Clock3,
   Facebook,
@@ -101,10 +100,9 @@ export function SiteHeader() {
   useCms();
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const brandPrefix = getContentValue("home.header.brandPrefix");
-  const brandAccent = getContentValue("home.header.brandAccent");
-  const brandSuffix = getContentValue("home.header.brandSuffix");
   const contactCta = getContentValue("home.header.contactCta");
+  const logoUrl = getContentValue("home.header.logoUrl");
+  const logoAlt = getContentValue("home.header.logoAlt");
   const links = navKeys.map((link) => ({ ...link, label: getContentValue(link.key) }));
 
   return (
@@ -119,8 +117,8 @@ export function SiteHeader() {
             aria-label="ADAi Chartered Accountants Home"
           >
             <img
-              src={adaiLogo}
-              alt="ADAi Chartered Accountants"
+              src={logoUrl}
+              alt={logoAlt}
               height={56}
               className="h-14 w-auto object-contain select-none"
             />

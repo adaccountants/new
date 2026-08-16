@@ -11,6 +11,8 @@ import type { ReactNode } from "react";
 
 import { SiteShell } from "@/components/site/SiteShell";
 import { Toaster } from "@/components/ui/sonner";
+import { getContentValue, getSeoMeta } from "@/lib/page-content-data";
+import { getSettings } from "@/lib/site-settings-data";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -71,48 +73,42 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Alpha Digi AI — Chartered Accountants in London" },
-      {
-        name: "description",
-        content:
-          "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
-      },
-      { name: "author", content: "Alpha Digi AI Accountants" },
-      { property: "og:site_name", content: "Alpha Digi AI Accountants" },
-      { property: "og:title", content: "Alpha Digi AI — Chartered Accountants in London" },
-      {
-        property: "og:description",
-        content:
-          "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: "/favicon.jpeg" },
-      { property: "og:image:alt", content: "ADAi Chartered Accountants logo" },
-      { property: "og:image:width", content: "1536" },
-      { property: "og:image:height", content: "512" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Alpha Digi AI — Chartered Accountants in London" },
-      {
-        name: "twitter:description",
-        content:
-          "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.",
-      },
-      { name: "twitter:image", content: "/favicon.jpeg" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "icon", href: "/favicon.jpeg", type: "image/jpeg" },
-      { rel: "shortcut icon", href: "/favicon.jpeg" },
-      { rel: "apple-touch-icon", href: "/favicon.jpeg" },
-    ],
-  }),
+  head: () => {
+    const seo = getSeoMeta("home");
+    const settings = getSettings();
+    const shareImage = getContentValue("home.seo.image");
+    const shareImageAlt = getContentValue("home.seo.imageAlt");
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { title: seo.title },
+        { name: "description", content: seo.description },
+        { name: "author", content: settings.firmName },
+        { property: "og:site_name", content: settings.firmName },
+        { property: "og:title", content: seo.ogTitle },
+        { property: "og:description", content: seo.ogDescription },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: shareImage },
+        { property: "og:image:alt", content: shareImageAlt },
+        { property: "og:image:width", content: "1536" },
+        { property: "og:image:height", content: "512" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: seo.ogTitle },
+        { name: "twitter:description", content: seo.ogDescription },
+        { name: "twitter:image", content: shareImage },
+      ],
+      links: [
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+        { rel: "icon", href: "/favicon.jpeg", type: "image/jpeg" },
+        { rel: "shortcut icon", href: "/favicon.jpeg" },
+        { rel: "apple-touch-icon", href: "/favicon.jpeg" },
+      ],
+    };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

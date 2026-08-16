@@ -22,7 +22,6 @@ export function Testimonials() {
   const headingPrefix = getContentValue("home.testimonials.headingPrefix");
   const headingBrand = getContentValue("home.testimonials.headingBrand");
   const headingSuffix = getContentValue("home.testimonials.headingSuffix");
-  const icaewNote = getContentValue("home.testimonials.icaewNote");
   const cta = getContentValue("home.testimonials.cta");
   const testimonials = getCards("testimonials").filter((card) => card.published);
 

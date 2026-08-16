@@ -4,26 +4,16 @@ import { About } from "@/components/site/About";
 import { Services } from "@/components/site/Services";
 import { WhyChoose } from "@/components/site/WhyChoose";
 import { Testimonials } from "@/components/site/Testimonials";
-import icaewLogo from "@/assets/finalicaewlogo.jpeg";
-
-const title = "Alpha Digi AI — Chartered Accountants in London";
-const description =
-  "ICAEW chartered accountants for individuals and business owners: annual accounts, tax planning, business start up, payroll, VAT and cloud bookkeeping.";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "preload", href: icaewLogo, as: "image" },
-    ],
-  }),
+  head: () => {
+    const icaewImage = getContentValue("home.footer.icaewImageUrl");
+    return {
+      meta: seoHeadTags("home"),
+      links: icaewImage ? [{ rel: "preload" as const, href: icaewImage, as: "image" as const }] : [],
+    };
+  },
   component: Index,
 });
 

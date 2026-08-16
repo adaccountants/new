@@ -4,26 +4,11 @@ import { Check } from "lucide-react";
 import { ContactCta } from "@/components/site/ContactCta";
 import { getCards, parseCareerBody } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
-import { getContentValue } from "@/lib/page-content-data";
+import { getContentValue, seoHeadTags } from "@/lib/page-content-data";
 
 export const Route = createFileRoute("/careers")({
   head: () => ({
-    meta: [
-      { title: "Careers at Alpha Digi AI Accountants" },
-      {
-        name: "description",
-        content:
-          "Join a chartered accountancy firm built on AI-assisted workflows. Roles for experienced ACA/ACCA/CTA professionals, graduates and apprentices across the UK.",
-      },
-      { property: "og:title", content: "Join Our Team | Alpha Digi Careers" },
-      {
-        property: "og:description",
-        content:
-          "Work at the intersection of chartered accountancy and AI — flexible working, modern tools and funded ICAEW pathways.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+    meta: seoHeadTags("careers"),
   }),
   component: CareersPage,
 });
