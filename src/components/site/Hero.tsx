@@ -1,13 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useContentValue } from "@/lib/cms-context";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 export function Hero() {
   const getContentValue = useContentValue();
   const reduced = useReducedMotion();
+  const hydrated = useHydrated();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const eyebrow = getContentValue("home.hero.eyebrow");
@@ -17,6 +19,10 @@ export function Hero() {
   const ctaPrimary = getContentValue("home.hero.ctaPrimary");
   const ctaSecondary = getContentValue("home.hero.ctaSecondary");
   const videoUrl = getContentValue("home.hero.videoUrl");
+  const headingAnimate = useMemo(() => {
+    if (reduced || !hydrated) return { opacity: 1, y: 0, scale: 1 };
+    return { opacity: [0, 1], y: [40, 0], scale: [0.96, 1] };
+  }, [reduced, hydrated]);
 
   // Autoplay + iOS fallback
   useEffect(() => {
@@ -63,7 +69,7 @@ export function Hero() {
         {/* ── LEFT: Text content ── */}
         <div className="relative z-10 order-last w-full lg:order-first lg:w-[47%] xl:w-[46%]">
 
-          <ScrollAnimate y={20} duration={0.5}>
+          <ScrollAnimate y={20} duration={0.5} replayOnMount>
             <span className="inline-flex items-center rounded-full bg-brand/15 px-4 py-2 text-[0.65rem] font-semibold tracking-[0.2em] text-brand-strong uppercase sm:px-5 sm:text-xs">
               {eyebrow}
             </span>
@@ -71,7 +77,7 @@ export function Hero() {
 
           <motion.h1
             initial={false}
-            animate={reduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
+            animate={headingAnimate}
             transition={{ duration: 0.8, delay: 0.1, ease: EASE_OUT }}
             className="mt-6 font-display font-bold tracking-tight"
             style={{ lineHeight: 1.05 }}
@@ -90,7 +96,7 @@ export function Hero() {
             </span>
           </motion.h1>
 
-          <ScrollAnimate delay={0.2} y={24} className="mt-7 max-w-lg">
+          <ScrollAnimate delay={0.2} y={24} replayOnMount className="mt-7 max-w-lg">
             <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
               {intro}
             </p>
@@ -99,6 +105,7 @@ export function Hero() {
           <ScrollAnimate
             delay={0.3}
             y={24}
+            replayOnMount
             className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
           >
             <Link

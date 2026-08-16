@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { motion, type Variants } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useRef } from "react";
 
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
 
 const containerVariants: Variants = {
@@ -26,6 +28,10 @@ const cardVariants: Variants = {
 export function TechnologyPartners() {
   const getContentValue = useContentValue();
   const { partners } = useCmsSnapshot();
+  const gridRef = useRef<HTMLDivElement>(null);
+  const hydrated = useHydrated();
+  const inView = useInView(gridRef, { once: true, amount: 0.2 });
+  const gridAnimate = !hydrated || inView ? "show" : "hidden";
   const eyebrow = getContentValue("services.partners.eyebrow");
   const heading = getContentValue("services.partners.heading");
   const intro = getContentValue("services.partners.intro");
@@ -45,10 +51,10 @@ export function TechnologyPartners() {
         </ScrollAnimate>
 
         <motion.div
+          ref={gridRef}
           variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
+          initial={false}
+          animate={gridAnimate}
           className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-4"
         >
           {partners.map((partner) => (

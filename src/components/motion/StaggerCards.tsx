@@ -1,4 +1,7 @@
-import { motion, type Variants } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
+import { useRef } from "react";
+
+import { useHydrated } from "@/hooks/use-hydrated";
 import { EASE_OUT } from "./ScrollAnimate";
 import { cn } from "@/lib/utils";
 
@@ -34,15 +37,20 @@ export function StaggerCards({
   className,
   cardClassName,
 }: StaggerCardsProps) {
+  const ref = useRef<HTMLUListElement>(null);
+  const hydrated = useHydrated();
+  const inView = useInView(ref, { once: true, amount: 0.2 });
+  const animate = !hydrated || inView ? "show" : "hidden";
+
   return (
     <motion.ul
+      ref={ref}
       variants={{
         ...containerVariants,
         show: { transition: { staggerChildren: stagger } },
       }}
       initial={false}
-      whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
+      animate={animate}
       className={cn(
         "flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:px-12",
         className,

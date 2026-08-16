@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Quote } from "lucide-react";
+import { useRef } from "react";
+
 import { EASE_OUT, ScrollAnimate } from "@/components/motion/ScrollAnimate";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
 
 const container = {
@@ -17,6 +20,10 @@ const item = {
 export function Testimonials() {
   const getContentValue = useContentValue();
   const { testimonials } = useCmsSnapshot();
+  const listRef = useRef<HTMLDivElement>(null);
+  const hydrated = useHydrated();
+  const inView = useInView(listRef, { once: true, amount: 0.2 });
+  const listAnimate = !hydrated || inView ? "visible" : "hidden";
   const eyebrow = getContentValue("home.testimonials.eyebrow");
   const headingPrefix = getContentValue("home.testimonials.headingPrefix");
   const headingBrand = getContentValue("home.testimonials.headingBrand");
@@ -35,10 +42,10 @@ export function Testimonials() {
       </ScrollAnimate>
 
       <motion.div
+        ref={listRef}
         variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        initial={false}
+        animate={listAnimate}
         className="mx-auto mt-12 grid w-full max-w-7xl gap-6 px-6 md:grid-cols-3 lg:px-12"
       >
         {testimonials.map((t) => (
