@@ -11,8 +11,13 @@ import { supabase } from "@/lib/supabase-client";
  */
 export async function getCmsDb(): Promise<SupabaseClient> {
   if (import.meta.env.SSR) {
-    const { getServiceSupabase } = await import("@/lib/supabase-server");
-    return getServiceSupabase();
+    try {
+      const { getServiceSupabase } = await import("@/lib/supabase-server");
+      const service = getServiceSupabase();
+      if (service) return service;
+    } catch (error) {
+      console.error("[cms] service role client failed, using anon", error);
+    }
   }
   return supabase;
 }

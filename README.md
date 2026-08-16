@@ -21,7 +21,7 @@ The app runs at [http://localhost:8080](http://localhost:8080).
 
 CMS data, admin auth, and file uploads use Supabase.
 
-1. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Add the same keys in Vercel.
+1. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Add the same keys in Vercel for Production and Preview. After changing Vercel env vars, redeploy. If Production is missing `SUPABASE_SERVICE_ROLE_KEY`, public pages still load via the anon key.
 2. In the Supabase SQL Editor, run `supabase/schema.sql`.
 3. If the tables already exist, run `supabase/grants.sql`. That restores GRANTs and replaces policies that queried `public.admins` as `anon` (which caused `permission denied for table admins` on cards).
 4. Optionally run `supabase/seed-page-content.sql` and `supabase/seed-cards.sql` to load the current site copy.

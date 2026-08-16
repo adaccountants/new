@@ -11,11 +11,13 @@ if (typeof window !== "undefined") {
 
 let client: SupabaseClient | null = null;
 
-export function getServiceSupabase(): SupabaseClient {
-  const url = process.env.VITE_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+export function getServiceSupabase(): SupabaseClient | null {
+  const url = import.meta.env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const env = process.env;
+  const serviceRoleKey = env["SUPABASE_SERVICE_ROLE_KEY"];
   if (!url || !serviceRoleKey) {
-    throw new Error("Missing VITE_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+    console.error("[cms] SUPABASE_SERVICE_ROLE_KEY is not available on the server");
+    return null;
   }
   if (!client) {
     client = createClient(url, serviceRoleKey, {
