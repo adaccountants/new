@@ -25,6 +25,9 @@
 
 import { emitCmsChange } from "@/lib/cms-sync";
 
+/** Current Vercel production URL. Update to the real custom domain once one is connected. */
+export const SITE_URL = "https://scroll-joy-animate.vercel.app";
+
 export type SiteSettings = {
   firmName: string;
   phone: string;
@@ -81,4 +84,48 @@ export function interpolateSettings(template: string, current = getSettings()): 
     .replaceAll("{email}", current.email)
     .replaceAll("{hours}", current.hours)
     .replaceAll("{firmName}", current.firmName);
+}
+
+export function getAccountingServiceJsonLd(current = getSettings()) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AccountingService",
+    name: current.firmName,
+    url: SITE_URL,
+    telephone: current.phone,
+    email: current.email,
+    // TODO: split address into streetAddress / addressLocality / postalCode as
+    // separate SiteSettings fields later for stronger structured data. Using the
+    // single address string as-is for now to match the current data shape.
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: current.address,
+      addressCountry: "GB",
+    },
+    openingHours: current.hours,
+    sameAs: current.socials.map((social) => social.url),
+  };
+}
+
+export function getServiceJsonLd(
+  card: { title: string; body?: string; subtitle?: string },
+  current = getSettings(),
+) {
+  const jsonLd: {
+    "@context": string;
+    "@type": string;
+    name: string;
+    description?: string;
+    provider: { "@type": string; name: string };
+    areaServed: string;
+  } = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: card.title,
+    provider: { "@type": "AccountingService", name: current.firmName },
+    areaServed: "GB",
+  };
+  const description = card.body || card.subtitle;
+  if (description) jsonLd.description = description;
+  return jsonLd;
 }

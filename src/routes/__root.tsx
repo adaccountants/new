@@ -12,7 +12,7 @@ import type { ReactNode } from "react";
 import { SiteShell } from "@/components/site/SiteShell";
 import { Toaster } from "@/components/ui/sonner";
 import { getContentValue, getSeoMeta } from "@/lib/page-content-data";
-import { getSettings } from "@/lib/site-settings-data";
+import { getAccountingServiceJsonLd, getSettings } from "@/lib/site-settings-data";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -97,6 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "twitter:title", content: seo.ogTitle },
         { name: "twitter:description", content: seo.ogDescription },
         { name: "twitter:image", content: shareImage },
+        { "script:ld+json": getAccountingServiceJsonLd(settings) },
       ],
       links: [
         {

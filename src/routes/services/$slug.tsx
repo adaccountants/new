@@ -5,24 +5,27 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { getCardBySlug, isHomeServiceCard } from "@/lib/cards-data";
 import { useCms } from "@/lib/cms-sync";
 import { getContentValue } from "@/lib/page-content-data";
-import { getSettings } from "@/lib/site-settings-data";
+import { getServiceJsonLd, getSettings } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
     const card = getCardBySlug("services", params.slug);
-    const firmName = getSettings().firmName;
+    const settings = getSettings();
+    const firmName = settings.firmName;
     const title = card ? `${card.title} | ${firmName}` : firmName;
     const description = card?.body || card?.subtitle || "";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
-    };
+    const meta: Array<Record<string, unknown>> = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ];
+    if (card) {
+      meta.push({ "script:ld+json": getServiceJsonLd(card, settings) });
+    }
+    return { meta };
   },
   component: ServiceDetailPage,
 });
