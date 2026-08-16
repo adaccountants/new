@@ -34,11 +34,12 @@ export function ScrollAnimate({
   ...rest
 }: ScrollAnimateProps) {
   const reduced = useReducedMotion();
+  const reveal = reduced ? undefined : { opacity: 1, y: 0, scale: 1 };
 
   return (
     <motion.div
-      initial={reduced ? false : { opacity: 0, y, scale }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={false}
+      whileInView={reveal}
       viewport={{ once, amount }}
       transition={{ duration, delay, ease: EASE_OUT }}
       {...rest}

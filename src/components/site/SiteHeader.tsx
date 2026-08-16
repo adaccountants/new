@@ -79,8 +79,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const contactCta = getContentValue("home.header.contactCta");
-  const logoUrl = getContentValue("home.header.logoUrl");
-  const logoAlt = getContentValue("home.header.logoAlt");
+  const logoUrl = getContentValue("home.header.logoUrl") || "/cms/adai-logo.jpeg";
+  const logoAlt = getContentValue("home.header.logoAlt") || "ADAi Chartered Accountants";
   const links = navKeys.map((link) => ({ ...link, label: getContentValue(link.key) }));
 
   return (

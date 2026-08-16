@@ -70,8 +70,8 @@ export function Hero() {
           </ScrollAnimate>
 
           <motion.h1
-            initial={{ opacity: 0, y: 40, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={false}
+            animate={reduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.1, ease: EASE_OUT }}
             className="mt-6 font-display font-bold tracking-tight"
             style={{ lineHeight: 1.05 }}
@@ -143,7 +143,7 @@ export function Hero() {
               playsInline
               preload="auto"
             >
-              <source src={videoUrl} type="video/mp4" />
+              {videoUrl ? <source src={videoUrl} type="video/mp4" /> : null}
             </video>
           </div>
 

@@ -22,9 +22,9 @@ export function SiteFooter() {
   const headingSuffix = getContentValue("home.footer.headingSuffix");
   const intro = interpolateSettings(getContentValue("home.footer.intro"), settings);
   const cta = getContentValue("home.footer.cta");
-  const icaewHref = getContentValue("home.footer.icaewHref");
-  const icaewImageUrl = getContentValue("home.footer.icaewImageUrl");
-  const icaewImageAlt = getContentValue("home.footer.icaewImageAlt");
+  const icaewHref = getContentValue("home.footer.icaewHref") || "https://www.icaew.com";
+  const icaewImageUrl = getContentValue("home.footer.icaewImageUrl") || "/cms/finalicaewlogo.jpeg";
+  const icaewImageAlt = getContentValue("home.footer.icaewImageAlt") || "ICAEW Chartered Accountant";
   const icaewNote = getContentValue("home.footer.icaewNote");
   const links = footerNav.map((link) => ({ ...link, label: getContentValue(link.key) }));
 

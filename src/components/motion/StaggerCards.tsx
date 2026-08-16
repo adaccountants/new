@@ -40,7 +40,7 @@ export function StaggerCards({
         ...containerVariants,
         show: { transition: { staggerChildren: stagger } },
       }}
-      initial="hidden"
+      initial={false}
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
       className={cn(
