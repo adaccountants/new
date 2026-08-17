@@ -78,7 +78,6 @@ export function SiteHeader() {
   const getContentValue = useContentValue();
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const contactCta = getContentValue("home.header.contactCta");
   const logoUrl = getContentValue("home.header.logoUrl") || "/cms/adai-logo.jpeg";
   const logoAlt = getContentValue("home.header.logoAlt") || "ADAi Chartered Accountants";
   const links = navKeys.map((link) => ({ ...link, label: getContentValue(link.key) }));
@@ -121,12 +120,6 @@ export function SiteHeader() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <Link
-              to="/contact"
-              className="hidden h-9 items-center justify-center rounded-full bg-brand px-4 text-sm font-medium tracking-tight text-brand-foreground shadow-brand hover:bg-brand-strong sm:inline-flex"
-            >
-              {contactCta}
-            </Link>
             <button
               type="button"
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border md:hidden"
