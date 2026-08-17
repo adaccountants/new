@@ -24,6 +24,9 @@ dist-ssr
 .env.*
 !.env.example
 
+# Vercel CLI project metadata (may contain org/project ids)
+.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
