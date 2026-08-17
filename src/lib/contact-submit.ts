@@ -49,7 +49,14 @@ export const submitContact = createServerFn({ method: "POST" })
 
     const { getSettings } = await import("@/lib/site-settings-data");
     const settings = await getSettings();
-    const to = "info@adaaccountants.uk";
+    const to = envValue("CONTACT_TO") || settings.email.trim();
+    if (!to) {
+      console.error("[contact] no recipient (CONTACT_TO or CMS Settings email)");
+      return {
+        ok: false,
+        error: "The contact form is not configured yet. Please email us directly.",
+      };
+    }
 
     const firmName = settings.firmName.trim() || "Alpha Digi AI Accountants";
     const phoneLine = data.phone || "Not provided";
