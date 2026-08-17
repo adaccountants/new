@@ -126,17 +126,10 @@ export function SiteFooter() {
         </div>
 
         {/* Copyright Bar */}
-        <div className="mt-12 flex flex-col gap-3 border-t border-surface/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 border-t border-surface/10 pt-8">
           <p className="text-xs text-surface/40">
             © {new Date().getFullYear()} {settings.footerText}
           </p>
-          <nav aria-label="Legal" className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-surface/75">
-            {footerLegal.map((link) => (
-              <Link key={link.to} to={link.to} className="transition-colors hover:text-brand">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
       </ScrollAnimate>
     </footer>
