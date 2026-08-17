@@ -11,7 +11,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen min-w-0 max-w-full bg-background text-foreground">
+    <div className="min-w-0 max-w-full bg-background text-foreground" style={{ minHeight: "100dvh" }}>
       <SiteHeader />
       {children}
       <SiteFooter />
