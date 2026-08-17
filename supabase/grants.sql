@@ -19,6 +19,11 @@ grant select, update, delete on table public.contact_submissions to authenticate
 
 grant select on table public.admins to authenticated, service_role;
 
+grant all on table public.contact_rate_limits to service_role;
+revoke all on table public.contact_rate_limits from public;
+revoke all on table public.contact_rate_limits from anon;
+revoke all on table public.contact_rate_limits from authenticated;
+
 create or replace function public.is_admin()
 returns boolean
 language sql

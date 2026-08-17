@@ -1,0 +1,36 @@
+Recommended starter Content-Security-Policy — NOT applied.
+
+Do not enable this until it has been tested against the live site. A naive CSP
+will break inline JSON-LD <script> tags, Framer Motion, and possibly other
+inline styles/scripts this app uses.
+
+Suggested starting point (adjust after watching the browser console):
+
+  Content-Security-Policy:
+    default-src 'self';
+    base-uri 'self';
+    object-src 'none';
+    frame-ancestors 'none';
+    form-action 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: blob: https://bglpwknowjvhuyykuuww.supabase.co;
+    font-src 'self' data:;
+    connect-src 'self' https://bglpwknowjvhuyykuuww.supabase.co wss://bglpwknowjvhuyykuuww.supabase.co;
+    media-src 'self' https://bglpwknowjvhuyykuuww.supabase.co;
+    frame-src 'none';
+    upgrade-insecure-requests;
+
+Why these directives:
+- script-src 'unsafe-inline': JSON-LD <script type="application/ld+json"> in the
+  document head, plus any other inline scripts the Vite/TanStack Start runtime
+  may emit. A nonce/hash based policy is better long-term but needs a pass that
+  inventories every inline script.
+- style-src 'unsafe-inline': Tailwind/runtime and Framer Motion inline styles.
+- img-src + media-src: CMS card images and knowledge files live on the public
+  Supabase storage host.
+- connect-src: browser Supabase client (REST, Auth, Realtime websocket).
+- frame-ancestors 'none': same intent as X-Frame-Options: DENY.
+
+After enabling, click through home, services, knowledge downloads, contact
+submit, and /admin login to confirm nothing is blocked.

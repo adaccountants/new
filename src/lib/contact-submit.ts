@@ -1,5 +1,15 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
+
+import {
+  CONTACT_RATE_LIMIT_MESSAGE,
+  CONTACT_RATE_LIMIT_MAX,
+  CONTACT_RATE_LIMIT_WINDOW_MS,
+  getClientIpFromHeaders,
+  memoryRateLimitRecord,
+  memoryRateLimitWouldExceed,
+} from "@/lib/contact-rate-limit";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(200),
@@ -35,6 +45,25 @@ export const submitContact = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<SubmitContactResult> => {
     if (data.website.trim().length > 0) {
       return { ok: true };
+    }
+
+    const ip = await readClientIp();
+    if (memoryRateLimitWouldExceed(ip)) {
+      return { ok: false, error: CONTACT_RATE_LIMIT_MESSAGE };
+    }
+
+    const { getServiceSupabase } = await import("@/lib/supabase-server");
+    const db = getServiceSupabase();
+    if (db) {
+      const limited = await dbRateLimitWouldExceed(db, ip);
+      if (limited === true) {
+        return { ok: false, error: CONTACT_RATE_LIMIT_MESSAGE };
+      }
+    }
+
+    memoryRateLimitRecord(ip);
+    if (db) {
+      await dbRateLimitRecord(db, ip);
     }
 
     const apiKey = envValue("RESEND_API_KEY");
@@ -93,8 +122,6 @@ export const submitContact = createServerFn({ method: "POST" })
     }
 
     try {
-      const { getServiceSupabase } = await import("@/lib/supabase-server");
-      const db = getServiceSupabase();
       if (db) {
         const { error: insertError } = await db.from("contact_submissions").insert({
           name: data.name,
@@ -112,3 +139,47 @@ export const submitContact = createServerFn({ method: "POST" })
 
     return { ok: true };
   });
+
+async function readClientIp(): Promise<string> {
+  try {
+    const { getRequest, getRequestIP } = await import("@tanstack/react-start/server");
+    const fromHeaders = getClientIpFromHeaders(getRequest().headers);
+    if (fromHeaders !== "unknown") return fromHeaders;
+    return getRequestIP({ xForwardedFor: true }) ?? "unknown";
+  } catch {
+    return "unknown";
+  }
+}
+
+type ServiceDb = SupabaseClient;
+
+async function dbRateLimitWouldExceed(db: ServiceDb, ip: string): Promise<boolean | "unavailable"> {
+  const since = new Date(Date.now() - CONTACT_RATE_LIMIT_WINDOW_MS).toISOString();
+  const { error: pruneError } = await db
+    .from("contact_rate_limits")
+    .delete()
+    .eq("ip", ip)
+    .lt("submitted_at", since);
+  if (pruneError) {
+    console.error("[contact] rate limit prune failed", pruneError.message);
+    return "unavailable";
+  }
+
+  const { count, error } = await db
+    .from("contact_rate_limits")
+    .select("id", { count: "exact", head: true })
+    .eq("ip", ip)
+    .gte("submitted_at", since);
+  if (error) {
+    console.error("[contact] rate limit query failed", error.message);
+    return "unavailable";
+  }
+  return (count ?? 0) >= CONTACT_RATE_LIMIT_MAX;
+}
+
+async function dbRateLimitRecord(db: ServiceDb, ip: string): Promise<void> {
+  const { error } = await db.from("contact_rate_limits").insert({ ip });
+  if (error) {
+    console.error("[contact] rate limit insert failed", error.message);
+  }
+}

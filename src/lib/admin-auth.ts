@@ -1,4 +1,18 @@
+import { clearAdminSession, persistAdminSession } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase-client";
+
+async function syncSessionCookies() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.access_token || !session.refresh_token) return;
+  await persistAdminSession({
+    data: {
+      accessToken: session.access_token,
+      refreshToken: session.refresh_token,
+    },
+  });
+}
 
 export async function getAdminUser() {
   const {
@@ -33,9 +47,15 @@ export async function signInAdmin(email: string, password: string) {
     throw new Error("This account is not an admin");
   }
 
+  await syncSessionCookies();
   return user;
 }
 
 export async function signOutAdmin() {
+  try {
+    await clearAdminSession();
+  } catch (error) {
+    console.error("[admin] failed to clear server session cookies", error);
+  }
   await supabase.auth.signOut();
 }

@@ -3,6 +3,8 @@ import {
   Link,
   Outlet,
   createFileRoute,
+  redirect,
+  isRedirect,
   useNavigate,
   useRouterState,
 } from "@tanstack/react-router";
@@ -23,9 +25,27 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { getAdminUser, signOutAdmin } from "@/lib/admin-auth";
+import { getServerAdminUser } from "@/lib/admin-session";
 import { cn } from "@/lib/utils";
 
+function isAdminLoginPath(pathname: string) {
+  return pathname === "/admin/login" || pathname.startsWith("/admin/login/");
+}
+
 export const Route = createFileRoute("/admin")({
+  beforeLoad: async ({ location }) => {
+    if (isAdminLoginPath(location.pathname)) return;
+    try {
+      const admin = await getServerAdminUser();
+      if (!admin) {
+        throw redirect({ to: "/admin/login" });
+      }
+    } catch (error) {
+      if (isRedirect(error)) throw error;
+      console.error("[admin] server session check failed", error);
+      throw redirect({ to: "/admin/login" });
+    }
+  },
   component: AdminLayout,
 });
 

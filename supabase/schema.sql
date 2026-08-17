@@ -118,6 +118,23 @@ grant select, update, delete on table public.contact_submissions to authenticate
 grant select on table public.admins to authenticated, service_role;
 
 -- ---------------------------------------------------------------------------
+-- 5b. contact_rate_limits (service-role only; see supabase/contact-rate-limits.sql)
+-- ---------------------------------------------------------------------------
+create table if not exists public.contact_rate_limits (
+  id uuid primary key default gen_random_uuid(),
+  ip text not null,
+  submitted_at timestamptz not null default now()
+);
+
+create index if not exists contact_rate_limits_ip_submitted_at_idx
+  on public.contact_rate_limits (ip, submitted_at desc);
+
+grant all on table public.contact_rate_limits to service_role;
+revoke all on table public.contact_rate_limits from public;
+revoke all on table public.contact_rate_limits from anon;
+revoke all on table public.contact_rate_limits from authenticated;
+
+-- ---------------------------------------------------------------------------
 -- 6. Row Level Security
 -- ---------------------------------------------------------------------------
 alter table public.cards enable row level security;
@@ -125,6 +142,7 @@ alter table public.page_content enable row level security;
 alter table public.site_settings enable row level security;
 alter table public.contact_submissions enable row level security;
 alter table public.admins enable row level security;
+alter table public.contact_rate_limits enable row level security;
 
 -- Avoid recursive RLS when policies check public.admins.
 -- Must not subquery public.admins directly in policies: anon has no GRANT

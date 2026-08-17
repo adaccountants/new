@@ -3,6 +3,10 @@ import * as RechartsPrimitive from "recharts";
 
 import { cn } from "@/lib/utils";
 
+// Unused shadcn/ui boilerplate (ChartStyle uses dangerouslySetInnerHTML).
+// Not imported by src/routes, src/components/site, or src/components/admin.
+// Kept as scaffolding only — do not use in production pages as-is.
+
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
 

@@ -169,7 +169,7 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
         <Input
           id="image"
           type="file"
-          accept="image/*"
+          accept="image/png,image/jpeg,image/webp"
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (!file) return;
@@ -238,7 +238,7 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
             <Input
               id="file"
               type="file"
-              accept=".pdf,.doc,.docx"
+              accept="application/pdf"
               onChange={(event) => {
                 const file = event.target.files?.[0];
                 if (!file) return;

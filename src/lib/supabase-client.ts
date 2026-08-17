@@ -1,3 +1,4 @@
+import { createBrowserClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 
 const url = import.meta.env.VITE_SUPABASE_URL;
@@ -9,10 +10,17 @@ if (!url || !anonKey) {
 
 const isBrowser = typeof window !== "undefined";
 
-export const supabase = createClient(url, anonKey, {
-  auth: {
-    persistSession: isBrowser,
-    autoRefreshToken: isBrowser,
-    detectSessionInUrl: isBrowser,
-  },
-});
+/**
+ * Browser: cookie-backed session (@supabase/ssr) so SSR beforeLoad can
+ * read the same session from request cookies.
+ * Server: unauthenticated anon client for public CMS reads (no session).
+ */
+export const supabase = isBrowser
+  ? createBrowserClient(url, anonKey)
+  : createClient(url, anonKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+      },
+    });
