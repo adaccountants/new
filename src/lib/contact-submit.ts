@@ -40,11 +40,10 @@ export const submitContact = createServerFn({ method: "POST" })
     const apiKey = envValue("RESEND_API_KEY");
     const from = envValue("RESEND_FROM");
     if (!apiKey || !from) {
-      const missing = [!apiKey && "RESEND_API_KEY", !from && "RESEND_FROM"].filter(Boolean).join(", ");
-      console.error("[contact] missing env vars:", missing);
+      console.error("[contact] RESEND_API_KEY or RESEND_FROM is not set");
       return {
         ok: false,
-        error: `[DEBUG] Missing env vars: ${missing}`,
+        error: "The contact form is not configured yet. Please email us directly.",
       };
     }
 
@@ -89,7 +88,7 @@ export const submitContact = createServerFn({ method: "POST" })
       console.error("[contact] Resend error", error);
       return {
         ok: false,
-        error: `[DEBUG] Resend error: ${error.name} – ${error.message}`,
+        error: "We couldn't send your message. Please try again or email us directly.",
       };
     }
 
