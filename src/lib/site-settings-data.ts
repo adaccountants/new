@@ -100,7 +100,8 @@ export function interpolateSettings(template: string, current: SiteSettings): st
     .replaceAll("{phone}", current.phone)
     .replaceAll("{email}", current.email)
     .replaceAll("{hours}", current.hours)
-    .replaceAll("{firmName}", current.firmName);
+    .replaceAll("{firmName}", current.firmName)
+    .replaceAll("{address}", current.address);
 }
 
 export function getAccountingServiceJsonLd(current: SiteSettings) {

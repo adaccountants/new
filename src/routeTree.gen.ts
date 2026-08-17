@@ -15,10 +15,14 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ServicesRouteRouteImport } from './routes/services/route'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminSectionRouteRouteImport } from './routes/admin/$section/route'
+import { Route as AdminInboxRouteImport } from './routes/admin/inbox'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
@@ -58,14 +62,29 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CookiePolicyRoute = CookiePolicyRouteImport.update({
+  id: '/cookie-policy',
+  path: '/cookie-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KnowledgeRoute = KnowledgeRouteImport.update({
   id: '/knowledge',
   path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRouteRoute = ServicesRouteRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -76,6 +95,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminSectionRouteRoute = AdminSectionRouteRouteImport.update({
   id: '/$section',
   path: '/$section',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminInboxRoute = AdminInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -127,8 +151,12 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
   '/knowledge': typeof KnowledgeRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms': typeof TermsRoute
   '/admin/$section': typeof AdminSectionRouteRouteWithChildren
+  '/admin/inbox': typeof AdminInboxRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -145,7 +173,11 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
   '/knowledge': typeof KnowledgeRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms': typeof TermsRoute
+  '/admin/inbox': typeof AdminInboxRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -165,8 +197,12 @@ export interface FileRoutesById {
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
   '/knowledge': typeof KnowledgeRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms': typeof TermsRoute
   '/admin/$section': typeof AdminSectionRouteRouteWithChildren
+  '/admin/inbox': typeof AdminInboxRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -187,8 +223,12 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/cookie-policy'
     | '/knowledge'
+    | '/privacy-policy'
+    | '/terms'
     | '/admin/$section'
+    | '/admin/inbox'
     | '/admin/login'
     | '/admin/settings'
     | '/services/$slug'
@@ -205,7 +245,11 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/cookie-policy'
     | '/knowledge'
+    | '/privacy-policy'
+    | '/terms'
+    | '/admin/inbox'
     | '/admin/login'
     | '/admin/settings'
     | '/services/$slug'
@@ -224,8 +268,12 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/cookie-policy'
     | '/knowledge'
+    | '/privacy-policy'
+    | '/terms'
     | '/admin/$section'
+    | '/admin/inbox'
     | '/admin/login'
     | '/admin/settings'
     | '/services/$slug'
@@ -245,7 +293,10 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
+  CookiePolicyRoute: typeof CookiePolicyRoute
   KnowledgeRoute: typeof KnowledgeRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -292,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cookie-policy': {
+      id: '/cookie-policy'
+      path: '/cookie-policy'
+      fullPath: '/cookie-policy'
+      preLoaderRoute: typeof CookiePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/knowledge': {
       id: '/knowledge'
       path: '/knowledge'
@@ -299,11 +357,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KnowledgeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -318,6 +390,13 @@ declare module '@tanstack/react-router' {
       path: '/$section'
       fullPath: '/admin/$section'
       preLoaderRoute: typeof AdminSectionRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/inbox': {
+      id: '/admin/inbox'
+      path: '/inbox'
+      fullPath: '/admin/inbox'
+      preLoaderRoute: typeof AdminInboxRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/login': {
@@ -396,6 +475,7 @@ const AdminSectionRouteRouteWithChildren =
 
 interface AdminRouteRouteChildren {
   AdminSectionRouteRoute: typeof AdminSectionRouteRouteWithChildren
+  AdminInboxRoute: typeof AdminInboxRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -404,6 +484,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSectionRouteRoute: AdminSectionRouteRouteWithChildren,
+  AdminInboxRoute: AdminInboxRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -436,7 +517,10 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
+  CookiePolicyRoute: CookiePolicyRoute,
   KnowledgeRoute: KnowledgeRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

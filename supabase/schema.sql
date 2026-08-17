@@ -63,7 +63,7 @@ insert into public.site_settings (
   'Alpha Digi AI Accountants',
   '020 3916 5680',
   'info@adaaccountants.uk',
-  'London, United Kingdom',
+  'Suite RA01, 195-197 Wood Street, London E17 3NU',
   'Mon – Fri, 9AM – 5PM',
   '[
     {"platform":"Instagram","url":"https://instagram.com"},
@@ -112,7 +112,8 @@ grant select on table public.site_settings to anon, authenticated, service_role;
 grant insert, update, delete on table public.site_settings to authenticated, service_role;
 
 grant all on table public.contact_submissions to service_role;
-revoke all on table public.contact_submissions from anon, authenticated;
+revoke all on table public.contact_submissions from anon;
+grant select, update, delete on table public.contact_submissions to authenticated;
 
 grant select on table public.admins to authenticated, service_role;
 
@@ -182,8 +183,29 @@ create policy site_settings_admin_all
   using (public.is_admin())
   with check (public.is_admin());
 
--- contact_submissions: no public policies (writes go through the service role)
--- (intentionally none)
+-- contact_submissions: public writes go through the service role.
+-- Authenticated CMS admins can read, update status, and delete (GDPR).
+drop policy if exists contact_submissions_admin_select on public.contact_submissions;
+create policy contact_submissions_admin_select
+  on public.contact_submissions
+  for select
+  to authenticated
+  using (auth.uid() in (select id from public.admins));
+
+drop policy if exists contact_submissions_admin_update on public.contact_submissions;
+create policy contact_submissions_admin_update
+  on public.contact_submissions
+  for update
+  to authenticated
+  using (auth.uid() in (select id from public.admins))
+  with check (auth.uid() in (select id from public.admins));
+
+drop policy if exists contact_submissions_admin_delete on public.contact_submissions;
+create policy contact_submissions_admin_delete
+  on public.contact_submissions
+  for delete
+  to authenticated
+  using (auth.uid() in (select id from public.admins));
 
 -- admins: only existing admins can read admin rows
 -- `auth.uid() = id` avoids recursive RLS on this table.

@@ -1,7 +1,8 @@
 import { getCards, isHomeServiceCard } from "@/lib/cards-data";
 import type { CmsSnapshot } from "@/lib/cms-context";
+import { LEGAL_SEO_FALLBACK, type LegalPage } from "@/lib/legal-page-content";
 import { contentMap, getAllContentBlocks, seoMetaFromContent, seoTagsFromMeta, type ContentPage } from "@/lib/page-content-data";
-import { getSettings } from "@/lib/site-settings-data";
+import { interpolateSettings, getSettings, SITE_URL } from "@/lib/site-settings-data";
 
 export async function loadCmsSnapshot(): Promise<CmsSnapshot> {
   try {
@@ -50,4 +51,24 @@ export function rootCms(matches: Array<{ loaderData?: unknown }>): CmsSnapshot {
 export function pageSeoHead(page: ContentPage, matches: Array<{ loaderData?: unknown }>) {
   const cms = rootCms(matches);
   return seoTagsFromMeta(seoMetaFromContent(page, cms.content, cms.settings));
+}
+
+export function legalPageHead(
+  page: LegalPage,
+  path: `/${string}`,
+  matches: Array<{ loaderData?: unknown }>,
+) {
+  const cms = rootCms(matches);
+  const seo = seoMetaFromContent(page, cms.content, cms.settings);
+  const fallback = LEGAL_SEO_FALLBACK[page];
+  const title = seo.title || fallback.title;
+  const description =
+    seo.description || interpolateSettings(fallback.description, cms.settings);
+  const ogTitle = seo.ogTitle || fallback.ogTitle || title;
+  const ogDescription =
+    seo.ogDescription || interpolateSettings(fallback.ogDescription, cms.settings) || description;
+  return {
+    meta: seoTagsFromMeta({ title, description, ogTitle, ogDescription }),
+    links: [{ rel: "canonical" as const, href: `${SITE_URL}${path}` }],
+  };
 }

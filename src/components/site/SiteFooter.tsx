@@ -14,6 +14,12 @@ const footerNav = [
   { key: "home.nav.contact", to: "/contact" as const },
 ];
 
+const footerLegal = [
+  { to: "/privacy-policy" as const, label: "Privacy Policy" },
+  { to: "/terms" as const, label: "Terms of Use" },
+  { to: "/cookie-policy" as const, label: "Cookie Policy" },
+];
+
 export function SiteFooter() {
   const getContentValue = useContentValue();
   const settings = useSettings();
@@ -78,6 +84,13 @@ export function SiteFooter() {
                     </Link>
                   </li>
                 ))}
+                {footerLegal.map((link) => (
+                  <li key={link.to}>
+                    <Link to={link.to} className="transition-colors hover:text-brand">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
 
@@ -113,10 +126,17 @@ export function SiteFooter() {
         </div>
 
         {/* Copyright Bar */}
-        <div className="mt-12 border-t border-surface/10 pt-8">
+        <div className="mt-12 flex flex-col gap-3 border-t border-surface/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-surface/40">
             © {new Date().getFullYear()} {settings.footerText}
           </p>
+          <nav aria-label="Legal" className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-surface/75">
+            {footerLegal.map((link) => (
+              <Link key={link.to} to={link.to} className="transition-colors hover:text-brand">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </ScrollAnimate>
     </footer>

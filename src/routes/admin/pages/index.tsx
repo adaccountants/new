@@ -99,7 +99,7 @@ function AdminPagesPage() {
             {block.type === "richtext" ? (
               <Textarea
                 id={block.key}
-                rows={4}
+                rows={block.key.endsWith(".body") ? 24 : 4}
                 value={draft[block.key] ?? block.value}
                 onChange={(event) =>
                   setDraft((current) => ({ ...current, [block.key]: event.target.value }))

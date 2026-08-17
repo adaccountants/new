@@ -14,7 +14,8 @@ grant select on table public.site_settings to anon, authenticated, service_role;
 grant insert, update, delete on table public.site_settings to authenticated, service_role;
 
 grant all on table public.contact_submissions to service_role;
-revoke all on table public.contact_submissions from anon, authenticated;
+revoke all on table public.contact_submissions from anon;
+grant select, update, delete on table public.contact_submissions to authenticated;
 
 grant select on table public.admins to authenticated, service_role;
 
@@ -68,6 +69,28 @@ create policy site_settings_admin_all
   for all
   using (public.is_admin())
   with check (public.is_admin());
+
+drop policy if exists contact_submissions_admin_select on public.contact_submissions;
+create policy contact_submissions_admin_select
+  on public.contact_submissions
+  for select
+  to authenticated
+  using (auth.uid() in (select id from public.admins));
+
+drop policy if exists contact_submissions_admin_update on public.contact_submissions;
+create policy contact_submissions_admin_update
+  on public.contact_submissions
+  for update
+  to authenticated
+  using (auth.uid() in (select id from public.admins))
+  with check (auth.uid() in (select id from public.admins));
+
+drop policy if exists contact_submissions_admin_delete on public.contact_submissions;
+create policy contact_submissions_admin_delete
+  on public.contact_submissions
+  for delete
+  to authenticated
+  using (auth.uid() in (select id from public.admins));
 
 drop policy if exists admins_select on public.admins;
 create policy admins_select

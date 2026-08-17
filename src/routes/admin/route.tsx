@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import {
   FileText,
+  Inbox,
   LayoutDashboard,
   LogOut,
   MessageSquareQuote,
@@ -32,9 +33,11 @@ const nav: Array<
   | { label: string; to: "/admin"; icon: typeof LayoutDashboard; end: true }
   | { label: string; to: "/admin/$section"; params: { section: string }; icon: typeof LayoutDashboard }
   | { label: string; to: "/admin/pages"; icon: typeof LayoutDashboard }
+  | { label: string; to: "/admin/inbox"; icon: typeof LayoutDashboard }
   | { label: string; to: "/admin/settings"; icon: typeof LayoutDashboard }
 > = [
   { label: "Dashboard", to: "/admin", icon: LayoutDashboard, end: true },
+  { label: "Inbox", to: "/admin/inbox", icon: Inbox },
   { label: "Services", to: "/admin/$section", params: { section: "services" }, icon: Layers },
   {
     label: "Testimonials",

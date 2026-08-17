@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
+import { CookieConsent } from "@/components/site/CookieConsent";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 
@@ -14,6 +15,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <SiteHeader />
       {children}
       <SiteFooter />
+      <CookieConsent />
     </div>
   );
 }

@@ -1,8 +1,19 @@
 import { getCmsDb } from "@/lib/cms-db";
+import { LEGAL_CONTENT_BLOCKS } from "@/lib/legal-page-content";
 import { interpolateSettings, getSettings, type SiteSettings } from "@/lib/site-settings-data";
 import { supabase } from "@/lib/supabase-client";
 
-export type ContentPage = "home" | "about" | "services" | "careers" | "contact" | "blog" | "knowledge";
+export type ContentPage =
+  | "home"
+  | "about"
+  | "services"
+  | "careers"
+  | "contact"
+  | "blog"
+  | "knowledge"
+  | "privacy-policy"
+  | "terms"
+  | "cookie-policy";
 
 export type ContentBlock = {
   key: string;
@@ -20,7 +31,12 @@ export const CONTENT_PAGES: { id: ContentPage; label: string }[] = [
   { id: "contact", label: "Contact" },
   { id: "blog", label: "Blog" },
   { id: "knowledge", label: "Knowledge" },
+  { id: "privacy-policy", label: "Privacy Policy" },
+  { id: "terms", label: "Terms of Use" },
+  { id: "cookie-policy", label: "Cookie Policy" },
 ];
+
+export { LEGAL_CONTENT_BLOCKS };
 
 type ContentRow = {
   key: string;
@@ -59,18 +75,28 @@ export function contentToRow(block: ContentBlock): ContentRow {
   };
 }
 
+function withLegalFallbacks(blocks: ContentBlock[], page?: string): ContentBlock[] {
+  const existing = new Set(blocks.map((block) => block.key));
+  const missing = LEGAL_CONTENT_BLOCKS.filter(
+    (block) => !existing.has(block.key) && (!page || block.page === page),
+  );
+  return missing.length ? [...blocks, ...missing] : blocks;
+}
+
 export async function getContentByPage(page: string): Promise<ContentBlock[]> {
   const db = await getCmsDb();
   const { data, error } = await db.from("page_content").select("*").eq("page", page);
-  if (logIfError(error, "getContentByPage")) return [];
-  return ((data ?? []) as ContentRow[]).map(contentFromRow);
+  if (logIfError(error, "getContentByPage")) {
+    return LEGAL_CONTENT_BLOCKS.filter((block) => block.page === page);
+  }
+  return withLegalFallbacks(((data ?? []) as ContentRow[]).map(contentFromRow), page);
 }
 
 export async function getAllContentBlocks(): Promise<ContentBlock[]> {
   const db = await getCmsDb();
   const { data, error } = await db.from("page_content").select("*");
-  if (logIfError(error, "getAllContentBlocks")) return [];
-  return ((data ?? []) as ContentRow[]).map(contentFromRow);
+  if (logIfError(error, "getAllContentBlocks")) return [...LEGAL_CONTENT_BLOCKS];
+  return withLegalFallbacks(((data ?? []) as ContentRow[]).map(contentFromRow));
 }
 
 export async function getContentValue(key: string): Promise<string> {
@@ -124,6 +150,12 @@ export async function seoHeadTags(page: ContentPage) {
 }
 
 export async function updateContent(key: string, value: string): Promise<void> {
+  const seed = LEGAL_CONTENT_BLOCKS.find((block) => block.key === key);
+  if (seed) {
+    const { error } = await supabase.from("page_content").upsert(contentToRow({ ...seed, value }));
+    throwIfError(error, "updateContent");
+    return;
+  }
   const { error } = await supabase.from("page_content").update({ value }).eq("key", key);
   throwIfError(error, "updateContent");
 }
