@@ -30,7 +30,7 @@ CMS data, admin auth, and file uploads use Supabase.
 
 ## Contact form (Resend)
 
-The `/contact` form sends an email through [Resend](https://resend.com) and stores a copy in Supabase `contact_submissions`. The API key never ships to the browser (`RESEND_*` must not use a `VITE_` prefix). Reply-To is the visitor’s address so you can reply from your inbox. The recipient defaults to the CMS Settings email (`info@adaaccountants.uk`) unless `CONTACT_TO` is set.
+The `/contact` form sends an email through [Resend](https://resend.com) and stores a copy in Supabase `contact_submissions`. The API key never ships to the browser (`RESEND_*` must not use a `VITE_` prefix). Every submission is sent to **info@adaaccountants.uk**. Reply-To is the visitor’s address so you can reply from that inbox.
 
 Do not skip domain verification for production. `beth.t@example.com` is a Resend test sender only — it can send to the email on your Resend account, not to arbitrary inboxes.
 
@@ -79,7 +79,6 @@ Copy `.env.example` values into local `.env` and into **Vercel → Project → S
 | ---------------- | --------------------- | ---------------------------------------------------- |
 | `RESEND_API_KEY` | Server only           | `re_…` from step 1                                   |
 | `RESEND_FROM`    | Server only           | `Alpha Digi AI Accountants <info@adaaccountants.uk>` |
-| `CONTACT_TO`     | Optional, server only | Leave blank to use CMS Settings email                |
 
 `RESEND_FROM` must use an address on the verified domain. Friendly-name syntax is `Name <email@domain>`.
 
@@ -99,7 +98,7 @@ On Vercel, after adding the env vars, trigger a new deployment. A failed send sh
 
 | Symptom                                     | What to check                                                                                              |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Form says it is not configured              | `RESEND_API_KEY` / `RESEND_FROM` missing on that environment, or no CMS Settings email and no `CONTACT_TO` |
+| Form says it is not configured              | `RESEND_API_KEY` / `RESEND_FROM` missing on that environment                                               |
 | Resend error / “couldn’t send”              | From address domain not verified; API key revoked; look at the Vercel function logs                        |
 | Mail never arrives                          | Domain still `Pending`; SPF/DKIM host names include the root twice; check Resend Emails for bounce         |
 | Can send to yourself but not the firm inbox | Still using `beth.t@example.com` — switch `RESEND_FROM` after verification                                 |
