@@ -111,7 +111,7 @@ function AdminInboxPage() {
                     </button>
                   ) : null}
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
                   <Button
                     type="button"
                     variant="outline"

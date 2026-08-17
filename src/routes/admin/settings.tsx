@@ -114,7 +114,7 @@ function AdminSettingsPage() {
           ) : (
             <ul className="space-y-3">
               {socials.map((social, index) => (
-                <li key={index} className="flex gap-2">
+                <li key={index} className="flex flex-col gap-2 sm:flex-row">
                   <Input
                     placeholder="Platform"
                     value={social.platform}
@@ -139,6 +139,7 @@ function AdminSettingsPage() {
                     type="button"
                     size="icon"
                     variant="outline"
+                    className="h-11 w-11 shrink-0 sm:h-9 sm:w-9"
                     onClick={() => setSocials((list) => list.filter((_, i) => i !== index))}
                   >
                     <Trash2 className="size-4" />

@@ -84,8 +84,8 @@ function AdminSectionListPage() {
         </p>
       ) : (
         <ul className="mt-8 divide-y rounded-xl border bg-white">
-          {cards.map((card, index) => (
-            <li key={card.id} className="flex items-center gap-4 p-4">
+          {cards.map((card, index) => (            <li key={card.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4">
+              {/* Thumbnail */}
               {card.imageUrl ? (
                 <img
                   src={card.imageUrl}
@@ -101,16 +101,22 @@ function AdminSectionListPage() {
                   No image
                 </div>
               )}
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-medium">{card.title}</p>
-                <p className="truncate text-xs text-muted-foreground">
-                  {card.slug ? `${card.slug} · ` : ""}sort {card.sortOrder}
-                </p>
+
+              {/* Title + badge row */}
+              <div className="flex min-w-0 flex-1 items-center gap-3 sm:contents">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium">{card.title}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {card.slug ? `${card.slug} · ` : ""}sort {card.sortOrder}
+                  </p>
+                </div>
+                <Badge variant={card.published ? "default" : "secondary"}>
+                  {card.published ? "Published" : "Draft"}
+                </Badge>
               </div>
-              <Badge variant={card.published ? "default" : "secondary"}>
-                {card.published ? "Published" : "Draft"}
-              </Badge>
-              <div className="flex items-center gap-1">
+
+              {/* Action buttons — full row on mobile, inline on sm+ */}
+              <div className="flex items-center gap-2">
                 <Button
                   type="button"
                   size="icon"
@@ -118,6 +124,7 @@ function AdminSectionListPage() {
                   disabled={index === 0}
                   onClick={() => move(card.id, -1)}
                   aria-label="Move up"
+                  className="h-11 w-11 sm:h-9 sm:w-9"
                 >
                   <ArrowUp className="size-4" />
                 </Button>
@@ -128,17 +135,18 @@ function AdminSectionListPage() {
                   disabled={index === cards.length - 1}
                   onClick={() => move(card.id, 1)}
                   aria-label="Move down"
+                  className="h-11 w-11 sm:h-9 sm:w-9"
                 >
                   <ArrowDown className="size-4" />
                 </Button>
-                <Button asChild size="icon" variant="outline">
+                <Button asChild size="icon" variant="outline" className="h-11 w-11 sm:h-9 sm:w-9">
                   <Link to="/admin/$section/$id" params={{ section, id: card.id }}>
                     <Pencil className="size-4" />
                   </Link>
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button size="icon" variant="outline">
+                    <Button size="icon" variant="outline" className="h-11 w-11 sm:h-9 sm:w-9">
                       <Trash2 className="size-4" />
                     </Button>
                   </AlertDialogTrigger>
@@ -146,7 +154,7 @@ function AdminSectionListPage() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete this card?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        “{card.title}” will be permanently deleted.
+                        "{card.title}" will be permanently deleted.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
