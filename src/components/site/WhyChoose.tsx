@@ -66,7 +66,7 @@ export function WhyChoose() {
 
             <ScrollAnimate
               delay={0.2}
-              className="mt-12 flex flex-col items-center gap-4 sm:flex-row"
+              className="mt-12 flex flex-col flex-wrap items-center gap-4 sm:flex-row"
             >
               <Link
                 to="/contact"

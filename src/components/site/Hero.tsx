@@ -64,13 +64,13 @@ export function Hero() {
         }}
       />
 
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-10 px-6 pt-0 pb-14 lg:flex-row lg:items-center lg:gap-12 lg:px-12 lg:pt-5 lg:pb-16">
+      <div className="relative mx-auto flex w-full min-w-0 max-w-7xl flex-col items-stretch gap-10 px-6 pt-0 pb-14 lg:flex-row lg:items-center lg:gap-12 lg:px-12 lg:pt-5 lg:pb-16">
 
         {/* ── LEFT: Text content ── */}
-        <div className="relative z-10 order-last w-full lg:order-first lg:w-[47%] xl:w-[46%]">
+        <div className="relative z-10 order-last w-full min-w-0 max-w-full lg:order-first lg:w-[47%] xl:w-[46%]">
 
-          <ScrollAnimate y={20} duration={0.5} replayOnMount>
-            <span className="inline-flex items-center rounded-full bg-brand/15 px-4 py-2 text-[0.65rem] font-semibold tracking-[0.2em] text-brand-strong uppercase sm:px-5 sm:text-xs">
+          <ScrollAnimate y={20} duration={0.5} replayOnMount className="max-w-full">
+            <span className="inline-flex max-w-full flex-wrap items-center rounded-full bg-brand/15 px-4 py-2 text-left text-[0.65rem] font-semibold tracking-[0.12em] break-words text-brand-strong uppercase sm:px-5 sm:text-xs sm:tracking-[0.2em]">
               {eyebrow}
             </span>
           </ScrollAnimate>
@@ -128,13 +128,10 @@ export function Hero() {
         </div>
 
         {/* ── RIGHT: Video container ── */}
-        <div
-          className="relative order-first -mx-6 w-[calc(100%+3rem)] lg:mx-0 lg:order-last lg:w-[50%] xl:w-[51%]"
-          style={{ flexShrink: 0 }}
-        >
+        <div className="relative order-first min-w-0 w-[calc(100%+3rem)] max-w-none -mx-6 lg:mx-0 lg:order-last lg:w-[50%] xl:w-[51%]">
           {/* 16:9 aspect ratio wrapper */}
           <div
-            className="relative w-full overflow-hidden rounded-none lg:rounded-[18px]"
+            className="relative w-full max-w-full overflow-hidden rounded-none lg:rounded-[18px]"
             style={{
               aspectRatio: "16 / 9",
               boxShadow:
@@ -143,7 +140,7 @@ export function Hero() {
           >
             <video
               ref={videoRef}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full max-w-full object-cover"
               autoPlay
               muted
               loop={!reduced}

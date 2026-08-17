@@ -31,7 +31,7 @@ export function Testimonials() {
   const cta = getContentValue("home.testimonials.cta");
 
   return (
-    <section id="testimonials" className="py-20">
+    <section id="testimonials" className="overflow-x-hidden py-20">
       <ScrollAnimate className="mx-auto max-w-2xl px-6 text-center">
         <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{eyebrow}</p>
         <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">

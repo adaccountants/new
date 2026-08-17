@@ -219,10 +219,15 @@
     border-color: var(--color-border);
   }
 
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     font-family: var(--font-sans);
     background-color: var(--color-background);
-
     color: var(--color-foreground);
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }

@@ -98,7 +98,7 @@ export function SiteHeader() {
               src={logoUrl}
               alt={logoAlt}
               height={56}
-              className="h-14 w-auto object-contain select-none"
+              className="h-14 w-auto max-w-[min(100%,12rem)] object-contain select-none"
             />
           </Link>
 

@@ -52,7 +52,7 @@ export function StaggerCards({
       initial={false}
       animate={animate}
       className={cn(
-        "flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:px-12",
+        "flex w-full min-w-0 max-w-full snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:px-12",
         className,
       )}
     >
