@@ -19,13 +19,13 @@ export function ContactCta() {
         </h2>
         <div className="flex flex-wrap items-center justify-center gap-3">
           {phoneHref ? (
-          <a
-            href={phoneHref}
-            className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-strong"
-          >
-            <Phone className="size-4" />
-            {settings.phone}
-          </a>
+            <a
+              href={phoneHref}
+              className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-strong"
+            >
+              <Phone className="size-4" />
+              {settings.phone}
+            </a>
           ) : (
             <span className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground">
               <Phone className="size-4" />

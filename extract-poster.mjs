@@ -2,10 +2,10 @@
 // Extracts first frame of hero-video.mp4 as hero-poster.webp using a headless canvas approach
 // Requires: puppeteer-core or just uses the file directly via canvas
 
-import { createCanvas } from 'canvas';
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { createCanvas } from "canvas";
+import { execSync } from "child_process";
+import fs from "fs";
+import path from "path";
 
 // We'll use a simpler approach: a temporary HTML file + screenshot via browser subagent
 // This script instead creates a minimal HTML that captures the first frame
@@ -35,5 +35,5 @@ v.load();
 </body>
 </html>`;
 
-fs.writeFileSync('extract-poster.html', html);
-console.log('Created extract-poster.html — open in browser to extract poster');
+fs.writeFileSync("extract-poster.html", html);
+console.log("Created extract-poster.html — open in browser to extract poster");

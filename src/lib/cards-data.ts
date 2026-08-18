@@ -2,19 +2,10 @@ import { getCmsDb } from "@/lib/cms-db";
 import { supabase } from "@/lib/supabase-client";
 
 export type CardSection =
-  | "services"
-  | "testimonials"
-  | "blog"
-  | "team"
-  | "careers"
-  | "knowledge"
-  | "partnership";
+  "services" | "testimonials" | "blog" | "team" | "careers" | "knowledge" | "partnership";
 
 export type KnowledgeCategory =
-  | "Guides"
-  | "Checklists & Templates"
-  | "Deadline Calendars"
-  | "Industry Insights";
+  "Guides" | "Checklists & Templates" | "Deadline Calendars" | "Industry Insights";
 
 export const KNOWLEDGE_CATEGORIES: KnowledgeCategory[] = [
   "Guides",
@@ -128,9 +119,16 @@ export function cardToRow(card: Omit<Card, "id"> & { id?: string }) {
   };
 }
 
-export async function getCards(section: string, opts?: { includeUnpublished?: boolean }): Promise<Card[]> {
+export async function getCards(
+  section: string,
+  opts?: { includeUnpublished?: boolean },
+): Promise<Card[]> {
   const db = await getCmsDb();
-  let query = db.from("cards").select("*").eq("section", section).order("sort_order", { ascending: true });
+  let query = db
+    .from("cards")
+    .select("*")
+    .eq("section", section)
+    .order("sort_order", { ascending: true });
   // Defense-in-depth: RLS already hides unpublished rows from anon. Keep the
   // filter on public SSR so a policy gap fails closed (empty) instead of leaking.
   if (import.meta.env.SSR && !opts?.includeUnpublished) {
@@ -193,7 +191,12 @@ export async function updateCard(id: string, patch: Partial<Card>): Promise<Card
   if (category) updated.category = category;
   if (linkUrl) updated.linkUrl = linkUrl;
 
-  const { data, error } = await supabase.from("cards").update(cardToRow(updated)).eq("id", id).select("*").single();
+  const { data, error } = await supabase
+    .from("cards")
+    .update(cardToRow(updated))
+    .eq("id", id)
+    .select("*")
+    .single();
   throwIfError(error, "updateCard");
   return cardFromRow(data as CardRow);
 }

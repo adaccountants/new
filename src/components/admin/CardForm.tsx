@@ -17,7 +17,13 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { addCard, type Card, type CardSection, KNOWLEDGE_CATEGORIES, updateCard } from "@/lib/cards-data";
+import {
+  addCard,
+  type Card,
+  type CardSection,
+  KNOWLEDGE_CATEGORIES,
+  updateCard,
+} from "@/lib/cards-data";
 import { isSafeAdminUrl, UNSAFE_URL_MESSAGE } from "@/lib/safe-url";
 import { uploadPublicFile } from "@/lib/storage-upload";
 
@@ -53,7 +59,10 @@ function cardSchema(section: CardSection) {
           path: ["category"],
         });
       }
-      if (section === "knowledge" && !isSafeAdminUrl(data.fileUrl ?? "", { allowStoragePath: true })) {
+      if (
+        section === "knowledge" &&
+        !isSafeAdminUrl(data.fileUrl ?? "", { allowStoragePath: true })
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: UNSAFE_URL_MESSAGE,
@@ -161,7 +170,9 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="slug">Slug{slugRequired.has(section) ? " (required)" : " (optional)"}</Label>
+        <Label htmlFor="slug">
+          Slug{slugRequired.has(section) ? " (required)" : " (optional)"}
+        </Label>
         <Input id="slug" {...form.register("slug")} placeholder="listed-non-listed-companies" />
         {form.formState.errors.slug ? (
           <p className="text-sm text-destructive">{form.formState.errors.slug.message}</p>
@@ -288,7 +299,9 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
       {uploading ? <p className="text-sm text-muted-foreground">Uploading…</p> : null}
 
       <div className="flex gap-2">
-        <Button type="submit" disabled={uploading}>{card ? "Save changes" : "Add card"}</Button>
+        <Button type="submit" disabled={uploading}>
+          {card ? "Save changes" : "Add card"}
+        </Button>
         <Button
           type="button"
           variant="outline"

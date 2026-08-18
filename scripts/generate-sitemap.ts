@@ -53,10 +53,7 @@ async function main() {
       card.published && Boolean(card.slug) && !isHomeServiceCard(card),
   );
 
-  const paths = [
-    ...STATIC_PATHS,
-    ...services.map((card) => `/services/${card.slug}`),
-  ];
+  const paths = [...STATIC_PATHS, ...services.map((card) => `/services/${card.slug}`)];
   const unique = [...new Set(paths)];
 
   const body = unique

@@ -101,7 +101,11 @@ export async function getAllContentBlocks(): Promise<ContentBlock[]> {
 
 export async function getContentValue(key: string): Promise<string> {
   const db = await getCmsDb();
-  const { data, error } = await db.from("page_content").select("value").eq("key", key).maybeSingle();
+  const { data, error } = await db
+    .from("page_content")
+    .select("value")
+    .eq("key", key)
+    .maybeSingle();
   if (logIfError(error, "getContentValue")) return "";
   return data?.value ?? "";
 }
@@ -121,11 +125,20 @@ export type SeoMeta = {
   ogDescription: string;
 };
 
-export function seoMetaFromContent(page: ContentPage, content: Record<string, string>, settings: SiteSettings): SeoMeta {
+export function seoMetaFromContent(
+  page: ContentPage,
+  content: Record<string, string>,
+  settings: SiteSettings,
+): SeoMeta {
   const title = contentValue(content, `${page}.seo.title`);
-  const description = interpolateSettings(contentValue(content, `${page}.seo.description`), settings);
+  const description = interpolateSettings(
+    contentValue(content, `${page}.seo.description`),
+    settings,
+  );
   const ogTitle = contentValue(content, `${page}.seo.ogTitle`) || title;
-  const ogDescription = interpolateSettings(contentValue(content, `${page}.seo.ogDescription`), settings) || description;
+  const ogDescription =
+    interpolateSettings(contentValue(content, `${page}.seo.ogDescription`), settings) ||
+    description;
   return { title, description, ogTitle, ogDescription };
 }
 

@@ -97,7 +97,9 @@ function AdminInboxPage() {
                     </a>
                     {item.phone ? ` · ${item.phone}` : ""}
                   </p>
-                  <p className="mt-1 text-xs text-muted-foreground">{formatSubmittedAt(item.createdAt)}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {formatSubmittedAt(item.createdAt)}
+                  </p>
                   <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">
                     {expanded ? item.message : truncate(item.message)}
                   </p>

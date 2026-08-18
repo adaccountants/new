@@ -15,7 +15,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { deleteCard, getCards, isCardSection, reorderCards, type CardSection } from "@/lib/cards-data";
+import {
+  deleteCard,
+  getCards,
+  isCardSection,
+  reorderCards,
+  type CardSection,
+} from "@/lib/cards-data";
 
 export const Route = createFileRoute("/admin/$section/")({
   loader: async ({ params }) => {
@@ -84,16 +90,18 @@ function AdminSectionListPage() {
         </p>
       ) : (
         <ul className="mt-8 divide-y rounded-xl border bg-white">
-          {cards.map((card, index) => (            <li key={card.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4">
+          {cards.map((card, index) => (
+            <li
+              key={card.id}
+              className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4"
+            >
               {/* Thumbnail */}
               {card.imageUrl ? (
                 <img
                   src={card.imageUrl}
                   alt=""
                   className={`size-16 shrink-0 rounded-md ${
-                    section === "partnership"
-                      ? "bg-slate-50 object-contain p-1"
-                      : "object-cover"
+                    section === "partnership" ? "bg-slate-50 object-contain p-1" : "object-cover"
                   }`}
                 />
               ) : (

@@ -31,7 +31,8 @@ export function SiteFooter() {
   const cta = getContentValue("home.footer.cta");
   const icaewHref = toSafeHref(getContentValue("home.footer.icaewHref") || "https://www.icaew.com");
   const icaewImageUrl = getContentValue("home.footer.icaewImageUrl") || "/cms/finalicaewlogo.jpeg";
-  const icaewImageAlt = getContentValue("home.footer.icaewImageAlt") || "ICAEW Chartered Accountant";
+  const icaewImageAlt =
+    getContentValue("home.footer.icaewImageAlt") || "ICAEW Chartered Accountant";
   const icaewNote = getContentValue("home.footer.icaewNote");
   const links = footerNav.map((link) => ({ ...link, label: getContentValue(link.key) }));
   const socials = settings.socials.filter((social) => {
@@ -75,9 +76,7 @@ export function SiteFooter() {
               className="h-28 sm:h-36 md:h-44 max-w-full w-auto object-contain select-none"
             />
           )}
-          <p className="mt-3 max-w-lg text-sm leading-relaxed text-surface/70">
-            {icaewNote}
-          </p>
+          <p className="mt-3 max-w-lg text-sm leading-relaxed text-surface/70">{icaewNote}</p>
         </div>
 
         {/* Responsive Footer Content Section below Logo */}
@@ -116,17 +115,17 @@ export function SiteFooter() {
             {socials.length > 0 && (
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 {socials.map((social) => (
-                    <a
-                      key={`${social.platform}-${social.url}`}
-                      href={social.url.trim()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Visit our ${social.platform} page`}
-                      className="text-surface/75 transition-colors hover:text-brand"
-                    >
-                      {getSocialIcon(social.platform, "h-5 w-5")}
-                    </a>
-                  ))}
+                  <a
+                    key={`${social.platform}-${social.url}`}
+                    href={social.url.trim()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit our ${social.platform} page`}
+                    className="text-surface/75 transition-colors hover:text-brand"
+                  >
+                    {getSocialIcon(social.platform, "h-5 w-5")}
+                  </a>
+                ))}
               </div>
             )}
           </div>

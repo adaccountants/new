@@ -39,7 +39,10 @@ export function CookieConsent() {
         <p className="text-sm leading-relaxed text-muted-foreground">
           This website uses only strictly necessary cookies required for it to function. We do not
           use analytics or advertising cookies. See our{" "}
-          <Link to="/cookie-policy" className="font-semibold text-brand transition-colors hover:text-brand-strong">
+          <Link
+            to="/cookie-policy"
+            className="font-semibold text-brand transition-colors hover:text-brand-strong"
+          >
             Cookie Policy
           </Link>
           .

@@ -45,8 +45,9 @@ function firstHop(value: string | null | undefined): string | null {
 export function getClientIpFromHeaders(headers: {
   get(name: string): string | null | undefined;
 }): string {
-  const vercelForwarded =
-    firstHop(headers.get("x-vercel-forwarded-for") ?? headers.get("X-Vercel-Forwarded-For"));
+  const vercelForwarded = firstHop(
+    headers.get("x-vercel-forwarded-for") ?? headers.get("X-Vercel-Forwarded-For"),
+  );
   if (vercelForwarded) return vercelForwarded;
 
   const realIp = firstHop(headers.get("x-real-ip") ?? headers.get("X-Real-IP"));

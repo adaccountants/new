@@ -75,10 +75,10 @@ Provider-specific walkthroughs: [Cloudflare](https://resend.com/docs/dashboard/d
 
 Copy `.env.example` values into local `.env`. On Vercel, set Resend keys for **Production** only (or a dedicated Preview Resend project) — never copy the production `RESEND_API_KEY` onto Preview. See [Preview vs Production](#preview-vs-production-vercel-environment-variables). Redeploy after saving.
 
-| Variable         | Where                 | Example                                              |
-| ---------------- | --------------------- | ---------------------------------------------------- |
-| `RESEND_API_KEY` | Server only           | `re_…` from step 1                                   |
-| `RESEND_FROM`    | Server only           | `Alpha Digi AI Accountants <info@adaaccountants.uk>` |
+| Variable         | Where       | Example                                              |
+| ---------------- | ----------- | ---------------------------------------------------- |
+| `RESEND_API_KEY` | Server only | `re_…` from step 1                                   |
+| `RESEND_FROM`    | Server only | `Alpha Digi AI Accountants <info@adaaccountants.uk>` |
 
 `RESEND_FROM` must use an address on the verified domain. Friendly-name syntax is `Name <email@domain>`.
 
@@ -119,13 +119,13 @@ Do not provision a second Supabase project from this repo; create it in the Supa
 
 ### Troubleshooting
 
-| Symptom                                     | What to check                                                                                              |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Form says it is not configured              | `RESEND_API_KEY` / `RESEND_FROM` missing on that environment                                               |
-| Resend error / “couldn’t send”              | From address domain not verified; API key revoked; look at the Vercel function logs                        |
-| Mail never arrives                          | Domain still `Pending`; SPF/DKIM host names include the root twice; check Resend Emails for bounce         |
-| Can send to yourself but not the firm inbox | Still using `beth.t@example.com` — switch `RESEND_FROM` after verification                                 |
-| Row missing in `contact_submissions`        | Email can still succeed; confirm `SUPABASE_SERVICE_ROLE_KEY` is set on the server                          |
+| Symptom                                     | What to check                                                                                      |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Form says it is not configured              | `RESEND_API_KEY` / `RESEND_FROM` missing on that environment                                       |
+| Resend error / “couldn’t send”              | From address domain not verified; API key revoked; look at the Vercel function logs                |
+| Mail never arrives                          | Domain still `Pending`; SPF/DKIM host names include the root twice; check Resend Emails for bounce |
+| Can send to yourself but not the firm inbox | Still using `beth.t@example.com` — switch `RESEND_FROM` after verification                         |
+| Row missing in `contact_submissions`        | Email can still succeed; confirm `SUPABASE_SERVICE_ROLE_KEY` is set on the server                  |
 
 ## Scripts
 

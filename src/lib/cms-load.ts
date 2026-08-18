@@ -1,7 +1,13 @@
 import { getCards, isHomeServiceCard } from "@/lib/cards-data";
 import type { CmsSnapshot } from "@/lib/cms-context";
 import { LEGAL_SEO_FALLBACK, type LegalPage } from "@/lib/legal-page-content";
-import { contentMap, getAllContentBlocks, seoMetaFromContent, seoTagsFromMeta, type ContentPage } from "@/lib/page-content-data";
+import {
+  contentMap,
+  getAllContentBlocks,
+  seoMetaFromContent,
+  seoTagsFromMeta,
+  type ContentPage,
+} from "@/lib/page-content-data";
 import { interpolateSettings, getSettings, SITE_URL } from "@/lib/site-settings-data";
 
 export async function loadCmsSnapshot(): Promise<CmsSnapshot> {
@@ -62,8 +68,7 @@ export function legalPageHead(
   const seo = seoMetaFromContent(page, cms.content, cms.settings);
   const fallback = LEGAL_SEO_FALLBACK[page];
   const title = seo.title || fallback.title;
-  const description =
-    seo.description || interpolateSettings(fallback.description, cms.settings);
+  const description = seo.description || interpolateSettings(fallback.description, cms.settings);
   const ogTitle = seo.ogTitle || fallback.ogTitle || title;
   const ogDescription =
     seo.ogDescription || interpolateSettings(fallback.ogDescription, cms.settings) || description;

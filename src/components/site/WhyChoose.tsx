@@ -38,7 +38,9 @@ export function WhyChoose() {
         <ScrollAnimate>
           <div className="relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-14 shadow-soft sm:px-12">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">{eyebrow}</p>
+              <p className="text-xs font-semibold tracking-[0.2em] text-brand uppercase">
+                {eyebrow}
+              </p>
               <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-surface sm:text-4xl">
                 {headingPrefix}
                 <span className="text-brand">{headingBrand}</span>
@@ -75,7 +77,8 @@ export function WhyChoose() {
                 {cta}
               </Link>
               <p className="text-sm text-surface/60">
-                {callPrefix} <span className="text-surface">{settings.phone}</span> — {settings.hours}.
+                {callPrefix} <span className="text-surface">{settings.phone}</span> —{" "}
+                {settings.hours}.
               </p>
             </ScrollAnimate>
           </div>

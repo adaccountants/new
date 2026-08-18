@@ -29,7 +29,9 @@ function AdminEditCardPage() {
         return;
       }
       setCard(loaded);
-      setNextSortOrder(existing.length ? Math.max(...existing.map((item) => item.sortOrder)) + 1 : 1);
+      setNextSortOrder(
+        existing.length ? Math.max(...existing.map((item) => item.sortOrder)) + 1 : 1,
+      );
     });
     return () => {
       cancelled = true;

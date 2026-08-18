@@ -31,8 +31,14 @@ for (let i = 0; i < 5; i++) {
   results.push(!blocked);
   if (!blocked) memoryRateLimitRecord(ip);
 }
-expect(results.filter(Boolean).length === CONTACT_RATE_LIMIT_MAX, `expected ${CONTACT_RATE_LIMIT_MAX} allowed, got ${results.filter(Boolean).length}`);
-expect(results.slice(CONTACT_RATE_LIMIT_MAX).every((ok) => !ok), "later attempts should be blocked");
+expect(
+  results.filter(Boolean).length === CONTACT_RATE_LIMIT_MAX,
+  `expected ${CONTACT_RATE_LIMIT_MAX} allowed, got ${results.filter(Boolean).length}`,
+);
+expect(
+  results.slice(CONTACT_RATE_LIMIT_MAX).every((ok) => !ok),
+  "later attempts should be blocked",
+);
 expect(CONTACT_RATE_LIMIT_MESSAGE.includes("few minutes"), "friendly error message");
 
 expect(
@@ -88,8 +94,14 @@ expect(
     "11111111-1111-1111-1111-111111111111-guide.pdf",
   "uploaded object path is kept",
 );
-expect(knowledgeObjectPath("/knowledge-files/abc-guide.pdf") === null, "static public/ PDF is not a storage object");
-expect(knowledgeObjectPath("https://example.com/file.pdf") === null, "external URL is not a bucket path");
+expect(
+  knowledgeObjectPath("/knowledge-files/abc-guide.pdf") === null,
+  "static public/ PDF is not a storage object",
+);
+expect(
+  knowledgeObjectPath("https://example.com/file.pdf") === null,
+  "external URL is not a bucket path",
+);
 
 const html = { type: "text/html", size: 100, name: "xss.html" };
 const svg = { type: "image/svg+xml", size: 100, name: "logo.svg" };
@@ -123,10 +135,16 @@ try {
 }
 expect(htmlPdfRejected, "html knowledge upload should be rejected");
 
-const pngBytes = Uint8Array.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0, 0, 0, 0, 0]);
+const pngBytes = Uint8Array.from([
+  0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0, 0, 0, 0, 0,
+]);
 const jpegBytes = Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-const webpBytes = Uint8Array.from([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50, 0, 0, 0, 0]);
-const pdfBytes = Uint8Array.from([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x34, 0, 0, 0, 0, 0, 0, 0, 0]);
+const webpBytes = Uint8Array.from([
+  0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50, 0, 0, 0, 0,
+]);
+const pdfBytes = Uint8Array.from([
+  0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x34, 0, 0, 0, 0, 0, 0, 0, 0,
+]);
 const htmlBytes = Uint8Array.from(Array.from("<!doctype html>", (ch) => ch.charCodeAt(0)));
 
 assertFileSignature("card-images", "image/png", pngBytes);

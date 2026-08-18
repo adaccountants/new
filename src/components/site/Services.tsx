@@ -13,14 +13,14 @@ export function Services() {
   const intro = getContentValue("home.services.intro");
   const cta = getContentValue("home.services.cta");
   const services = homeServices.map((card) => {
-      const item: { id: string; label: string; image: string; caption?: string } = {
-        id: card.id,
-        label: card.title,
-        image: card.imageUrl,
-      };
-      if (card.subtitle) item.caption = card.subtitle;
-      return item;
-    });
+    const item: { id: string; label: string; image: string; caption?: string } = {
+      id: card.id,
+      label: card.title,
+      image: card.imageUrl,
+    };
+    if (card.subtitle) item.caption = card.subtitle;
+    return item;
+  });
 
   return (
     <section id="services" className="overflow-x-hidden py-20">

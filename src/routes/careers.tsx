@@ -48,7 +48,9 @@ function CareersPage() {
         <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
           {getContentValue("careers.culture.heading")}
         </h2>
-        <p className="mt-4 max-w-3xl text-muted-foreground">{getContentValue("careers.culture.intro")}</p>
+        <p className="mt-4 max-w-3xl text-muted-foreground">
+          {getContentValue("careers.culture.intro")}
+        </p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {culture.map((c) => (
             <article
@@ -110,7 +112,9 @@ function CareersPage() {
                 className="flex flex-col rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
               >
                 <h3 className="text-xl font-bold text-foreground">{r.title}</h3>
-                {r.subtitle ? <p className="mt-1 text-sm font-semibold text-brand">{r.subtitle}</p> : null}
+                {r.subtitle ? (
+                  <p className="mt-1 text-sm font-semibold text-brand">{r.subtitle}</p>
+                ) : null}
                 <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
                   {paragraphs.map((p) => (
                     <p key={p}>{p}</p>
@@ -123,7 +127,10 @@ function CareersPage() {
                     </p>
                     <ul className="mt-2 space-y-2">
                       {ideals.map((i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-sm text-muted-foreground"
+                        >
                           <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground">
                             <Check className="size-3" strokeWidth={3} />
                           </span>

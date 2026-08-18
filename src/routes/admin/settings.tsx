@@ -38,18 +38,22 @@ function AdminSettingsPage() {
     JSON.stringify(socials) !== JSON.stringify(current.socials);
 
   function save() {
-    const invalid = socials.find((social) => social.url.trim().length > 0 && !isSafeExternalUrl(social.url));
+    const invalid = socials.find(
+      (social) => social.url.trim().length > 0 && !isSafeExternalUrl(social.url),
+    );
     if (invalid) {
       setSocialUrlError(UNSAFE_URL_MESSAGE);
       return;
     }
     setSocialUrlError("");
-    void updateSettings({ firmName, phone, email, address, hours, footerText, socials }).then(() => {
-      void router.invalidate();
-      toast.success("Settings saved");
-      setSavedFlash(true);
-      window.setTimeout(() => setSavedFlash(false), 2000);
-    });
+    void updateSettings({ firmName, phone, email, address, hours, footerText, socials }).then(
+      () => {
+        void router.invalidate();
+        toast.success("Settings saved");
+        setSavedFlash(true);
+        window.setTimeout(() => setSavedFlash(false), 2000);
+      },
+    );
   }
 
   return (
@@ -140,7 +144,9 @@ function AdminSettingsPage() {
                     onChange={(e) => {
                       setSocialUrlError("");
                       setSocials((list) =>
-                        list.map((item, i) => (i === index ? { ...item, url: e.target.value } : item)),
+                        list.map((item, i) =>
+                          i === index ? { ...item, url: e.target.value } : item,
+                        ),
                       );
                     }}
                   />

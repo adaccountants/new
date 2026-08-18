@@ -15,7 +15,10 @@ function throwIfError(error: { message: string } | null, action: string) {
 }
 
 export async function markContactSubmissionHandled(id: string): Promise<void> {
-  const { error } = await supabase.from("contact_submissions").update({ status: "handled" }).eq("id", id);
+  const { error } = await supabase
+    .from("contact_submissions")
+    .update({ status: "handled" })
+    .eq("id", id);
   throwIfError(error, "markContactSubmissionHandled");
 }
 

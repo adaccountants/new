@@ -104,18 +104,18 @@ function ContactPage() {
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 {socials.map((social) => (
-                    <a
-                      key={`${social.platform}-${social.url}`}
-                      href={social.url.trim()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Visit our ${social.platform} page`}
-                      className="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand text-brand-foreground transition-colors hover:bg-brand-strong"
-                      title={`Follow us on ${social.platform}`}
-                    >
-                      {getSocialIcon(social.platform, "size-5")}
-                    </a>
-                  ))}
+                  <a
+                    key={`${social.platform}-${social.url}`}
+                    href={social.url.trim()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit our ${social.platform} page`}
+                    className="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand text-brand-foreground transition-colors hover:bg-brand-strong"
+                    title={`Follow us on ${social.platform}`}
+                  >
+                    {getSocialIcon(social.platform, "size-5")}
+                  </a>
+                ))}
               </div>
             </div>
           )}

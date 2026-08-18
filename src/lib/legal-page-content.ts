@@ -110,7 +110,8 @@ export const LEGAL_SEO_FALLBACK: Record<LegalPage, SeoMeta> = {
     description:
       "How {firmName} uses cookies on this website. We use only strictly necessary cookies and do not use analytics or advertising cookies.",
     ogTitle: "Cookie Policy | Alpha Digi AI Accountants",
-    ogDescription: "This website uses only strictly necessary cookies. We do not use analytics or advertising cookies.",
+    ogDescription:
+      "This website uses only strictly necessary cookies. We do not use analytics or advertising cookies.",
   },
 };
 

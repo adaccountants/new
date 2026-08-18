@@ -1,10 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
-import {
-  assertFileSignature,
-  assertUploadAllowed,
-  type StorageBucket,
-} from "@/lib/file-signature";
+import { assertFileSignature, assertUploadAllowed, type StorageBucket } from "@/lib/file-signature";
 import { supabase } from "@/lib/supabase-client";
 
 export type { StorageBucket } from "@/lib/file-signature";
@@ -47,7 +43,11 @@ export const validateUploadSignature = createServerFn({ method: "POST" })
     if (!Array.isArray(header) || header.length < 4 || header.length > 64) {
       throw new Error("Invalid upload");
     }
-    if (!header.every((byte) => typeof byte === "number" && Number.isInteger(byte) && byte >= 0 && byte <= 255)) {
+    if (
+      !header.every(
+        (byte) => typeof byte === "number" && Number.isInteger(byte) && byte >= 0 && byte <= 255,
+      )
+    ) {
       throw new Error("Invalid upload");
     }
     return { bucket, type, size, name, header: header as number[] };

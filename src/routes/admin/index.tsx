@@ -9,7 +9,10 @@ export const Route = createFileRoute("/admin/")({
   loader: async () => {
     const [blocks, ...sectionCounts] = await Promise.all([
       getAllContentBlocks(),
-      ...CARD_SECTIONS.map(async (section) => ({ section, count: (await getCards(section)).length })),
+      ...CARD_SECTIONS.map(async (section) => ({
+        section,
+        count: (await getCards(section)).length,
+      })),
     ]);
     return {
       contentCount: blocks.length,
@@ -39,7 +42,10 @@ function AdminDashboardPage() {
     void (async () => {
       const [blocks, ...sectionCounts] = await Promise.all([
         getAllContentBlocks(),
-        ...CARD_SECTIONS.map(async (section) => ({ section, count: (await getCards(section)).length })),
+        ...CARD_SECTIONS.map(async (section) => ({
+          section,
+          count: (await getCards(section)).length,
+        })),
       ]);
       if (cancelled) return;
       setContentCount(blocks.length);

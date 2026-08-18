@@ -62,7 +62,9 @@ function ServiceDetailPage() {
           <p className="mt-4 max-w-2xl text-lg font-semibold text-foreground">{card.subtitle}</p>
         ) : null}
         {card.body ? (
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">{card.body}</p>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+            {card.body}
+          </p>
         ) : null}
 
         <div className="mt-8 flex flex-wrap items-center gap-4">

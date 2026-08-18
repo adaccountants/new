@@ -11,7 +11,9 @@ export const Route = createFileRoute("/")({
     const icaewImage = rootCms(matches).content["home.footer.icaewImageUrl"];
     return {
       meta: pageSeoHead("home", matches),
-      links: icaewImage ? [{ rel: "preload" as const, href: icaewImage, as: "image" as const }] : [],
+      links: icaewImage
+        ? [{ rel: "preload" as const, href: icaewImage, as: "image" as const }]
+        : [],
     };
   },
   component: Index,

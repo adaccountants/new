@@ -65,10 +65,8 @@ export function Hero() {
       />
 
       <div className="relative mx-auto flex w-full min-w-0 max-w-7xl flex-col items-stretch gap-10 px-6 pt-0 pb-14 lg:flex-row lg:items-center lg:gap-12 lg:px-12 lg:pt-5 lg:pb-16">
-
         {/* ── LEFT: Text content ── */}
         <div className="relative z-10 order-last w-full min-w-0 max-w-full lg:order-first lg:w-[47%] xl:w-[46%]">
-
           <ScrollAnimate y={20} duration={0.5} replayOnMount className="max-w-full">
             <span className="inline-flex max-w-full flex-wrap items-center rounded-full bg-brand/15 px-4 py-2 text-left text-[0.65rem] font-semibold tracking-[0.12em] break-words text-brand-strong uppercase sm:px-5 sm:text-xs sm:tracking-[0.2em]">
               {eyebrow}
@@ -97,9 +95,7 @@ export function Hero() {
           </motion.h1>
 
           <ScrollAnimate delay={0.2} y={24} replayOnMount className="mt-7 max-w-lg">
-            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {intro}
-            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{intro}</p>
           </ScrollAnimate>
 
           <ScrollAnimate

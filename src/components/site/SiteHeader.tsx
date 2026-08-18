@@ -1,16 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import {
-  Clock3,
-  Facebook,
-  Instagram,
-  Mail,
-  Menu,
-  Phone,
-  Twitter,
-  X,
-  Youtube,
-} from "lucide-react";
+import { Clock3, Facebook, Instagram, Mail, Menu, Phone, Twitter, X, Youtube } from "lucide-react";
 import { useContentValue, useSettings } from "@/lib/cms-context";
 import { toSafeHref } from "@/lib/safe-url";
 import { getMailHref, getPhoneHref } from "@/lib/site-settings-data";
@@ -32,7 +22,8 @@ function socialIcon(platform: string): ReactNode {
   if (name.includes("facebook")) return <Facebook className={iconClass} aria-hidden />;
   if (name.includes("instagram")) return <Instagram className={iconClass} aria-hidden />;
   if (name.includes("youtube")) return <Youtube className={iconClass} aria-hidden />;
-  if (name === "x" || name.includes("twitter")) return <Twitter className={iconClass} aria-hidden />;
+  if (name === "x" || name.includes("twitter"))
+    return <Twitter className={iconClass} aria-hidden />;
   return null;
 }
 
@@ -40,7 +31,9 @@ function TopInfoBar() {
   const settings = useSettings();
   const phoneHref = toSafeHref(getPhoneHref(settings.phone));
   const mailHref = toSafeHref(getMailHref(settings.email));
-  const orderedSocials = settings.socials.filter((social) => social.url && !social.platform.toLowerCase().includes("linkedin"));
+  const orderedSocials = settings.socials.filter(
+    (social) => social.url && !social.platform.toLowerCase().includes("linkedin"),
+  );
 
   return (
     <div className="bg-neutral-950 text-white">
@@ -48,13 +41,13 @@ function TopInfoBar() {
         <ul className="flex min-w-0 flex-nowrap items-center gap-3 text-[11px] leading-none font-medium tracking-[0.01em] sm:gap-5 sm:text-xs lg:gap-8">
           <li className="shrink-0">
             {phoneHref ? (
-            <a
-              href={phoneHref}
-              className="inline-flex items-center gap-1.5 text-white/90 transition-colors hover:text-white"
-            >
-              <Phone className="h-3.5 w-3.5 text-white/70" aria-hidden />
-              <span>{settings.phone}</span>
-            </a>
+              <a
+                href={phoneHref}
+                className="inline-flex items-center gap-1.5 text-white/90 transition-colors hover:text-white"
+              >
+                <Phone className="h-3.5 w-3.5 text-white/70" aria-hidden />
+                <span>{settings.phone}</span>
+              </a>
             ) : (
               <span className="inline-flex items-center gap-1.5 text-white/90">
                 <Phone className="h-3.5 w-3.5 text-white/70" aria-hidden />
@@ -64,13 +57,13 @@ function TopInfoBar() {
           </li>
           <li className="min-w-0">
             {mailHref ? (
-            <a
-              href={mailHref}
-              className="inline-flex max-w-[46vw] items-center gap-1.5 text-white/90 transition-colors hover:text-white sm:max-w-none"
-            >
-              <Mail className="h-3.5 w-3.5 shrink-0 text-white/70" aria-hidden />
-              <span className="truncate">{settings.email}</span>
-            </a>
+              <a
+                href={mailHref}
+                className="inline-flex max-w-[46vw] items-center gap-1.5 text-white/90 transition-colors hover:text-white sm:max-w-none"
+              >
+                <Mail className="h-3.5 w-3.5 shrink-0 text-white/70" aria-hidden />
+                <span className="truncate">{settings.email}</span>
+              </a>
             ) : (
               <span className="inline-flex max-w-[46vw] items-center gap-1.5 text-white/90 sm:max-w-none">
                 <Mail className="h-3.5 w-3.5 shrink-0 text-white/70" aria-hidden />
@@ -85,7 +78,6 @@ function TopInfoBar() {
             </span>
           </li>
         </ul>
-
       </div>
     </div>
   );

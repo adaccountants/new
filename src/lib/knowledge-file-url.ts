@@ -6,8 +6,7 @@ const PATH_MARKERS = [
   "/storage/v1/object/authenticated/knowledge-files/",
 ];
 
-const UPLOADED_OBJECT_PREFIX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-/i;
+const UPLOADED_OBJECT_PREFIX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-/i;
 
 /**
  * Object path inside the Supabase knowledge-files bucket.

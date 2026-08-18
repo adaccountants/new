@@ -61,7 +61,9 @@ function AboutPage() {
             <span className="inline-block h-7 w-1.5 rounded-full bg-brand" />
             {getContentValue("about.numbers.heading")}
           </h2>
-          <p className="mt-4 max-w-3xl text-muted-foreground">{getContentValue("about.numbers.body")}</p>
+          <p className="mt-4 max-w-3xl text-muted-foreground">
+            {getContentValue("about.numbers.body")}
+          </p>
           <div className="mt-8 grid gap-8 border-t border-border pt-8 sm:grid-cols-2">
             <div>
               <h3 className="text-lg font-bold text-foreground">
@@ -118,7 +120,9 @@ function AboutPage() {
               className="flex h-full flex-col justify-between rounded-3xl border border-border bg-secondary/50 p-6"
             >
               <Quote className="size-7 text-brand" />
-              <blockquote className="mt-4 text-sm leading-relaxed text-foreground">{t.body}</blockquote>
+              <blockquote className="mt-4 text-sm leading-relaxed text-foreground">
+                {t.body}
+              </blockquote>
               <figcaption className="mt-6 text-sm font-semibold text-muted-foreground">
                 {t.title}
                 {t.subtitle ? ` · ${t.subtitle}` : ""}

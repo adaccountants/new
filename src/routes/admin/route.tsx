@@ -25,13 +25,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { getAdminUser, signOutAdmin } from "@/lib/admin-auth";
 import { getServerAdminUser } from "@/lib/admin-session";
 import { cn } from "@/lib/utils";
@@ -59,7 +53,12 @@ export const Route = createFileRoute("/admin")({
 
 const nav: Array<
   | { label: string; to: "/admin"; icon: typeof LayoutDashboard; end: true }
-  | { label: string; to: "/admin/$section"; params: { section: string }; icon: typeof LayoutDashboard }
+  | {
+      label: string;
+      to: "/admin/$section";
+      params: { section: string };
+      icon: typeof LayoutDashboard;
+    }
   | { label: string; to: "/admin/pages"; icon: typeof LayoutDashboard }
   | { label: string; to: "/admin/inbox"; icon: typeof LayoutDashboard }
   | { label: string; to: "/admin/settings"; icon: typeof LayoutDashboard }
@@ -75,7 +74,12 @@ const nav: Array<
   },
   { label: "Blog", to: "/admin/$section", params: { section: "blog" }, icon: Newspaper },
   { label: "Knowledge", to: "/admin/$section", params: { section: "knowledge" }, icon: BookOpen },
-  { label: "Partnerships", to: "/admin/$section", params: { section: "partnership" }, icon: Handshake },
+  {
+    label: "Partnerships",
+    to: "/admin/$section",
+    params: { section: "partnership" },
+    icon: Handshake,
+  },
   { label: "Team", to: "/admin/$section", params: { section: "team" }, icon: Users },
   { label: "Careers", to: "/admin/$section", params: { section: "careers" }, icon: Briefcase },
   { label: "Pages", to: "/admin/pages", icon: FileText },
@@ -83,13 +87,7 @@ const nav: Array<
 ];
 
 /** Shared nav link renderer used by both the sidebar and the mobile Sheet. */
-function NavLinks({
-  pathname,
-  onNavigate,
-}: {
-  pathname: string;
-  onNavigate?: () => void;
-}) {
+function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
   return (
     <nav className="flex flex-1 flex-col gap-1 p-3">
       {nav.map((item) => {
@@ -118,12 +116,7 @@ function NavLinks({
           );
         }
         return (
-          <Link
-            key={item.label}
-            to={item.to}
-            className={className}
-            onClick={onNavigate}
-          >
+          <Link key={item.label} to={item.to} className={className} onClick={onNavigate}>
             <Icon className="size-4 shrink-0" />
             {item.label}
           </Link>
@@ -228,10 +221,7 @@ function AdminLayout() {
               <p className="text-xs text-muted-foreground text-left">Alpha Digi CMS</p>
             </SheetHeader>
             <div className="flex flex-1 flex-col overflow-y-auto">
-              <NavLinks
-                pathname={pathname}
-                onNavigate={() => setSheetOpen(false)}
-              />
+              <NavLinks pathname={pathname} onNavigate={() => setSheetOpen(false)} />
             </div>
             <div className="border-t p-3">
               <Button

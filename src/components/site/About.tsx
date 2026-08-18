@@ -6,7 +6,8 @@ import { useContentValue } from "@/lib/cms-context";
 export function About() {
   const getContentValue = useContentValue();
   const imageUrl = getContentValue("home.about.imageUrl") || "/cms/acc-bridge.jpg";
-  const imageAlt = getContentValue("home.about.imageAlt") || "Tower Bridge over the River Thames at dusk";
+  const imageAlt =
+    getContentValue("home.about.imageAlt") || "Tower Bridge over the River Thames at dusk";
   const yearsValue = getContentValue("home.about.yearsValue");
   const yearsLabel = getContentValue("home.about.yearsLabel");
   const eyebrow = getContentValue("home.about.eyebrow");

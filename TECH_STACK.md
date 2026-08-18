@@ -4,11 +4,11 @@ This file describes the complete technology stack used by this project (Alpha Di
 
 ## Runtime and language
 
-| Layer | Choice | Version (from `package.json`) | Role |
-| --- | --- | --- | --- |
-| Language | TypeScript | `^5.8.3` | Typed application code; `strict` compiler options in `tsconfig.json` |
-| UI library | React | `^19.2.0` | Components and client interactivity |
-| Module system | ESM | `"type": "module"` | Native ES modules |
+| Layer         | Choice     | Version (from `package.json`) | Role                                                                 |
+| ------------- | ---------- | ----------------------------- | -------------------------------------------------------------------- |
+| Language      | TypeScript | `^5.8.3`                      | Typed application code; `strict` compiler options in `tsconfig.json` |
+| UI library    | React      | `^19.2.0`                     | Components and client interactivity                                  |
+| Module system | ESM        | `"type": "module"`            | Native ES modules                                                    |
 
 TypeScript compiles for **ES2022**, uses the **bundler** module resolver, and maps `@/*` to `./src/*`.
 
@@ -16,26 +16,26 @@ TypeScript compiles for **ES2022**, uses the **bundler** module resolver, and ma
 
 The app is a **TanStack Start** project, not Next.js.
 
-| Package | Role |
-| --- | --- |
-| `@tanstack/react-start` | Full-stack React framework: SSR, HTML shell, server functions, request middleware |
-| `@tanstack/react-router` | File-based routing, layouts, head/meta, scroll restoration |
-| `@tanstack/router-plugin` | Vite plugin that generates `src/routeTree.gen.ts` from `src/routes/` |
-| `@tanstack/react-query` | Server-state cache; a `QueryClient` is created per router in `src/router.tsx` and provided in `src/routes/__root.tsx` |
+| Package                   | Role                                                                                                                  |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `@tanstack/react-start`   | Full-stack React framework: SSR, HTML shell, server functions, request middleware                                     |
+| `@tanstack/react-router`  | File-based routing, layouts, head/meta, scroll restoration                                                            |
+| `@tanstack/router-plugin` | Vite plugin that generates `src/routeTree.gen.ts` from `src/routes/`                                                  |
+| `@tanstack/react-query`   | Server-state cache; a `QueryClient` is created per router in `src/router.tsx` and provided in `src/routes/__root.tsx` |
 
 ### Routing
 
 Routes live in `src/routes/`. Each `.tsx` file is a URL:
 
-| File | URL |
-| --- | --- |
-| `__root.tsx` | App shell (`<html>`, fonts, CSS, `<Outlet />`) |
-| `index.tsx` | `/` |
-| `about.tsx` | `/about` |
-| `services.tsx` | `/services` |
-| `careers.tsx` | `/careers` |
-| `blog.tsx` | `/blog` |
-| `contact.tsx` | `/contact` |
+| File           | URL                                            |
+| -------------- | ---------------------------------------------- |
+| `__root.tsx`   | App shell (`<html>`, fonts, CSS, `<Outlet />`) |
+| `index.tsx`    | `/`                                            |
+| `about.tsx`    | `/about`                                       |
+| `services.tsx` | `/services`                                    |
+| `careers.tsx`  | `/careers`                                     |
+| `blog.tsx`     | `/blog`                                        |
+| `contact.tsx`  | `/contact`                                     |
 
 Do not add Next.js-style `app/` or `pages/` trees. The only root layout is `__root.tsx`.
 
@@ -49,13 +49,13 @@ Public pages load CMS data in route loaders. The contact form posts through `cre
 
 ## Build and tooling
 
-| Tool | Role |
-| --- | --- |
-| **Vite** `^8.1.5` | Dev server (`npm run dev` → `vite dev`) and production build |
-| **`vite.config.ts`** | TanStack Start, React, Tailwind, Nitro, and `@` path alias |
-| **`@vitejs/plugin-react`** | React Fast Refresh / JSX |
-| **`vite-tsconfig-paths`** | Resolves `tsconfig` paths |
-| **`@tailwindcss/vite`** | Tailwind v4 Vite plugin |
+| Tool                       | Role                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| **Vite** `^8.1.5`          | Dev server (`npm run dev` → `vite dev`) and production build |
+| **`vite.config.ts`**       | TanStack Start, React, Tailwind, Nitro, and `@` path alias   |
+| **`@vitejs/plugin-react`** | React Fast Refresh / JSX                                     |
+| **`vite-tsconfig-paths`**  | Resolves `tsconfig` paths                                    |
+| **`@tailwindcss/vite`**    | Tailwind v4 Vite plugin                                      |
 
 Scripts:
 
@@ -67,14 +67,14 @@ Scripts:
 
 ## Styling and design system
 
-| Tool | Role |
-| --- | --- |
-| **Tailwind CSS v4** | Utility CSS in `src/styles.css` (`@import "tailwindcss"`) |
-| **tw-animate-css** | Extra animation utilities |
-| **shadcn/ui** (New York style) | Generated primitives in `src/components/ui/` (`components.json`) |
-| **Radix UI** | Accessible headless primitives under the shadcn wrappers |
-| **class-variance-authority**, **clsx**, **tailwind-merge** | Variant APIs and `cn()` class merging in `src/lib/utils.ts` |
-| **Lucide React** | Icons (`iconLibrary`: lucide) |
+| Tool                                                       | Role                                                             |
+| ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| **Tailwind CSS v4**                                        | Utility CSS in `src/styles.css` (`@import "tailwindcss"`)        |
+| **tw-animate-css**                                         | Extra animation utilities                                        |
+| **shadcn/ui** (New York style)                             | Generated primitives in `src/components/ui/` (`components.json`) |
+| **Radix UI**                                               | Accessible headless primitives under the shadcn wrappers         |
+| **class-variance-authority**, **clsx**, **tailwind-merge** | Variant APIs and `cn()` class merging in `src/lib/utils.ts`      |
+| **Lucide React**                                           | Icons (`iconLibrary`: lucide)                                    |
 
 Design tokens (brand gold, ink, cream, radius, fonts) are CSS custom properties in `src/styles.css`, mapped into Tailwind via `@theme inline`.
 
@@ -85,8 +85,8 @@ Design tokens (brand gold, ink, cream, radius, fonts) are CSS custom properties 
 
 ## Animation
 
-| Package | Role |
-| --- | --- |
+| Package                 | Role                                                       |
+| ----------------------- | ---------------------------------------------------------- |
 | **Framer Motion** `^12` | Scroll reveal, parallax, staggered cards, button hover/tap |
 
 Site-specific wrappers:
@@ -102,28 +102,28 @@ Marketing sections live in `src/components/site/` (`SiteHeader`, `Hero`, `About`
 
 These are on the shadcn/Radix template even if not every widget is used on the public pages:
 
-| Package | Role |
-| --- | --- |
-| **react-hook-form** | Form state |
-| **zod** | Schema validation (including the contact form server function) |
-| **resend** | Transactional email for `/contact` submissions |
-| **@hookform/resolvers** | Zod adapter for react-hook-form |
-| **cmdk** | Command palette |
-| **vaul** | Drawer |
-| **embla-carousel-react** | Carousel |
-| **react-day-picker** / **date-fns** | Calendar and dates |
-| **input-otp** | OTP input |
-| **react-resizable-panels** | Split panes |
-| **recharts** | Charts (`src/components/ui/chart.tsx`) |
-| **sonner** | Toasts |
+| Package                             | Role                                                           |
+| ----------------------------------- | -------------------------------------------------------------- |
+| **react-hook-form**                 | Form state                                                     |
+| **zod**                             | Schema validation (including the contact form server function) |
+| **resend**                          | Transactional email for `/contact` submissions                 |
+| **@hookform/resolvers**             | Zod adapter for react-hook-form                                |
+| **cmdk**                            | Command palette                                                |
+| **vaul**                            | Drawer                                                         |
+| **embla-carousel-react**            | Carousel                                                       |
+| **react-day-picker** / **date-fns** | Calendar and dates                                             |
+| **input-otp**                       | OTP input                                                      |
+| **react-resizable-panels**          | Split panes                                                    |
+| **recharts**                        | Charts (`src/components/ui/chart.tsx`)                         |
+| **sonner**                          | Toasts                                                         |
 
 ## Quality
 
-| Tool | Role |
-| --- | --- |
+| Tool                       | Role                                             |
+| -------------------------- | ------------------------------------------------ |
 | **ESLint 9** (flat config) | Lint TS/TSX; React Hooks + React Refresh plugins |
-| **typescript-eslint** | TypeScript-aware rules |
-| **Prettier** | Formatting; ESLint runs `eslint-plugin-prettier` |
+| **typescript-eslint**      | TypeScript-aware rules                           |
+| **Prettier**               | Formatting; ESLint runs `eslint-plugin-prettier` |
 
 SSR error helpers live in `src/lib/error-capture.ts` and `src/lib/error-page.ts`.
 

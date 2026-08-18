@@ -36,7 +36,11 @@ export function sniffUploadMime(bytes: Uint8Array): string | null {
   return null;
 }
 
-export function assertFileSignature(bucket: StorageBucket, claimedType: string, bytes: Uint8Array): void {
+export function assertFileSignature(
+  bucket: StorageBucket,
+  claimedType: string,
+  bytes: Uint8Array,
+): void {
   const sniffed = sniffUploadMime(bytes);
   const imageError = "Please upload a PNG, JPEG, or WebP image.";
   const pdfError = "Please upload a PDF file.";
