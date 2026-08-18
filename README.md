@@ -30,7 +30,7 @@ CMS data, admin auth, and file uploads use Supabase.
 
 ## Contact form (Resend)
 
-The `/contact` form sends an email through [Resend](https://resend.com) and stores a copy in Supabase `contact_submissions`. The API key never ships to the browser (`RESEND_*` must not use a `VITE_` prefix). Every submission is sent to **info@adaaccountants.uk**. Reply-To is the visitor’s address so you can reply from that inbox.
+The `/contact` form sends an email through [Resend](https://resend.com) and stores a copy in Supabase `contact_submissions`. The API key never ships to the browser (`RESEND_*` and `CONTACT_TO` must not use a `VITE_` prefix). The recipient is `CONTACT_TO`, or the CMS Settings email if that variable is unset. Reply-To is the visitor’s address so you can reply from that inbox.
 
 Do not skip domain verification for production. `beth.t@example.com` is a Resend test sender only — it can send to the email on your Resend account, not to arbitrary inboxes.
 
@@ -79,6 +79,7 @@ Copy `.env.example` values into local `.env`. On Vercel, set Resend keys for **P
 | ---------------- | --------------------- | ---------------------------------------------------- |
 | `RESEND_API_KEY` | Server only           | `re_…` from step 1                                   |
 | `RESEND_FROM`    | Server only           | `Alpha Digi AI Accountants <info@adaaccountants.uk>` |
+| `CONTACT_TO`     | Server only           | `info@adaaccountants.uk`                             |
 
 `RESEND_FROM` must use an address on the verified domain. Friendly-name syntax is `Name <email@domain>`.
 
@@ -101,7 +102,7 @@ Preview deployments must **not** share production `SUPABASE_SERVICE_ROLE_KEY` or
 **Do this in the Vercel dashboard now:**
 
 1. Open the project → **Settings** → **Environment Variables**.
-2. For each of `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, and `RESEND_FROM`:
+2. For each of `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `RESEND_FROM`, and `CONTACT_TO`:
    - Expand the variable.
    - If **Preview** (or **Preview + Production**) is checked, either:
      - **Remove Preview** so the value applies to **Production** only, or
@@ -121,9 +122,9 @@ Do not provision a second Supabase project from this repo; create it in the Supa
 
 | Symptom                                     | What to check                                                                                              |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Form says it is not configured              | `RESEND_API_KEY` / `RESEND_FROM` missing on that environment                                               |
+| Form says it is not configured              | `RESEND_API_KEY` / `RESEND_FROM` missing, or both `CONTACT_TO` and CMS Settings email empty                |
 | Resend error / “couldn’t send”              | From address domain not verified; API key revoked; look at the Vercel function logs                        |
-| Mail never arrives                          | Domain still `Pending`; SPF/DKIM host names include the root twice; check Resend Emails for bounce         |
+| Mail never arrives                          | `CONTACT_TO` pointing at the wrong inbox; domain still `Pending`; check Resend Emails for bounce           |
 | Can send to yourself but not the firm inbox | Still using `beth.t@example.com` — switch `RESEND_FROM` after verification                                 |
 | Row missing in `contact_submissions`        | Email can still succeed; confirm `SUPABASE_SERVICE_ROLE_KEY` is set on the server                          |
 
