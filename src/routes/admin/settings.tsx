@@ -3,13 +3,18 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
 
+import {
+  FounderEditor,
+  founderDraftFromSettings,
+  founderDraftsEqual,
+  type FounderDraft,
+} from "@/components/admin/FounderEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { isSafeAdminUrl, isSafeExternalUrl, UNSAFE_URL_MESSAGE } from "@/lib/safe-url";
 import { getSettings, updateSettings } from "@/lib/site-settings-data";
-import { uploadPublicFile } from "@/lib/storage-upload";
 
 export const Route = createFileRoute("/admin/settings")({
   loader: async () => ({ current: await getSettings() }),
@@ -25,15 +30,11 @@ function AdminSettingsPage() {
   const [address, setAddress] = useState(current.address);
   const [hours, setHours] = useState(current.hours);
   const [footerText, setFooterText] = useState(current.footerText);
-  const [founderName, setFounderName] = useState(current.founderName);
-  const [founderRole, setFounderRole] = useState(current.founderRole);
-  const [founderCredentials, setFounderCredentials] = useState(current.founderCredentials);
-  const [founderBio, setFounderBio] = useState(current.founderBio);
-  const [founderPhotoUrl, setFounderPhotoUrl] = useState(current.founderPhotoUrl);
+  const savedFounder = founderDraftFromSettings(current);
+  const [founder, setFounder] = useState<FounderDraft>(savedFounder);
   const [socials, setSocials] = useState(current.socials);
   const [savedFlash, setSavedFlash] = useState(false);
   const [socialUrlError, setSocialUrlError] = useState("");
-  const [founderPhotoError, setFounderPhotoError] = useState("");
   const [uploading, setUploading] = useState(false);
 
   const dirty =
@@ -43,11 +44,7 @@ function AdminSettingsPage() {
     address !== current.address ||
     hours !== current.hours ||
     footerText !== current.footerText ||
-    founderName !== current.founderName ||
-    founderRole !== current.founderRole ||
-    founderCredentials !== current.founderCredentials ||
-    founderBio !== current.founderBio ||
-    founderPhotoUrl !== current.founderPhotoUrl ||
+    !founderDraftsEqual(founder, savedFounder) ||
     JSON.stringify(socials) !== JSON.stringify(current.socials);
 
   function save() {
@@ -56,12 +53,11 @@ function AdminSettingsPage() {
       setSocialUrlError(UNSAFE_URL_MESSAGE);
       return;
     }
-    if (!isSafeAdminUrl(founderPhotoUrl)) {
-      setFounderPhotoError(UNSAFE_URL_MESSAGE);
+    if (!isSafeAdminUrl(founder.founderPhotoUrl)) {
+      toast.error(UNSAFE_URL_MESSAGE);
       return;
     }
     setSocialUrlError("");
-    setFounderPhotoError("");
     void updateSettings({
       firmName,
       phone,
@@ -69,11 +65,7 @@ function AdminSettingsPage() {
       address,
       hours,
       footerText,
-      founderName,
-      founderRole,
-      founderCredentials,
-      founderBio,
-      founderPhotoUrl,
+      ...founder,
       socials,
     })
       .then(() => {
@@ -139,76 +131,7 @@ function AdminSettingsPage() {
           />
         </div>
 
-        <div className="space-y-4 border-t pt-6">
-          <div>
-            <h2 className="text-sm font-semibold tracking-tight">Founder</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Shown on the About page. Leave the name blank to hide the block. Photo is optional.
-            </p>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="founderName">Name</Label>
-            <Input id="founderName" value={founderName} onChange={(e) => setFounderName(e.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="founderRole">Role</Label>
-            <Input id="founderRole" value={founderRole} onChange={(e) => setFounderRole(e.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="founderCredentials">Credentials</Label>
-            <Input
-              id="founderCredentials"
-              value={founderCredentials}
-              onChange={(e) => setFounderCredentials(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="founderBio">Bio</Label>
-            <Textarea
-              id="founderBio"
-              rows={8}
-              value={founderBio}
-              onChange={(e) => setFounderBio(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="founderPhoto">Photo</Label>
-            <Input
-              id="founderPhoto"
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (!file) return;
-                setFounderPhotoError("");
-                setUploading(true);
-                void uploadPublicFile("card-images", file)
-                  .then((url) => setFounderPhotoUrl(url))
-                  .catch((err: unknown) => {
-                    setFounderPhotoError(err instanceof Error ? err.message : "Image upload failed");
-                  })
-                  .finally(() => setUploading(false));
-              }}
-            />
-            <Input
-              placeholder="Or paste an image URL"
-              value={founderPhotoUrl}
-              onChange={(event) => {
-                setFounderPhotoError("");
-                setFounderPhotoUrl(event.target.value);
-              }}
-            />
-            {founderPhotoUrl ? (
-              <img
-                src={founderPhotoUrl}
-                alt=""
-                className="mt-2 h-40 w-full max-w-md rounded-md border object-cover"
-              />
-            ) : null}
-            {uploading ? <p className="text-sm text-muted-foreground">Uploading…</p> : null}
-            {founderPhotoError ? <p className="text-sm text-destructive">{founderPhotoError}</p> : null}
-          </div>
-        </div>
+        <FounderEditor value={founder} onChange={setFounder} onBusyChange={setUploading} />
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">

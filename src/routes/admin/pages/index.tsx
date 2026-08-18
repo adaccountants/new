@@ -1,7 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
+import {
+  FounderEditor,
+  founderDraftFromSettings,
+  founderDraftsEqual,
+  type FounderDraft,
+} from "@/components/admin/FounderEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,15 +18,20 @@ import {
   getAllContentBlocks,
   updateContent,
 } from "@/lib/page-content-data";
+import { isSafeAdminUrl, UNSAFE_URL_MESSAGE } from "@/lib/safe-url";
+import { getSettings, updateSettings } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/admin/pages/")({
-  loader: async () => ({ blocks: await getAllContentBlocks() }),
+  loader: async () => ({
+    blocks: await getAllContentBlocks(),
+    settings: await getSettings(),
+  }),
   component: AdminPagesPage,
 });
 
 function AdminPagesPage() {
   const router = useRouter();
-  const { blocks: allBlocks } = Route.useLoaderData();
+  const { blocks: allBlocks, settings } = Route.useLoaderData();
   const [page, setPage] = useState<ContentPage>("home");
   const blocks = allBlocks.filter((item) => item.page === page);
   const originals = useMemo(
@@ -28,30 +39,51 @@ function AdminPagesPage() {
     [blocks],
   );
   const [draft, setDraft] = useState<Record<string, string>>(originals);
+  const savedFounder = founderDraftFromSettings(settings);
+  const [founder, setFounder] = useState<FounderDraft>(savedFounder);
+  const [founderBusy, setFounderBusy] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
 
-  const dirty = blocks.some((block) => (draft[block.key] ?? block.value) !== block.value);
+  useEffect(() => {
+    setFounder(founderDraftFromSettings(settings));
+  }, [settings]);
+
+  const copyDirty = blocks.some((block) => (draft[block.key] ?? block.value) !== block.value);
+  const founderDirty = !founderDraftsEqual(founder, savedFounder);
+  const dirty = copyDirty || (page === "about" && founderDirty);
 
   function selectPage(next: ContentPage) {
     if (dirty && !window.confirm("Discard unsaved changes?")) return;
     setPage(next);
     const nextBlocks = allBlocks.filter((item) => item.page === next);
     setDraft(Object.fromEntries(nextBlocks.map((block) => [block.key, block.value])));
+    setFounder(founderDraftFromSettings(settings));
     setSavedFlash(false);
   }
 
   function save() {
+    if (!isSafeAdminUrl(founder.founderPhotoUrl)) {
+      toast.error(UNSAFE_URL_MESSAGE);
+      return;
+    }
     void (async () => {
-      for (const block of blocks) {
-        const value = draft[block.key] ?? block.value;
-        if (value !== block.value) {
-          await updateContent(block.key, value);
+      try {
+        for (const block of blocks) {
+          const value = draft[block.key] ?? block.value;
+          if (value !== block.value) {
+            await updateContent(block.key, value);
+          }
         }
+        if (founderDirty) {
+          await updateSettings(founder);
+        }
+        await router.invalidate();
+        toast.success("Saved");
+        setSavedFlash(true);
+        window.setTimeout(() => setSavedFlash(false), 2000);
+      } catch (err: unknown) {
+        toast.error(err instanceof Error ? err.message : "Could not save");
       }
-      await router.invalidate();
-      toast.success("Saved");
-      setSavedFlash(true);
-      window.setTimeout(() => setSavedFlash(false), 2000);
     })();
   }
 
@@ -70,7 +102,7 @@ function AdminPagesPage() {
           ) : savedFlash ? (
             <span className="text-sm text-emerald-700">Saved</span>
           ) : null}
-          <Button type="button" onClick={save} disabled={!dirty}>
+          <Button type="button" onClick={save} disabled={!dirty || founderBusy}>
             Save
           </Button>
         </div>
@@ -90,6 +122,9 @@ function AdminPagesPage() {
       </div>
 
       <div className="mt-8 space-y-5">
+        {page === "about" ? (
+          <FounderEditor value={founder} onChange={setFounder} onBusyChange={setFounderBusy} />
+        ) : null}
         {blocks.map((block) => (
           <div key={block.key} className="space-y-2">
             <Label htmlFor={block.key}>
