@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   CONTACT_RATE_LIMIT_MESSAGE,
   CONTACT_RATE_LIMIT_MAX,
+  CONTACT_RATE_LIMIT_UNKNOWN_IP,
   CONTACT_RATE_LIMIT_WINDOW_MS,
   getClientIpFromHeaders,
   memoryRateLimitRecord,
@@ -142,12 +143,10 @@ export const submitContact = createServerFn({ method: "POST" })
 
 async function readClientIp(): Promise<string> {
   try {
-    const { getRequest, getRequestIP } = await import("@tanstack/react-start/server");
-    const fromHeaders = getClientIpFromHeaders(getRequest().headers);
-    if (fromHeaders !== "unknown") return fromHeaders;
-    return getRequestIP({ xForwardedFor: true }) ?? "unknown";
+    const { getRequest } = await import("@tanstack/react-start/server");
+    return getClientIpFromHeaders(getRequest().headers);
   } catch {
-    return "unknown";
+    return CONTACT_RATE_LIMIT_UNKNOWN_IP;
   }
 }
 

@@ -18,6 +18,11 @@ function envValue(name: "VITE_SUPABASE_URL" | "VITE_SUPABASE_ANON_KEY"): string 
   return (process.env[name] ?? "").trim();
 }
 
+/** Cookie-backed Supabase client for this request (RLS as the signed-in user). */
+export function getRequestSupabase() {
+  return createSupabaseRequestClient();
+}
+
 function createSupabaseRequestClient() {
   const url = envValue("VITE_SUPABASE_URL");
   const anonKey = envValue("VITE_SUPABASE_ANON_KEY");

@@ -21,9 +21,9 @@ The app runs at [http://localhost:8080](http://localhost:8080).
 
 CMS data, admin auth, and file uploads use Supabase.
 
-1. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Add the same keys in Vercel for Production and Preview. After changing Vercel env vars, redeploy. If Production is missing `SUPABASE_SERVICE_ROLE_KEY`, public pages still load via the anon key.
+1. Copy `.env.example` to `.env` and fill in `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Add **Production** values in Vercel only for the production Supabase project (see [Preview vs Production](#preview-vs-production-vercel-environment-variables) — do not reuse production service-role or Resend keys on Preview). After changing Vercel env vars, redeploy. If Production is missing `SUPABASE_SERVICE_ROLE_KEY`, public pages still load via the anon key; the contact-form store and knowledge signed URLs will not.
 2. In the Supabase SQL Editor, run `supabase/schema.sql`.
-3. If the tables already exist, run `supabase/grants.sql`. That restores GRANTs and replaces policies that queried `public.admins` as `anon` (which caused `permission denied for table admins` on cards).
+3. If the tables already exist, run `supabase/grants.sql`. That restores GRANTs and replaces policies that queried `public.admins` as `anon` (which caused `permission denied for table admins` on cards). Then run `supabase/storage-hardening.sql` so `knowledge-files` is private and neither bucket is listable by anonymous clients.
 4. Optionally run `supabase/seed-page-content.sql` and `supabase/seed-cards.sql` to load the current site copy.
 5. Authentication → Users → Add user (email + password). Then insert that user into `public.admins` (see the comment at the bottom of `schema.sql`).
 6. Restart `npm run dev`.
@@ -73,7 +73,7 @@ Provider-specific walkthroughs: [Cloudflare](https://resend.com/docs/dashboard/d
 
 ### 3. Environment variables
 
-Copy `.env.example` values into local `.env` and into **Vercel → Project → Settings → Environment Variables** for **Production** and **Preview**. Redeploy after saving.
+Copy `.env.example` values into local `.env`. On Vercel, set Resend keys for **Production** only (or a dedicated Preview Resend project) — never copy the production `RESEND_API_KEY` onto Preview. See [Preview vs Production](#preview-vs-production-vercel-environment-variables). Redeploy after saving.
 
 | Variable         | Where                 | Example                                              |
 | ---------------- | --------------------- | ---------------------------------------------------- |
@@ -93,6 +93,29 @@ Copy `.env.example` values into local `.env` and into **Vercel → Project → S
 5. Optional: in Supabase, Table Editor → `contact_submissions` (needs `SUPABASE_SERVICE_ROLE_KEY` on the server).
 
 On Vercel, after adding the env vars, trigger a new deployment. A failed send shows an error on the form; it does not fake a thank-you.
+
+## Preview vs Production (Vercel environment variables)
+
+Preview deployments must **not** share production `SUPABASE_SERVICE_ROLE_KEY` or `RESEND_API_KEY`. A public PR URL would otherwise be a second production CMS and contact inbox against the live database and mail quota.
+
+**Do this in the Vercel dashboard now:**
+
+1. Open the project → **Settings** → **Environment Variables**.
+2. For each of `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, and `RESEND_FROM`:
+   - Expand the variable.
+   - If **Preview** (or **Preview + Production**) is checked, either:
+     - **Remove Preview** so the value applies to **Production** only, or
+     - Delete the variable and recreate it with **Production** selected and Preview unchecked.
+3. Repeat for `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` unless Preview is pointed at a **separate** (non-production) Supabase project. If Preview should not talk to production at all, do not leave production URL/anon/service-role on the Preview environment.
+4. Optional but recommended if any Preview env still has credentials: **Settings** → **Deployment Protection** → enable protection on Preview so unauthenticated visitors cannot open PR URLs.
+5. Redeploy Production after the change. Delete or redeploy any existing Preview deployments that were built with production secrets.
+
+**Preview should use one of:**
+
+- A separate Supabase project (and a separate Resend API key / test sender) created only for previews, **or**
+- No privileged secrets on Preview, plus Deployment Protection enabled before any secrets are attached.
+
+Do not provision a second Supabase project from this repo; create it in the Supabase dashboard if you want isolated Preview data.
 
 ### Troubleshooting
 

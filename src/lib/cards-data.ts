@@ -131,7 +131,8 @@ export function cardToRow(card: Omit<Card, "id"> & { id?: string }) {
 export async function getCards(section: string, opts?: { includeUnpublished?: boolean }): Promise<Card[]> {
   const db = await getCmsDb();
   let query = db.from("cards").select("*").eq("section", section).order("sort_order", { ascending: true });
-  // Service-role SSR bypasses RLS; keep drafts off public pages.
+  // Defense-in-depth: RLS already hides unpublished rows from anon. Keep the
+  // filter on public SSR so a policy gap fails closed (empty) instead of leaking.
   if (import.meta.env.SSR && !opts?.includeUnpublished) {
     query = query.eq("published", true);
   }

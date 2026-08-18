@@ -2,14 +2,25 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Download } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
-import { getCards, KNOWLEDGE_CATEGORIES } from "@/lib/cards-data";
+import { getCards, KNOWLEDGE_CATEGORIES, type Card } from "@/lib/cards-data";
 import { useContentValue } from "@/lib/cms-context";
 import { pageSeoHead } from "@/lib/cms-load";
+import { knowledgeObjectPath } from "@/lib/knowledge-file-url";
+import { signKnowledgeFileUrls } from "@/lib/knowledge-signed-url";
 
 export const Route = createFileRoute("/knowledge")({
   loader: async () => {
     const cards = (await getCards("knowledge")).filter((card) => card.published);
-    return { cards };
+    const signedByPath = await signKnowledgeFileUrls({
+      data: cards.map((card) => card.fileUrl).filter((url): url is string => Boolean(url)),
+    });
+    const withSignedFiles: Card[] = cards.map((card) => {
+      const path = knowledgeObjectPath(card.fileUrl);
+      if (!path) return card;
+      const signedUrl = signedByPath[path];
+      return signedUrl ? { ...card, fileUrl: signedUrl } : { ...card, fileUrl: undefined };
+    });
+    return { cards: withSignedFiles };
   },
   head: ({ loaderData, matches }) => {
     const preload = loaderData.cards

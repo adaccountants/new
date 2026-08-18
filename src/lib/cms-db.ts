@@ -3,21 +3,16 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase-client";
 
 /**
- * Public loaders run on the server without a user session.
- * Use the service role there so reads are not blocked by RLS policies
- * that accidentally query `public.admins` as the `anon` role.
+ * CMS reads for public pages and shared loaders.
  *
- * Browser calls keep the anon/authenticated client (admin writes + Storage).
+ * Always the anon (browser) / unauthenticated server anon client so Row Level
+ * Security applies: published cards only, public page_content and site_settings.
+ * Do not use the service-role client here — it bypasses RLS.
+ *
+ * Admin writes keep using the authenticated browser client in cards-data /
+ * page-content-data / site-settings-data. Inbox reads use the request-scoped
+ * cookie client in contact-submissions-data, not this helper.
  */
 export async function getCmsDb(): Promise<SupabaseClient> {
-  if (import.meta.env.SSR) {
-    try {
-      const { getServiceSupabase } = await import("@/lib/supabase-server");
-      const service = getServiceSupabase();
-      if (service) return service;
-    } catch (error) {
-      console.error("[cms] service role client failed, using anon", error);
-    }
-  }
   return supabase;
 }

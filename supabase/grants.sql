@@ -104,10 +104,9 @@ create policy admins_select
   using (auth.uid() = id);
 
 drop policy if exists storage_public_select on storage.objects;
-create policy storage_public_select
-  on storage.objects
-  for select
-  using (bucket_id in ('card-images', 'knowledge-files'));
+
+update storage.buckets set public = true where id = 'card-images';
+update storage.buckets set public = false where id = 'knowledge-files';
 
 drop policy if exists storage_admin_insert on storage.objects;
 create policy storage_admin_insert

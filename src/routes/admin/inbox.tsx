@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { listContactSubmissions } from "@/lib/contact-inbox";
 import {
   deleteContactSubmission,
-  listContactSubmissions,
   markContactSubmissionHandled,
   type ContactSubmission,
 } from "@/lib/contact-submissions-data";

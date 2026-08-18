@@ -38,6 +38,9 @@ export async function uploadPublicFile(bucket: StorageBucket, file: File): Promi
     upsert: false,
   });
   if (error) throw new Error(error.message);
+  if (bucket === "knowledge-files") {
+    return path;
+  }
   const { data } = supabase.storage.from(bucket).getPublicUrl(path);
   return data.publicUrl;
 }

@@ -236,19 +236,16 @@ create policy admins_select
 -- ---------------------------------------------------------------------------
 -- 7. Storage buckets + policies
 -- Dashboard alternative: Storage → New bucket → card-images (public),
--- knowledge-files (public). The SQL below does the same.
+-- knowledge-files (private). Public image URLs work without a SELECT policy.
+-- Knowledge PDFs are served via short-lived signed URLs from the server.
 -- ---------------------------------------------------------------------------
 insert into storage.buckets (id, name, public)
 values
   ('card-images', 'card-images', true),
-  ('knowledge-files', 'knowledge-files', true)
+  ('knowledge-files', 'knowledge-files', false)
 on conflict (id) do update set public = excluded.public;
 
 drop policy if exists storage_public_select on storage.objects;
-create policy storage_public_select
-  on storage.objects
-  for select
-  using (bucket_id in ('card-images', 'knowledge-files'));
 
 drop policy if exists storage_admin_insert on storage.objects;
 create policy storage_admin_insert
