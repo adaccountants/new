@@ -17,7 +17,7 @@ Registered office: {address}
 Contact: {email} | {phone}
 
 ## What information we collect
-The personal information we collect through this website is what you provide when you submit our contact form: your name, email address, phone number (if provided), and your message. When you submit the form, your IP address is also briefly logged for spam prevention. That IP log is kept only for the rate-limiting window and is not linked to your identity beyond that purpose. We do not use analytics, tracking, or advertising cookies on this website, and we do not collect personal information as you browse.
+The personal information we collect through this website is what you provide when you submit our contact form: your name, email address, phone number (if provided), and your message. When you submit the contact form, we also briefly log your IP address, solely to prevent spam and abuse of the form. This IP address is not linked to your identity, is not used for tracking or marketing, and is automatically deleted after a short period. We do not use analytics, tracking, or advertising cookies on this website.
 
 ## How we use your information
 We use the information you submit through the contact form solely to respond to your enquiry and communicate with you about the services you've asked about. We do not use your information for marketing without your separate, explicit consent, and we do not sell or share your information with third parties for their own marketing purposes.
