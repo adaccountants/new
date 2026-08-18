@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInAdmin } from "@/lib/admin-auth";
+import { signInAdmin, ADMIN_LOGIN_ERROR } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
@@ -27,8 +27,8 @@ function AdminLoginPage() {
           setError("");
           void signInAdmin(email.trim(), password)
             .then(() => navigate({ to: "/admin" }))
-            .catch((err: unknown) => {
-              setError(err instanceof Error ? err.message : "Sign-in failed");
+            .catch(() => {
+              setError(ADMIN_LOGIN_ERROR);
             })
             .finally(() => setPending(false));
         }}

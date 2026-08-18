@@ -12,6 +12,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { useContentValue, useSettings } from "@/lib/cms-context";
+import { toSafeHref } from "@/lib/safe-url";
 import { getMailHref, getPhoneHref } from "@/lib/site-settings-data";
 
 const navKeys = [
@@ -37,6 +38,8 @@ function socialIcon(platform: string): ReactNode {
 
 function TopInfoBar() {
   const settings = useSettings();
+  const phoneHref = toSafeHref(getPhoneHref(settings.phone));
+  const mailHref = toSafeHref(getMailHref(settings.email));
   const orderedSocials = settings.socials.filter((social) => social.url && !social.platform.toLowerCase().includes("linkedin"));
 
   return (
@@ -44,22 +47,36 @@ function TopInfoBar() {
       <div className="mx-auto flex h-10 w-full max-w-7xl items-center justify-between gap-3 overflow-hidden px-4 sm:h-[42px] sm:gap-6 sm:px-6 lg:px-12">
         <ul className="flex min-w-0 flex-nowrap items-center gap-3 text-[11px] leading-none font-medium tracking-[0.01em] sm:gap-5 sm:text-xs lg:gap-8">
           <li className="shrink-0">
+            {phoneHref ? (
             <a
-              href={getPhoneHref(settings.phone)}
+              href={phoneHref}
               className="inline-flex items-center gap-1.5 text-white/90 transition-colors hover:text-white"
             >
               <Phone className="h-3.5 w-3.5 text-white/70" aria-hidden />
               <span>{settings.phone}</span>
             </a>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-white/90">
+                <Phone className="h-3.5 w-3.5 text-white/70" aria-hidden />
+                <span>{settings.phone}</span>
+              </span>
+            )}
           </li>
           <li className="min-w-0">
+            {mailHref ? (
             <a
-              href={getMailHref(settings.email)}
+              href={mailHref}
               className="inline-flex max-w-[46vw] items-center gap-1.5 text-white/90 transition-colors hover:text-white sm:max-w-none"
             >
               <Mail className="h-3.5 w-3.5 shrink-0 text-white/70" aria-hidden />
               <span className="truncate">{settings.email}</span>
             </a>
+            ) : (
+              <span className="inline-flex max-w-[46vw] items-center gap-1.5 text-white/90 sm:max-w-none">
+                <Mail className="h-3.5 w-3.5 shrink-0 text-white/70" aria-hidden />
+                <span className="truncate">{settings.email}</span>
+              </span>
+            )}
           </li>
           <li className="hidden shrink-0 sm:block">
             <span className="inline-flex items-center gap-1.5 text-white/80">

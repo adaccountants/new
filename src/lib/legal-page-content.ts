@@ -4,7 +4,7 @@ export const LEGAL_PAGES = ["privacy-policy", "terms", "cookie-policy"] as const
 export type LegalPage = (typeof LEGAL_PAGES)[number];
 
 export const PRIVACY_POLICY_BODY = `# Privacy Policy
-Last updated: 17 August 2026
+Last updated: 18 August 2026
 
 {firmName} ("we", "us", "our") is committed to protecting your privacy. This policy explains what personal information we collect through this website, how we use it, and your rights.
 
@@ -14,7 +14,7 @@ Registered office: {address}
 Contact: {email} | {phone}
 
 ## What information we collect
-The only personal information we collect through this website is what you provide when you submit our contact form: your name, email address, phone number (if provided), and your message. We do not use analytics, tracking, or advertising cookies on this website, and we do not collect any personal information automatically as you browse.
+The personal information we collect through this website is what you provide when you submit our contact form: your name, email address, phone number (if provided), and your message. When you submit the form, your IP address is also briefly logged for spam prevention. That IP log is kept only for the rate-limiting window and is not linked to your identity beyond that purpose. We do not use analytics, tracking, or advertising cookies on this website, and we do not collect personal information as you browse.
 
 ## How we use your information
 We use the information you submit through the contact form solely to respond to your enquiry and communicate with you about the services you've asked about. We do not use your information for marketing without your separate, explicit consent, and we do not sell or share your information with third parties for their own marketing purposes.

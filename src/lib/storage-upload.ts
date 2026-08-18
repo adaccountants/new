@@ -1,35 +1,81 @@
+import { createServerFn } from "@tanstack/react-start";
+
+import {
+  assertFileSignature,
+  assertUploadAllowed,
+  type StorageBucket,
+} from "@/lib/file-signature";
 import { supabase } from "@/lib/supabase-client";
 
-export type StorageBucket = "card-images" | "knowledge-files";
+export type { StorageBucket } from "@/lib/file-signature";
+export { assertFileSignature, assertUploadAllowed } from "@/lib/file-signature";
 
-const IMAGE_MIME_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
-const PDF_MIME_TYPE = "application/pdf";
-const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
-const PDF_MAX_BYTES = 15 * 1024 * 1024;
+const SIGNATURE_BYTES = 16;
 
-type UploadFile = Pick<File, "type" | "size" | "name">;
+type SignaturePayload = {
+  bucket: StorageBucket;
+  type: string;
+  size: number;
+  name: string;
+  header: number[];
+};
 
-export function assertUploadAllowed(bucket: StorageBucket, file: UploadFile): void {
-  if (bucket === "card-images") {
-    if (!IMAGE_MIME_TYPES.has(file.type)) {
-      throw new Error("Please upload a PNG, JPEG, or WebP image.");
+/**
+ * Server-side magic-byte check. The browser `file.type` is only a first-pass UX
+ * filter; this is the security boundary before the client talks to Storage.
+ */
+export const validateUploadSignature = createServerFn({ method: "POST" })
+  .validator((input: unknown): SignaturePayload => {
+    if (!input || typeof input !== "object") {
+      throw new Error("Invalid upload");
     }
-    if (file.size > IMAGE_MAX_BYTES) {
-      throw new Error("Images must be 5MB or smaller.");
+    const data = input as Record<string, unknown>;
+    const bucket = data["bucket"];
+    const type = data["type"];
+    const size = data["size"];
+    const name = data["name"];
+    const header = data["header"];
+    if (bucket !== "card-images" && bucket !== "knowledge-files") {
+      throw new Error("Invalid upload");
     }
-    return;
-  }
+    if (typeof type !== "string" || typeof name !== "string") {
+      throw new Error("Invalid upload");
+    }
+    if (typeof size !== "number" || !Number.isFinite(size) || size < 0) {
+      throw new Error("Invalid upload");
+    }
+    if (!Array.isArray(header) || header.length < 4 || header.length > 64) {
+      throw new Error("Invalid upload");
+    }
+    if (!header.every((byte) => typeof byte === "number" && Number.isInteger(byte) && byte >= 0 && byte <= 255)) {
+      throw new Error("Invalid upload");
+    }
+    return { bucket, type, size, name, header: header as number[] };
+  })
+  .handler(async ({ data }) => {
+    const { getAdminUserFromRequest } = await import("@/lib/admin-session.server");
+    const admin = await getAdminUserFromRequest();
+    if (!admin) throw new Error("Unauthorized");
 
-  if (file.type !== PDF_MIME_TYPE) {
-    throw new Error("Please upload a PDF file.");
-  }
-  if (file.size > PDF_MAX_BYTES) {
-    throw new Error("PDFs must be 15MB or smaller.");
-  }
-}
+    const bytes = Uint8Array.from(data.header);
+    assertFileSignature(data.bucket, data.type, bytes);
+    assertUploadAllowed(data.bucket, { type: data.type, size: data.size, name: data.name });
+    return { ok: true as const };
+  });
 
 export async function uploadPublicFile(bucket: StorageBucket, file: File): Promise<string> {
   assertUploadAllowed(bucket, file);
+
+  const header = Array.from(new Uint8Array(await file.slice(0, SIGNATURE_BYTES).arrayBuffer()));
+  await validateUploadSignature({
+    data: {
+      bucket,
+      type: file.type,
+      size: file.size,
+      name: file.name,
+      header,
+    },
+  });
 
   const safeName = file.name.replace(/[^\w.-]+/g, "_");
   const path = `${crypto.randomUUID()}-${safeName}`;

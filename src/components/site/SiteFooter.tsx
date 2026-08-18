@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ScrollAnimate } from "@/components/motion/ScrollAnimate";
 import { useContentValue, useSettings } from "@/lib/cms-context";
 import { interpolateSettings } from "@/lib/site-settings-data";
+import { isSafeExternalUrl, toSafeHref, warnUnsafeUrl } from "@/lib/safe-url";
 import { getSocialIcon } from "@/lib/social-icons";
 
 const footerNav = [
@@ -28,24 +29,42 @@ export function SiteFooter() {
   const headingSuffix = getContentValue("home.footer.headingSuffix");
   const intro = interpolateSettings(getContentValue("home.footer.intro"), settings);
   const cta = getContentValue("home.footer.cta");
-  const icaewHref = getContentValue("home.footer.icaewHref") || "https://www.icaew.com";
+  const icaewHref = toSafeHref(getContentValue("home.footer.icaewHref") || "https://www.icaew.com");
   const icaewImageUrl = getContentValue("home.footer.icaewImageUrl") || "/cms/finalicaewlogo.jpeg";
   const icaewImageAlt = getContentValue("home.footer.icaewImageAlt") || "ICAEW Chartered Accountant";
   const icaewNote = getContentValue("home.footer.icaewNote");
   const links = footerNav.map((link) => ({ ...link, label: getContentValue(link.key) }));
+  const socials = settings.socials.filter((social) => {
+    if (!social.url?.trim()) return false;
+    if (isSafeExternalUrl(social.url)) return true;
+    warnUnsafeUrl(social.url);
+    return false;
+  });
 
   return (
     <footer className="border-t border-border/60 bg-ink">
       <ScrollAnimate className="mx-auto w-full max-w-7xl px-6 py-14 lg:px-12">
         {/* ICAEW Accreditation Logo (Untouched) */}
         <div className="mb-8">
-          <a
-            href={icaewHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={icaewImageAlt}
-            className="inline-block focus:outline-none"
-          >
+          {icaewHref ? (
+            <a
+              href={icaewHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={icaewImageAlt}
+              className="inline-block focus:outline-none"
+            >
+              <img
+                src={icaewImageUrl}
+                alt={icaewImageAlt}
+                width={736}
+                height={298}
+                decoding="async"
+                draggable={false}
+                className="h-28 sm:h-36 md:h-44 max-w-full w-auto object-contain select-none"
+              />
+            </a>
+          ) : (
             <img
               src={icaewImageUrl}
               alt={icaewImageAlt}
@@ -55,7 +74,7 @@ export function SiteFooter() {
               draggable={false}
               className="h-28 sm:h-36 md:h-44 max-w-full w-auto object-contain select-none"
             />
-          </a>
+          )}
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-surface/70">
             {icaewNote}
           </p>
@@ -94,14 +113,12 @@ export function SiteFooter() {
               </ul>
             </nav>
 
-            {settings.socials.filter((s) => s.url && s.url.trim().length > 0).length > 0 && (
+            {socials.length > 0 && (
               <div className="mt-4 flex flex-wrap items-center gap-4">
-                {settings.socials
-                  .filter((s) => s.url && s.url.trim().length > 0)
-                  .map((social) => (
+                {socials.map((social) => (
                     <a
                       key={`${social.platform}-${social.url}`}
-                      href={social.url}
+                      href={social.url.trim()}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Visit our ${social.platform} page`}

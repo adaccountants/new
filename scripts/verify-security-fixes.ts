@@ -8,7 +8,8 @@ import {
   memoryRateLimitWouldExceed,
 } from "../src/lib/contact-rate-limit.ts";
 import { knowledgeObjectPath } from "../src/lib/knowledge-file-url.ts";
-import { assertUploadAllowed } from "../src/lib/storage-upload.ts";
+import { assertFileSignature, assertUploadAllowed } from "../src/lib/file-signature.ts";
+import { isSafeExternalUrl } from "../src/lib/safe-url.ts";
 
 function headers(map: Record<string, string>) {
   return {
@@ -121,5 +122,49 @@ try {
   htmlPdfRejected = error instanceof Error && error.message.includes("PDF");
 }
 expect(htmlPdfRejected, "html knowledge upload should be rejected");
+
+const pngBytes = Uint8Array.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0, 0, 0, 0, 0]);
+const jpegBytes = Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+const webpBytes = Uint8Array.from([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50, 0, 0, 0, 0]);
+const pdfBytes = Uint8Array.from([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x34, 0, 0, 0, 0, 0, 0, 0, 0]);
+const htmlBytes = Uint8Array.from(Array.from("<!doctype html>", (ch) => ch.charCodeAt(0)));
+
+assertFileSignature("card-images", "image/png", pngBytes);
+assertFileSignature("card-images", "image/jpeg", jpegBytes);
+assertFileSignature("card-images", "image/webp", webpBytes);
+assertFileSignature("knowledge-files", "application/pdf", pdfBytes);
+
+let spoofedRejected = false;
+try {
+  assertFileSignature("card-images", "image/png", htmlBytes);
+} catch (error) {
+  spoofedRejected = error instanceof Error;
+}
+expect(spoofedRejected, "html bytes claimed as png should be rejected");
+
+let mismatchRejected = false;
+try {
+  assertFileSignature("card-images", "image/png", jpegBytes);
+} catch (error) {
+  mismatchRejected = error instanceof Error && error.message.includes("do not match");
+}
+expect(mismatchRejected, "jpeg bytes claimed as png should be rejected");
+
+let pdfAsImageRejected = false;
+try {
+  assertFileSignature("card-images", "image/png", pdfBytes);
+} catch (error) {
+  pdfAsImageRejected = error instanceof Error;
+}
+expect(pdfAsImageRejected, "pdf bytes should not be accepted as a card image");
+
+expect(isSafeExternalUrl("https://example.com"), "https is allowed");
+expect(isSafeExternalUrl("http://example.com"), "http is allowed");
+expect(isSafeExternalUrl("mailto:hi@example.com"), "mailto is allowed");
+expect(isSafeExternalUrl("tel:+441234"), "tel is allowed");
+expect(!isSafeExternalUrl("javascript:alert(1)"), "javascript: is blocked");
+expect(!isSafeExternalUrl("data:text/html,hi"), "data: is blocked");
+expect(!isSafeExternalUrl("vbscript:msgbox"), "vbscript: is blocked");
+expect(!isSafeExternalUrl("//evil.example"), "protocol-relative is blocked");
 
 console.log("security helper checks passed");

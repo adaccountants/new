@@ -158,7 +158,11 @@ export async function getCardById(id: string): Promise<Card | undefined> {
 }
 
 export async function addCard(card: Omit<Card, "id">): Promise<Card> {
-  const { data, error } = await supabase.from("cards").insert(cardToRow(card)).select("*").single();
+  const { data, error } = await supabase
+    .from("cards")
+    .insert(cardToRow({ ...card, published: card.published ?? false }))
+    .select("*")
+    .single();
   throwIfError(error, "addCard");
   return cardFromRow(data as CardRow);
 }

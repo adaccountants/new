@@ -7,6 +7,7 @@ import { useContentValue } from "@/lib/cms-context";
 import { pageSeoHead } from "@/lib/cms-load";
 import { knowledgeObjectPath } from "@/lib/knowledge-file-url";
 import { signKnowledgeFileUrls } from "@/lib/knowledge-signed-url";
+import { toSafeDownloadHref } from "@/lib/safe-url";
 
 export const Route = createFileRoute("/knowledge")({
   loader: async () => {
@@ -65,7 +66,9 @@ function KnowledgePage() {
         <section key={group.category} className="mx-auto max-w-6xl px-5 pb-16">
           <p className="text-sm font-bold tracking-[0.2em] text-brand uppercase">{group.category}</p>
           <div className="mt-8 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {group.items.map((item, index) => (
+            {group.items.map((item, index) => {
+              const fileHref = toSafeDownloadHref(item.fileUrl);
+              return (
               <article
                 key={item.id}
                 className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-glow"
@@ -88,9 +91,9 @@ function KnowledgePage() {
                 <div className="flex flex-1 flex-col gap-3 p-6">
                   <h2 className="text-lg leading-snug font-bold text-foreground">{item.title}</h2>
                   <p className="text-sm leading-relaxed text-muted-foreground">{item.body}</p>
-                  {item.fileUrl ? (
+                  {fileHref ? (
                     <a
-                      href={item.fileUrl}
+                      href={fileHref}
                       download={item.fileName || true}
                       className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors group-hover:bg-brand group-hover:text-brand-foreground"
                     >
@@ -100,7 +103,8 @@ function KnowledgePage() {
                   ) : null}
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         </section>
       ))}

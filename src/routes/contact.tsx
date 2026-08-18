@@ -8,6 +8,7 @@ import { pageSeoHead } from "@/lib/cms-load";
 import { submitContact } from "@/lib/contact-submit";
 import { getMailHref, getPhoneHref } from "@/lib/site-settings-data";
 import { getSocialIcon } from "@/lib/social-icons";
+import { isSafeExternalUrl, toSafeHref, warnUnsafeUrl } from "@/lib/safe-url";
 
 export const Route = createFileRoute("/contact")({
   head: ({ matches }) => ({
@@ -27,13 +28,13 @@ function ContactPage() {
       icon: Phone,
       label: getContentValue("contact.detail.phoneLabel"),
       value: settings.phone,
-      href: getPhoneHref(settings.phone),
+      href: toSafeHref(getPhoneHref(settings.phone)),
     },
     {
       icon: Mail,
       label: getContentValue("contact.detail.emailLabel"),
       value: settings.email,
-      href: getMailHref(settings.email),
+      href: toSafeHref(getMailHref(settings.email)),
     },
     {
       icon: MapPin,
@@ -46,6 +47,12 @@ function ContactPage() {
       value: settings.hours,
     },
   ];
+  const socials = settings.socials.filter((social) => {
+    if (!social.url?.trim()) return false;
+    if (isSafeExternalUrl(social.url)) return true;
+    warnUnsafeUrl(social.url);
+    return false;
+  });
 
   return (
     <main className="bg-background">
@@ -90,18 +97,16 @@ function ContactPage() {
             </div>
           ))}
 
-          {settings.socials.filter((s) => s.url && s.url.trim().length > 0).length > 0 && (
+          {socials.length > 0 && (
             <div className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-5 shadow-soft">
               <p className="text-xs font-bold tracking-[0.15em] text-muted-foreground uppercase">
                 Social Media
               </p>
               <div className="flex flex-wrap items-center gap-3">
-                {settings.socials
-                  .filter((s) => s.url && s.url.trim().length > 0)
-                  .map((social) => (
+                {socials.map((social) => (
                     <a
                       key={`${social.platform}-${social.url}`}
-                      href={social.url}
+                      href={social.url.trim()}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Visit our ${social.platform} page`}

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getSettings, updateSettings } from "@/lib/site-settings-data";
+import { isSafeExternalUrl, UNSAFE_URL_MESSAGE } from "@/lib/safe-url";
 
 export const Route = createFileRoute("/admin/settings")({
   loader: async () => ({ current: await getSettings() }),
@@ -25,6 +26,7 @@ function AdminSettingsPage() {
   const [footerText, setFooterText] = useState(current.footerText);
   const [socials, setSocials] = useState(current.socials);
   const [savedFlash, setSavedFlash] = useState(false);
+  const [socialUrlError, setSocialUrlError] = useState("");
 
   const dirty =
     firmName !== current.firmName ||
@@ -36,6 +38,12 @@ function AdminSettingsPage() {
     JSON.stringify(socials) !== JSON.stringify(current.socials);
 
   function save() {
+    const invalid = socials.find((social) => social.url.trim().length > 0 && !isSafeExternalUrl(social.url));
+    if (invalid) {
+      setSocialUrlError(UNSAFE_URL_MESSAGE);
+      return;
+    }
+    setSocialUrlError("");
     void updateSettings({ firmName, phone, email, address, hours, footerText, socials }).then(() => {
       void router.invalidate();
       toast.success("Settings saved");
@@ -129,11 +137,12 @@ function AdminSettingsPage() {
                   <Input
                     placeholder="https://"
                     value={social.url}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      setSocialUrlError("");
                       setSocials((list) =>
                         list.map((item, i) => (i === index ? { ...item, url: e.target.value } : item)),
-                      )
-                    }
+                      );
+                    }}
                   />
                   <Button
                     type="button"
@@ -148,6 +157,7 @@ function AdminSettingsPage() {
               ))}
             </ul>
           )}
+          {socialUrlError ? <p className="text-sm text-destructive">{socialUrlError}</p> : null}
         </div>
       </div>
     </div>

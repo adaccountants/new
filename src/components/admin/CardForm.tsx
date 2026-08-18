@@ -18,6 +18,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { addCard, type Card, type CardSection, KNOWLEDGE_CATEGORIES, updateCard } from "@/lib/cards-data";
+import { isSafeAdminUrl, UNSAFE_URL_MESSAGE } from "@/lib/safe-url";
 import { uploadPublicFile } from "@/lib/storage-upload";
 
 const slugRequired = new Set<CardSection>(["services", "blog"]);
@@ -28,7 +29,9 @@ function cardSchema(section: CardSection) {
       title: z.string().min(1, "Title is required"),
       subtitle: z.string().optional(),
       body: z.string().optional(),
-      imageUrl: z.string(),
+      imageUrl: z.string().refine((value) => isSafeAdminUrl(value), {
+        message: UNSAFE_URL_MESSAGE,
+      }),
       slug: z.string().optional(),
       published: z.boolean(),
       category: z.string().optional(),
@@ -48,6 +51,13 @@ function cardSchema(section: CardSection) {
           code: z.ZodIssueCode.custom,
           message: "Category is required",
           path: ["category"],
+        });
+      }
+      if (section === "knowledge" && !isSafeAdminUrl(data.fileUrl ?? "", { allowStoragePath: true })) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: UNSAFE_URL_MESSAGE,
+          path: ["fileUrl"],
         });
       }
     });
@@ -74,7 +84,7 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
       body: card?.body ?? "",
       imageUrl: card?.imageUrl ?? "",
       slug: card?.slug ?? "",
-      published: card?.published ?? true,
+      published: card?.published ?? false,
       category: card?.category ?? "",
       fileUrl: card?.fileUrl ?? "",
       fileName: card?.fileName ?? "",
@@ -188,6 +198,9 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
           value={imageUrl}
           onChange={(event) => form.setValue("imageUrl", event.target.value, { shouldDirty: true })}
         />
+        {form.formState.errors.imageUrl ? (
+          <p className="text-sm text-destructive">{form.formState.errors.imageUrl.message}</p>
+        ) : null}
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -225,6 +238,9 @@ export function CardForm({ section, card, nextSortOrder }: CardFormProps) {
             </Select>
             {form.formState.errors.category ? (
               <p className="text-sm text-destructive">{form.formState.errors.category.message}</p>
+            ) : null}
+            {form.formState.errors.fileUrl ? (
+              <p className="text-sm text-destructive">{form.formState.errors.fileUrl.message}</p>
             ) : null}
           </div>
 

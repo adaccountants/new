@@ -28,6 +28,15 @@ export default defineConfig({
       ],
     },
   },
+  preview: {
+    port: 8080,
+    strictPort: true,
+    headers: {
+      // Same policy as vercel.json, without upgrade-insecure-requests (breaks local http).
+      "Content-Security-Policy":
+        "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://bglpwknowjvhuyykuuww.supabase.co; font-src 'self'; connect-src 'self' https://bglpwknowjvhuyykuuww.supabase.co wss://bglpwknowjvhuyykuuww.supabase.co; media-src 'self' https://bglpwknowjvhuyykuuww.supabase.co; frame-src 'none'",
+    },
+  },
   optimizeDeps: {
     include: ["framer-motion", "@tanstack/react-router", "@tanstack/react-query"],
   },
