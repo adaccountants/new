@@ -77,10 +77,21 @@ function AdminSectionListPage() {
         </Button>
       </div>
 
+      {section === "team" ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          The About page founder block is edited under{" "}
+          <Link to="/admin/pages" className="font-medium text-slate-900 underline underline-offset-2">
+            Pages → About
+          </Link>
+          . Team cards here are not shown on the public site.
+        </p>
+      ) : null}
+
       {cards.length === 0 ? (
         <p className="mt-10 text-sm text-muted-foreground">
-          No cards in this section yet. About currently has no named team members on the live site,
-          so Team starts empty — add people here when you have photos and bios.
+          {section === "team"
+            ? "No extra team cards yet. Use Pages → About to edit the founder shown on the live About page."
+            : "No cards in this section yet."}
         </p>
       ) : (
         <ul className="mt-8 divide-y rounded-xl border bg-white">
