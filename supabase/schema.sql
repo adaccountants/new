@@ -52,12 +52,18 @@ create table if not exists public.site_settings (
   hours text not null default '',
   socials jsonb not null default '[]'::jsonb,
   footer_text text not null default '',
+  founder_name text not null default '',
+  founder_role text not null default '',
+  founder_credentials text not null default '',
+  founder_bio text not null default '',
+  founder_photo_url text not null default '',
   updated_at timestamptz not null default now(),
   constraint site_settings_singleton check (id = 1)
 );
 
 insert into public.site_settings (
-  id, firm_name, phone, email, address, hours, socials, footer_text
+  id, firm_name, phone, email, address, hours, socials, footer_text,
+  founder_name, founder_role, founder_credentials, founder_bio, founder_photo_url
 ) values (
   1,
   'Alpha Digi AI Accountants',
@@ -72,7 +78,12 @@ insert into public.site_settings (
     {"platform":"YouTube","url":"https://youtube.com"},
     {"platform":"Facebook","url":"https://facebook.com"}
   ]'::jsonb,
-  'Alpha Digi AI Accountants. ICAEW Chartered Accountants.'
+  'Alpha Digi AI Accountants. ICAEW Chartered Accountants.',
+  'Hritesh Gupta',
+  'Founder & Principal Accountant',
+  'ACA (ICAEW), ACA (ICAI), IFRS Certified (ACCA)',
+  $founder_bio$Alpha Digi AI Accountants is led by Hritesh Gupta, a member of the ICAEW with over 12 years of experience, including time at a Big Four firm in the UK. He has varied experience across industrial audits and has worked with clients across different geographies worldwide. He is also a member of the ICAI with experience working in India, an IIM alumnus, and IFRS certified by the ACCA. Throughout his career, he has worked extensively with charities, US-listed clients, and small and medium-sized enterprises.$founder_bio$,
+  ''
 )
 on conflict (id) do nothing;
 

@@ -2,7 +2,7 @@ import { getCards, isHomeServiceCard } from "@/lib/cards-data";
 import type { CmsSnapshot } from "@/lib/cms-context";
 import { LEGAL_SEO_FALLBACK, type LegalPage } from "@/lib/legal-page-content";
 import { contentMap, getAllContentBlocks, seoMetaFromContent, seoTagsFromMeta, type ContentPage } from "@/lib/page-content-data";
-import { interpolateSettings, getSettings, SITE_URL } from "@/lib/site-settings-data";
+import { interpolateSettings, getSettings, EMPTY_SETTINGS, SITE_URL } from "@/lib/site-settings-data";
 
 export async function loadCmsSnapshot(): Promise<CmsSnapshot> {
   try {
@@ -23,15 +23,7 @@ export async function loadCmsSnapshot(): Promise<CmsSnapshot> {
   } catch (error) {
     console.error("[cms] failed to load snapshot", error);
     return {
-      settings: {
-        firmName: "",
-        phone: "",
-        email: "",
-        address: "",
-        hours: "",
-        socials: [],
-        footerText: "",
-      },
+      settings: { ...EMPTY_SETTINGS, socials: [] },
       content: {},
       homeServices: [],
       testimonials: [],

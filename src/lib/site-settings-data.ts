@@ -1,4 +1,5 @@
 import { getCmsDb } from "@/lib/cms-db";
+import { isSafeExternalUrl, isSafeRelativeUrl } from "@/lib/safe-url";
 import { supabase } from "@/lib/supabase-client";
 
 /** Current Vercel production URL. Update to the real custom domain once one is connected.
@@ -15,9 +16,14 @@ export type SiteSettings = {
   hours: string;
   socials: { platform: string; url: string }[];
   footerText: string;
+  founderName: string;
+  founderRole: string;
+  founderCredentials: string;
+  founderBio: string;
+  founderPhotoUrl: string;
 };
 
-const EMPTY_SETTINGS: SiteSettings = {
+export const EMPTY_SETTINGS: SiteSettings = {
   firmName: "",
   phone: "",
   email: "",
@@ -25,6 +31,11 @@ const EMPTY_SETTINGS: SiteSettings = {
   hours: "",
   socials: [],
   footerText: "",
+  founderName: "",
+  founderRole: "",
+  founderCredentials: "",
+  founderBio: "",
+  founderPhotoUrl: "",
 };
 
 type SettingsRow = {
@@ -36,6 +47,11 @@ type SettingsRow = {
   hours: string;
   socials: SiteSettings["socials"];
   footer_text: string;
+  founder_name?: string | null;
+  founder_role?: string | null;
+  founder_credentials?: string | null;
+  founder_bio?: string | null;
+  founder_photo_url?: string | null;
 };
 
 function throwIfError(error: { message: string } | null, action: string) {
@@ -56,6 +72,11 @@ export function settingsFromRow(row: SettingsRow): SiteSettings {
     hours: row.hours,
     socials: Array.isArray(row.socials) ? row.socials.map((item) => ({ ...item })) : [],
     footerText: row.footer_text,
+    founderName: row.founder_name?.trim() ?? "",
+    founderRole: row.founder_role?.trim() ?? "",
+    founderCredentials: row.founder_credentials?.trim() ?? "",
+    founderBio: row.founder_bio?.trim() ?? "",
+    founderPhotoUrl: row.founder_photo_url?.trim() ?? "",
   };
 }
 
@@ -69,6 +90,11 @@ export function settingsToRow(current: SiteSettings) {
     hours: current.hours,
     socials: current.socials,
     footer_text: current.footerText,
+    founder_name: current.founderName,
+    founder_role: current.founderRole,
+    founder_credentials: current.founderCredentials,
+    founder_bio: current.founderBio,
+    founder_photo_url: current.founderPhotoUrl,
   };
 }
 
@@ -145,5 +171,60 @@ export function getServiceJsonLd(
   };
   const description = card.body || card.subtitle;
   if (description) jsonLd.description = description;
+  return jsonLd;
+}
+
+function founderPhotoAbsoluteUrl(current: SiteSettings): string | undefined {
+  const photo = current.founderPhotoUrl.trim();
+  if (!photo) return undefined;
+  if (isSafeRelativeUrl(photo)) return `${SITE_URL}${photo}`;
+  if (isSafeExternalUrl(photo)) return photo;
+  return undefined;
+}
+
+export function getFounderPersonJsonLd(current: SiteSettings) {
+  const name = current.founderName.trim();
+  if (!name) return undefined;
+
+  const jsonLd: {
+    "@context": string;
+    "@type": string;
+    name: string;
+    jobTitle?: string;
+    honorificSuffix?: string;
+    hasCredential?: {
+      "@type": "EducationalOccupationalCredential";
+      credentialCategory: string;
+      name: string;
+    };
+    worksFor: { "@type": string; name: string; url: string };
+    image?: string;
+  } = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    worksFor: {
+      "@type": "AccountingService",
+      name: current.firmName,
+      url: SITE_URL,
+    },
+  };
+
+  const role = current.founderRole.trim();
+  if (role) jsonLd.jobTitle = role;
+
+  const credentials = current.founderCredentials.trim();
+  if (credentials) {
+    jsonLd.honorificSuffix = credentials;
+    jsonLd.hasCredential = {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Professional qualification",
+      name: credentials,
+    };
+  }
+
+  const image = founderPhotoAbsoluteUrl(current);
+  if (image) jsonLd.image = image;
+
   return jsonLd;
 }

@@ -2,19 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Quote } from "lucide-react";
 
 import { ContactCta } from "@/components/site/ContactCta";
-import { useCmsSnapshot, useContentValue } from "@/lib/cms-context";
-import { pageSeoHead } from "@/lib/cms-load";
+import { useCmsSnapshot, useContentValue, useSettings } from "@/lib/cms-context";
+import { pageSeoHead, rootCms } from "@/lib/cms-load";
+import { toSafeDownloadHref } from "@/lib/safe-url";
+import { getFounderPersonJsonLd } from "@/lib/site-settings-data";
 
 export const Route = createFileRoute("/about")({
-  head: ({ matches }) => ({
-    meta: pageSeoHead("about", matches),
-  }),
+  head: ({ matches }) => {
+    const { settings } = rootCms(matches);
+    const person = getFounderPersonJsonLd(settings);
+    return {
+      meta: person
+        ? [...pageSeoHead("about", matches), { "script:ld+json": person }]
+        : pageSeoHead("about", matches),
+    };
+  },
   component: AboutPage,
 });
 
 function AboutPage() {
   const getContentValue = useContentValue();
   const { testimonials } = useCmsSnapshot();
+  const settings = useSettings();
   const badges = [1, 2, 3, 4, 5, 6].map((n) => getContentValue(`about.badge.${n}`));
   const differences = [1, 2, 3].map((n) => ({
     title: getContentValue(`about.different.${n}.title`),
@@ -104,6 +113,14 @@ function AboutPage() {
         </div>
       </section>
 
+      <FounderBlock
+        name={settings.founderName}
+        role={settings.founderRole}
+        credentials={settings.founderCredentials}
+        bio={settings.founderBio}
+        photoUrl={settings.founderPhotoUrl}
+      />
+
       <section className="mx-auto max-w-6xl px-5 py-10">
         <p className="text-sm font-bold tracking-[0.2em] text-brand uppercase">
           {getContentValue("about.testimonials.eyebrow")}
@@ -133,5 +150,81 @@ function AboutPage() {
 
       <ContactCta />
     </main>
+  );
+}
+
+function FounderBlock({
+  name,
+  role,
+  credentials,
+  bio,
+  photoUrl,
+}: {
+  name: string;
+  role: string;
+  credentials: string;
+  bio: string;
+  photoUrl: string;
+}) {
+  const founderName = name.trim();
+  if (!founderName) return null;
+
+  const photo = toSafeDownloadHref(photoUrl);
+  const credentialLine = credentials.trim() ? `${founderName} — ${credentials.trim()}` : "";
+  const paragraphs = bio
+    .split(/\n\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
+  const copy = (
+    <>
+      <p className="text-sm font-bold tracking-[0.2em] text-brand uppercase">About the founder</p>
+      <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        {founderName}
+      </h2>
+      {credentialLine ? (
+        <p className="mt-3 text-lg font-semibold text-foreground">{credentialLine}</p>
+      ) : null}
+      {role.trim() ? (
+        <p className="mt-2 text-sm font-semibold text-muted-foreground">{role.trim()}</p>
+      ) : null}
+      {paragraphs.length > 0 ? (
+        <div className="mt-5 max-w-3xl space-y-4 text-sm leading-relaxed text-muted-foreground">
+          {paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      ) : null}
+    </>
+  );
+
+  if (!photo) {
+    return (
+      <section className="mx-auto max-w-6xl px-5 py-10">
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-10">
+          <span className="mb-4 block h-1.5 w-12 rounded-full bg-brand" />
+          {copy}
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="mx-auto max-w-6xl px-5 py-10">
+      <div className="grid items-center gap-8 rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-10 lg:grid-cols-2">
+        <div className="overflow-hidden rounded-3xl">
+          <img
+            src={photo}
+            alt={founderName}
+            width={800}
+            height={1000}
+            loading="lazy"
+            decoding="async"
+            className="h-[320px] w-full object-cover sm:h-[420px]"
+          />
+        </div>
+        <div>{copy}</div>
+      </div>
+    </section>
   );
 }
