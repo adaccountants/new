@@ -2,11 +2,8 @@ import { getCmsDb } from "@/lib/cms-db";
 import { isSafeExternalUrl, isSafeRelativeUrl } from "@/lib/safe-url";
 import { supabase } from "@/lib/supabase-client";
 
-/** Current Vercel production URL. Update to the real custom domain once one is connected.
- *  vercel.json sends X-Robots-Tag: noindex, nofollow for this *.vercel.app host.
- *  Remove that header when the real domain goes live and this SITE_URL is updated —
- *  otherwise the real site will also be blocked from indexing by mistake. */
-export const SITE_URL = "https://scroll-joy-animate.vercel.app";
+/** Canonical public origin (www). Apex adaaccountants.uk redirects here. */
+export const SITE_URL = "https://www.adaaccountants.uk";
 
 export type SiteSettings = {
   firmName: string;

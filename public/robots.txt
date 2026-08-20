@@ -14,7 +14,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-# Temporary Vercel domain. X-Robots-Tag: noindex, nofollow is set in vercel.json
-# for scroll-joy-animate.vercel.app. Remove that header when the real domain goes
-# live and SITE_URL is updated — otherwise the real site will be blocked from indexing.
-Sitemap: https://scroll-joy-animate.vercel.app/sitemap.xml
+Sitemap: https://www.adaaccountants.uk/sitemap.xml
